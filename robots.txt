@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yougkxm.github.io/sitemap.xml

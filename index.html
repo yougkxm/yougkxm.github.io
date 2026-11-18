@@ -115,6 +115,7 @@
     --shadow:0 1px 2px rgba(15,23,42,.05), 0 8px 24px rgba(15,23,42,.06);
   }
   *{box-sizing:border-box}
+  [hidden]{display:none !important}
   html{-webkit-text-size-adjust:100%}
   body{
     margin:0;
@@ -378,7 +379,7 @@
               <div class="field" id="offsiteWrap">
                 <label for="offsite">Offsite Ads</label>
                 <div class="ib"><select id="offsite">
-                  <option value="0" selected>0% — not attributed</option>
+                  <option value="0" selected>0% — none</option>
                   <option value="12">12%</option>
                   <option value="15">15%</option>
                 </select></div>
@@ -653,18 +654,23 @@
 
   function decimals() { return (state.currency === "₩" || state.currency === "¥") ? 0 : 2; }
 
-  function money(v) {
-    var a = Math.abs(v);
-    var d = decimals();
-    var s = a.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
-    return (v < 0 ? "-" : "") + state.currency + s;
+  function round(v, d) {
+    var f = Math.pow(10, d);
+    var r = Math.round(v * f) / f;
+    return r === 0 ? 0 : r; // normalises -0
   }
-  function money0(v) {
+  function fmt(v) {
     var d = decimals();
-    var s = Math.abs(v).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
-    return (v < 0 ? "-" : "") + state.currency + s;
+    var r = round(v, d);
+    var s = Math.abs(r).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+    return (r < 0 ? "-" : "") + state.currency + s;
   }
-  function pct(v) { return (v).toFixed(1) + "%"; }
+  var money = fmt;
+  var money0 = fmt;
+  function pct(v) {
+    var r = round(v, 1);
+    return (r === 0 ? "0.0" : r.toFixed(1)) + "%";
+  }
 
   function readInputs() {
     var returnRate = clamp(n("returnRate"), 0, 99);
