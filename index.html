@@ -256,6 +256,13 @@
   footer.site{border-top:1px solid var(--line);background:var(--card);margin-top:36px;padding:22px 0 34px;font-size:12.5px;color:var(--muted)}
   footer.site .wrap{display:flex;flex-direction:column;gap:6px}
   .noscript{background:var(--warn-soft);color:var(--warn);padding:10px 14px;border-radius:10px;margin:14px 0;font-size:14px}
+  @media (max-width:480px){
+    .brand span.sub{display:none}
+    header.site nav a{margin-left:11px;font-size:12.5px}
+    .tab small{display:none}
+    .tab{padding:11px 6px;font-size:13px}
+    .card .inner{padding:15px}
+  }
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 </style>
 </head>
@@ -413,7 +420,7 @@
                 <div class="n">zero profit, nothing lost</div>
               </div>
               <div class="kpi">
-                <div class="k">Price for target margin</div>
+                <div class="k">Target-margin price</div>
                 <div class="v" id="targetPrice">$0.00</div>
                 <div class="n" id="targetNote">at 20% margin</div>
               </div>
