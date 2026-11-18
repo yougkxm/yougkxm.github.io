@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Etsy &amp; Gumroad Fee Calculator 2026 — Profit, Returns &amp; Break-Even Price</title>
+<meta name="description" content="Free seller profit calculator with 2026 Etsy and Gumroad fee presets. See your real net profit per sale after fees, shipping, refunds and ads — and the break-even price and minimum price you need to hit your target margin. No signup, runs in your browser.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://yougkxm.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Seller Tools">
+<meta property="og:title" content="Seller Profit &amp; Break-Even Calculator (2026 Fees)">
+<meta property="og:description" content="Etsy, Gumroad Direct, Gumroad Discover and Shopify fees in one calculator. Real profit per sale, hidden loss from returns and ads, break-even price and target-margin price. Free, no signup.">
+<meta property="og:url" content="https://yougkxm.github.io/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Seller Profit &amp; Break-Even Calculator (2026 Fees)">
+<meta name="twitter:description" content="What you actually keep per sale on Etsy and Gumroad — after fees, shipping, returns and ads. Free browser calculator, no signup.">
+<meta name="theme-color" content="#0f172a">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Seller Profit & Break-Even Calculator (2026 Fees)",
+      "url": "https://yougkxm.github.io/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any (runs in the browser)",
+      "browserRequirements": "Requires JavaScript",
+      "description": "A free calculator that shows real net profit per sale for Etsy, Gumroad Direct, Gumroad Discover and Shopify, including return rate, shipping, ad cost, break-even price and the minimum price needed to reach a target margin.",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "Etsy fee and profit calculator with Offsite Ads",
+        "Gumroad Direct and Gumroad Discover fee calculator",
+        "Break-even price calculation that includes returns",
+        "Minimum price for a target net margin",
+        "Hidden loss breakdown: returns, return shipping, ad spend"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Are these the official Etsy and Gumroad fees for 2026?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "They are the standard published rates as of November 2026 that this calculator ships with: Etsy at $0.20 listing, 6.5% transaction and 3% + $0.25 payment processing; Gumroad Direct at 10% + $0.50 plus card processing at 2.9% + $0.30; Gumroad Discover at a flat 30%. Rates change, and they vary by country and by account. Every fee field on this page is editable, so enter the numbers on your own statement. Always confirm with the platform's own fee page before pricing a product."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Why does the calculator include return rate?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A refund does not only remove the sale price. You usually still pay the outbound shipping, a return or restocking cost, and the fixed part of your platform and card fees. Most fee calculators ignore all three, which makes a product with 10% returns look more profitable than it is. This calculator spreads those losses across every order so the profit figure matches what lands in your account."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a break-even price?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The break-even price is the lowest sale price at which you make exactly zero profit once fees, product cost, shipping, returns and ads are paid. Below it, every sale loses money. This page also shows the price you need for a target margin, which is usually the more useful number for pricing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Gumroad Discover really take 30%?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Gumroad charges a flat 30% on sales that come through Discover, its marketplace, where the buyer found you. Direct sales to your own audience are charged the lower direct rate. That is why the same product can be profitable on one channel and thin on the other, and why this page treats them as separate presets."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need an account or an email address to use this?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The calculator is a single page that runs entirely in your browser. Nothing you type is sent anywhere or stored on a server, and it keeps working offline once the page has loaded."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use a currency other than US dollars?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Pick the currency symbol in the form. No conversion is applied: enter your prices and costs in the same currency and the results stay in that currency."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root{
+    --bg:#f6f7f9;
+    --card:#ffffff;
+    --ink:#0f172a;
+    --muted:#5b6577;
+    --line:#e3e7ee;
+    --accent:#0f766e;
+    --accent-soft:#e6f4f1;
+    --warn:#b42318;
+    --warn-soft:#fdecea;
+    --ok:#0f766e;
+    --gold:#b45309;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(15,23,42,.05), 0 8px 24px rgba(15,23,42,.06);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    font-size:16px;
+    line-height:1.6;
+  }
+  a{color:var(--accent)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  header.site{border-bottom:1px solid var(--line);background:var(--card)}
+  header.site .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:-.01em}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .brand span.sub{font-weight:500;color:var(--muted);font-size:13px}
+  header.site nav a{font-size:13px;color:var(--muted);text-decoration:none;margin-left:16px}
+  header.site nav a:hover{color:var(--accent)}
+
+  .hero{padding:38px 0 8px}
+  h1{font-size:clamp(26px,4.4vw,40px);line-height:1.15;letter-spacing:-.025em;margin:0 0 12px}
+  .hero p.lead{font-size:clamp(15px,2vw,18px);color:var(--muted);margin:0 0 14px;max-width:760px}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+  .pill{font-size:12.5px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:4px 11px;font-weight:600}
+
+  section.calc{margin:22px 0 8px}
+  .app{display:grid;grid-template-columns:minmax(300px,400px) 1fr;gap:16px;align-items:start}
+  @media (max-width:860px){ .app{grid-template-columns:1fr} }
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .card .inner{padding:18px}
+  .card h2{font-size:16px;margin:0 0 4px;letter-spacing:-.01em}
+  .card p.hint{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+
+  .tabs{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+  .tab{
+    appearance:none;border:1px solid var(--line);background:#fbfcfd;color:var(--ink);
+    border-radius:10px;padding:9px 8px;font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;
+    text-align:center;line-height:1.25;transition:border-color .15s, background .15s, color .15s;
+  }
+  .tab:hover{border-color:#c9d2de}
+  .tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+  .tab small{display:block;font-weight:500;font-size:11px;opacity:.8;margin-top:1px}
+
+  fieldset{border:0;margin:0 0 14px;padding:0;min-width:0}
+  legend{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;padding:0}
+  .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .field{display:flex;flex-direction:column;gap:4px}
+  .field label{font-size:12.5px;color:var(--muted);font-weight:600}
+  .field .ib{position:relative;display:flex;align-items:center}
+  .field .ib .pre,.field .ib .suf{position:absolute;font-size:13px;color:#8b95a6;pointer-events:none}
+  .field .ib .pre{left:10px}
+  .field .ib .suf{right:10px}
+  input[type=number],select{
+    width:100%;font:inherit;font-size:15px;color:var(--ink);background:#fff;
+    border:1px solid #cfd6e0;border-radius:9px;padding:9px 10px;
+  }
+  input[type=number]{-moz-appearance:textfield}
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  input[type=number]:focus,select:focus{outline:2px solid var(--accent-soft);border-color:var(--accent)}
+  .field .ib.has-pre input{padding-left:24px}
+  .field .ib.has-suf input{padding-right:26px}
+  .field .ib select{padding-right:26px}
+  .inline{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);margin-top:6px}
+  .inline input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent)}
+  details.adv{border-top:1px solid var(--line);margin-top:4px;padding-top:12px}
+  details.adv summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--accent);list-style:none}
+  details.adv summary::-webkit-details-marker{display:none}
+  details.adv summary:before{content:"⚙ ";font-weight:400}
+  details.adv[open] summary{margin-bottom:10px}
+  .fee-note{font-size:12px;color:var(--muted);margin:6px 0 0}
+
+  .results .hero-num{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+  .big{font-size:clamp(34px,6vw,46px);font-weight:750;letter-spacing:-.03em;line-height:1.05}
+  .big.loss{color:var(--warn)}
+  .big-sub{font-size:13px;color:var(--muted);padding-bottom:8px}
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;border-radius:999px;padding:4px 10px;margin-top:10px}
+  .badge.bad{background:var(--warn-soft);color:var(--warn)}
+  .badge.good{background:var(--accent-soft);color:var(--accent)}
+  .badge.mid{background:#fff7ed;color:var(--gold)}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:16px}
+  .kpi{border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fbfcfd}
+  .kpi .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
+  .kpi .v{font-size:21px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+  .kpi .n{font-size:11.5px;color:var(--muted)}
+  .kpi.warn .v{color:var(--warn)}
+
+  .bar{margin-top:18px}
+  .bar .track{display:flex;height:14px;border-radius:7px;overflow:hidden;background:#eef1f5}
+  .bar .seg{height:100%}
+  .bar .legend{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:8px;font-size:12px;color:var(--muted)}
+  .bar .legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+
+  table{border-collapse:collapse;width:100%;font-size:13.5px}
+  caption{text-align:left;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-bottom:8px}
+  th,td{padding:8px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+  th:first-child,td:first-child{text-align:left;white-space:normal}
+  thead th{font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:1px solid #cfd6e0}
+  tbody tr.sum td{font-weight:700;border-bottom:none;border-top:2px solid #cfd6e0}
+  td.neg{color:var(--warn)}
+  td.pos{color:var(--ok)}
+  .tbl-wrap{overflow-x:auto}
+
+  ul.hidden{margin:8px 0 0;padding-left:18px;font-size:13.5px;color:var(--muted)}
+  ul.hidden li{margin:3px 0}
+  ul.hidden b{color:var(--ink)}
+
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  button.ghost{font:inherit;font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-soft);border:1px solid #cfe7e2;border-radius:9px;padding:8px 13px;cursor:pointer}
+  button.ghost:hover{background:#d9efea}
+
+  .content{margin:40px 0}
+  .content h2{font-size:clamp(20px,3vw,26px);letter-spacing:-.02em;margin:0 0 10px}
+  .content h3{font-size:16.5px;margin:22px 0 6px}
+  .content p,.content li{color:#33404f}
+  .content p{max-width:820px}
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+  .panel h3{margin-top:0}
+  .panel ul{margin:6px 0 0;padding-left:18px}
+  .panel li{margin:4px 0;font-size:14px}
+
+  .tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:16px}
+  .tool{display:flex;flex-direction:column;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px;text-decoration:none;color:inherit;transition:border-color .15s, transform .15s}
+  .tool:hover{border-color:var(--accent);transform:translateY(-1px)}
+  .tool .t{font-weight:700;font-size:15px}
+  .tool .d{font-size:13px;color:var(--muted);margin:4px 0 10px}
+  .tool .p{font-size:13px;font-weight:700;color:var(--accent)}
+  .tool .p s{color:#93a0b1;font-weight:500;margin-right:6px}
+  .tool.free .p{color:var(--accent)}
+
+  details.faq{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:9px}
+  details.faq summary{cursor:pointer;font-weight:650;font-size:15px}
+  details.faq p{margin:8px 0 0;font-size:14px;color:#33404f}
+
+  footer.site{border-top:1px solid var(--line);background:var(--card);margin-top:36px;padding:22px 0 34px;font-size:12.5px;color:var(--muted)}
+  footer.site .wrap{display:flex;flex-direction:column;gap:6px}
+  .noscript{background:var(--warn-soft);color:var(--warn);padding:10px 14px;border-radius:10px;margin:14px 0;font-size:14px}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span> Seller Tools <span class="sub">free calculators for online sellers</span></div>
+    <nav aria-label="Sections">
+      <a href="#calculator">Calculator</a>
+      <a href="#fees">2026 fees</a>
+      <a href="#tools">Tools</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Seller Profit &amp; Break-Even Calculator <span style="color:var(--muted);font-weight:600">(2026 fees)</span></h1>
+    <p class="lead">What you actually keep per sale on Etsy, Gumroad or Shopify — after transaction fees, payment processing, shipping, refunds and ad spend. It also tells you the break-even price and the minimum price your target margin needs.</p>
+    <div class="pills">
+      <span class="pill">Free · no signup</span>
+      <span class="pill">Runs in your browser</span>
+      <span class="pill">Returns included</span>
+      <span class="pill">Every fee editable</span>
+    </div>
+  </div>
+
+  <section class="calc" id="calculator" aria-labelledby="calc-title">
+    <h2 id="calc-title" class="sr-only">Profit and break-even calculator</h2>
+    <div class="app">
+      <!-- INPUTS -->
+      <div class="card">
+        <div class="inner">
+          <h2>Your numbers</h2>
+          <p class="hint">Results update as you type. Nothing leaves your browser.</p>
+
+          <div class="tabs" role="tablist" aria-label="Platform fee preset">
+            <button class="tab" role="tab" id="tab-etsy" aria-selected="true" data-platform="etsy">Etsy<small>listing + transaction + processing</small></button>
+            <button class="tab" role="tab" id="tab-gumroadDirect" aria-selected="false" data-platform="gumroadDirect">Gumroad Direct<small>10% + $0.50</small></button>
+            <button class="tab" role="tab" id="tab-gumroadDiscover" aria-selected="false" data-platform="gumroadDiscover">Gumroad Discover<small>30% flat</small></button>
+            <button class="tab" role="tab" id="tab-custom" aria-selected="false" data-platform="custom">Shopify / Custom<small>your own rates</small></button>
+          </div>
+
+          <fieldset>
+            <legend>Sale</legend>
+            <div class="row">
+              <div class="field">
+                <label for="price">Sale price</label>
+                <div class="ib has-pre"><span class="pre" data-cur>$</span><input type="number" id="price" value="25" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="currency">Currency symbol</label>
+                <div class="ib"><select id="currency" aria-label="Currency symbol">
+                  <option value="$" selected>USD $</option>
+                  <option value="€">EUR €</option>
+                  <option value="£">GBP £</option>
+                  <option value="₩">KRW ₩</option>
+                  <option value="¥">JPY ¥</option>
+                  <option value="₹">INR ₹</option>
+                  <option value="C$">CAD C$</option>
+                </select></div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Costs per sale</legend>
+            <div class="row">
+              <div class="field">
+                <label for="cogs">Product cost (COGS)</label>
+                <div class="ib has-pre"><span class="pre" data-cur>$</span><input type="number" id="cogs" value="8" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="shipping">Shipping you pay</label>
+                <div class="ib has-pre"><span class="pre" data-cur>$</span><input type="number" id="shipping" value="4" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="returnRate">Return / refund rate</label>
+                <div class="ib has-suf"><input type="number" id="returnRate" value="10" min="0" max="99" step="0.5" inputmode="decimal"><span class="suf">%</span></div>
+              </div>
+              <div class="field">
+                <label for="returnCost">Cost per return</label>
+                <div class="ib has-pre"><span class="pre" data-cur>$</span><input type="number" id="returnCost" value="3" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="adCost">Ad spend per order</label>
+                <div class="ib has-pre"><span class="pre" data-cur>$</span><input type="number" id="adCost" value="1" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="targetMargin">Target net margin</label>
+                <div class="ib has-suf"><input type="number" id="targetMargin" value="20" min="0" max="95" step="1" inputmode="decimal"><span class="suf">%</span></div>
+              </div>
+            </div>
+            <p class="fee-note">Cost per return = return label, restocking or repacking you pay. Ad spend per order = total ad budget ÷ orders, not per click.</p>
+          </fieldset>
+
+          <details class="adv" id="feeDetails">
+            <summary>Fees (prefilled, editable)</summary>
+            <div class="row">
+              <div class="field">
+                <label for="platformPct">Platform fee</label>
+                <div class="ib has-suf"><input type="number" id="platformPct" value="6.5" min="0" max="99" step="0.01" inputmode="decimal"><span class="suf">%</span></div>
+              </div>
+              <div class="field">
+                <label for="platformFixed">Platform fixed</label>
+                <div class="ib has-pre"><span class="pre" data-cur>$</span><input type="number" id="platformFixed" value="0" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="processingPct">Processing fee</label>
+                <div class="ib has-suf"><input type="number" id="processingPct" value="3" min="0" max="99" step="0.01" inputmode="decimal"><span class="suf">%</span></div>
+              </div>
+              <div class="field">
+                <label for="processingFixed">Processing fixed</label>
+                <div class="ib has-pre"><span class="pre" data-cur>$</span><input type="number" id="processingFixed" value="0.25" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="listingFee">Listing / fixed per order</label>
+                <div class="ib has-pre"><span class="pre" data-cur>$</span><input type="number" id="listingFee" value="0.20" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field" id="offsiteWrap">
+                <label for="offsite">Offsite Ads</label>
+                <div class="ib"><select id="offsite">
+                  <option value="0" selected>0% — not attributed</option>
+                  <option value="12">12%</option>
+                  <option value="15">15%</option>
+                </select></div>
+              </div>
+            </div>
+            <div class="inline" id="procToggleWrap" hidden>
+              <input type="checkbox" id="includeProcessing" checked>
+              <label for="includeProcessing" style="font-weight:500">Include card processing (2.9% + $0.30)</label>
+            </div>
+            <p class="fee-note" id="presetNote">Etsy defaults: $0.20 listing, 6.5% transaction, 3% + $0.25 processing, as of Nov 2026. Verify on your own statement.</p>
+          </details>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="card results">
+        <div class="inner">
+          <h2>Your real profit</h2>
+          <p class="hint" id="resultHint">Net profit per order, with refunds and returns spread across every order.</p>
+          <div aria-live="polite" id="liveRegion">
+            <div class="hero-num">
+              <div class="big" id="netPerOrder">$0.00</div>
+              <div class="big-sub" id="netMargin">0.0% net margin</div>
+            </div>
+            <div id="badge" class="badge good">—</div>
+
+            <div class="kpis">
+              <div class="kpi">
+                <div class="k">Break-even price</div>
+                <div class="v" id="breakEven">$0.00</div>
+                <div class="n">zero profit, nothing lost</div>
+              </div>
+              <div class="kpi">
+                <div class="k">Price for target margin</div>
+                <div class="v" id="targetPrice">$0.00</div>
+                <div class="n" id="targetNote">at 20% margin</div>
+              </div>
+              <div class="kpi">
+                <div class="k">Net per 100 sales</div>
+                <div class="v" id="monthlyNet">$0.00</div>
+                <div class="n">same mix, same costs</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bar" id="barWrap">
+            <div class="track" role="img" aria-label="Where each order's money goes" id="barTrack">
+              <div class="seg" id="segFees" style="background:#f59e0b;width:0"></div>
+              <div class="seg" id="segCogs" style="background:#64748b;width:0"></div>
+              <div class="seg" id="segShip" style="background:#94a3b8;width:0"></div>
+              <div class="seg" id="segRet" style="background:#ef4444;width:0"></div>
+              <div class="seg" id="segAds" style="background:#a855f7;width:0"></div>
+              <div class="seg" id="segNet" style="background:#0f766e;width:0"></div>
+            </div>
+            <div class="legend">
+              <span><i style="background:#f59e0b"></i>Fees <b id="lgFees">$0</b></span>
+              <span><i style="background:#64748b"></i>Product <b id="lgCogs">$0</b></span>
+              <span><i style="background:#94a3b8"></i>Shipping <b id="lgShip">$0</b></span>
+              <span><i style="background:#ef4444"></i>Returns <b id="lgRet">$0</b></span>
+              <span><i style="background:#a855f7"></i>Ads <b id="lgAds">$0</b></span>
+              <span><i style="background:#0f766e"></i>Profit <b id="lgNet">$0</b></span>
+            </div>
+          </div>
+
+          <div class="tbl-wrap" style="margin-top:20px">
+            <table id="breakdown">
+              <caption>Per order and per 100 orders</caption>
+              <thead>
+                <tr><th scope="col">Line</th><th scope="col">Per order</th><th scope="col">Per 100</th></tr>
+              </thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+
+          <div style="margin-top:18px">
+            <h3 style="font-size:14px;margin:0 0 4px">Hidden loss (what a price sheet leaves out)</h3>
+            <ul class="hidden" id="hiddenList"></ul>
+          </div>
+
+          <div class="btnrow">
+            <button class="ghost" type="button" id="copyBtn">Copy this summary</button>
+            <button class="ghost" type="button" id="resetBtn">Reset to preset</button>
+          </div>
+          <p class="fee-note" id="assumptionNote" style="margin-top:12px"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPLAINER -->
+  <section class="content" id="fees">
+    <h2>Etsy and Gumroad fees, 2026</h2>
+    <p>Fee schedules are the first thing sellers underestimate, and the second is returns. These are the standard rates this page ships with as of November 2026. They can differ by country, by shop and by payment method, so treat them as a starting point and put your own statement's numbers into the fee fields above.</p>
+    <div class="cols">
+      <div class="panel">
+        <h3>Etsy</h3>
+        <ul>
+          <li><b>$0.20</b> listing fee per listing (renews every four months, or after a sale)</li>
+          <li><b>6.5%</b> transaction fee on the sale price, including shipping charged to the buyer</li>
+          <li><b>3% + $0.25</b> payment processing where Etsy Payments applies</li>
+          <li><b>12% or 15%</b> Offsite Ads fee on orders attributed to an offsite ad — optional to join, mandatory once you cross the platform's sales threshold</li>
+          <li>Returns do not return the listing fee, and card processing is generally not refunded</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Gumroad</h3>
+        <ul>
+          <li><b>Direct sales:</b> 10% + $0.50 per sale on top of your own card processing at 2.9% + $0.30</li>
+          <li><b>Discover sales:</b> a flat 30%, for buyers the marketplace brought you</li>
+          <li>There is no monthly fee, so a low-volume shop does not pay for idle months</li>
+          <li>Because Discover costs roughly three times the direct rate, the same product can be profitable on one channel and thin on the other</li>
+          <li>Digital products have no shipping and low return rates — the two numbers that decide most physical products barely move your digital margin</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Shopify and your own store</h3>
+        <ul>
+          <li>No per-sale platform percentage, but a subscription and often paid apps</li>
+          <li>Payment processing at roughly <b>2.9% + $0.30</b> depending on plan and country</li>
+          <li>Add app and subscription cost per order into the fixed per-order field to see your true cost</li>
+          <li>You carry the full cost of returns, which is where the margin usually disappears</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Break-even price, with returns built in</h3>
+    <p>Most calculators compute <em>price − fees − product cost</em> and stop. That number is optimistic in a specific, predictable way: it assumes every order is kept, that shipping is free, and that no ad budget is spent. Once you add a return rate, the break-even price moves up — sometimes by 20% or more on a cheap product with a 10% return rate, because fixed fees and outbound shipping are paid on orders that come back.</p>
+    <p>Enter your price, product cost, shipping, return rate, return cost and ad spend, and this page solves the price where profit is exactly zero, plus the price your target margin needs. If your current price sits between the two, the badge says so instead of pretending the product is fine.</p>
+
+    <h3>How to read the numbers</h3>
+    <ul>
+      <li><b>Real profit per order</b> is averaged across kept and refunded orders — so it is the number that actually reaches your account, not the best case.</li>
+      <li><b>Net margin</b> is that profit divided by your listing price. A 30% margin on a $20 product is $6, not a comfortable cushion once ads and returns are in.</li>
+      <li><b>Break-even price</b> is your floor. Any discount below it is paying customers to take your stock.</li>
+      <li><b>Price for target margin</b> is the number to put on the listing, or the number to walk away from.</li>
+    </ul>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="content" id="tools">
+    <h2>When one product is not enough</h2>
+    <p>This page answers one product, one price, one sale. If you sell several SKUs and file taxes, the hard part becomes the year: which products carried the profit, what the quarter's set-aside should be, and which expenses you can actually deduct. That is what the tools below cover.</p>
+    <div class="tools">
+      <a class="tool free" href="https://8299181964131.gumroad.com/l/seller-profit-calculator-lite" target="_blank" rel="noopener">
+        <div>
+          <div class="t">Seller Profit Calculator Lite</div>
+          <div class="d">The same fee logic as this page, for several products at once. Free.</div>
+        </div>
+        <div class="p">$0+ · free</div>
+      </a>
+      <a class="tool" href="https://8299181964131.gumroad.com/l/seller-profit-tax-calculator/LAUNCH25" target="_blank" rel="noopener">
+        <div>
+          <div class="t">Seller Profit &amp; Tax Calculator 2026</div>
+          <div class="d">Multi-SKU profit tracking with quarterly tax set-aside (Schedule C / self-employment) built in.</div>
+        </div>
+        <div class="p"><s>$19.99</s> $14.99 with LAUNCH25</div>
+      </a>
+      <a class="tool" href="https://8299181964131.gumroad.com/l/bank-statement-to-excel" target="_blank" rel="noopener">
+        <div>
+          <div class="t">Bank Statement → Excel</div>
+          <div class="d">Turn a PDF statement into clean, categorized rows you can reconcile against payouts.</div>
+        </div>
+        <div class="p">$19</div>
+      </a>
+      <a class="tool" href="https://8299181964131.gumroad.com/l/ecom-review-painpoint-analyzer" target="_blank" rel="noopener">
+        <div>
+          <div class="t">Review Pain-Point Analyzer</div>
+          <div class="d">Find what buyers complain about in a category before you price into it.</div>
+        </div>
+        <div class="p">$29</div>
+      </a>
+      <a class="tool" href="https://8299181964131.gumroad.com/l/receipt-tax-expense-aggregator" target="_blank" rel="noopener">
+        <div>
+          <div class="t">Receipt &amp; Tax Expense Aggregator</div>
+          <div class="d">Sort a year of receipts into deductible categories instead of a shoebox.</div>
+        </div>
+        <div class="p">$39</div>
+      </a>
+      <a class="tool" href="https://8299181964131.gumroad.com/l/skincare-mockup-pack-15/LAUNCHMOCK" target="_blank" rel="noopener">
+        <div>
+          <div class="t">Skincare Mockup Pack</div>
+          <div class="d">15 photorealistic mockups for listings that do not look like stock photos.</div>
+        </div>
+        <div class="p"><s>$12.99</s> $9.99 with LAUNCHMOCK</div>
+      </a>
+    </div>
+  </section>
+
+  <section class="content" id="faq">
+    <h2>Questions</h2>
+    <details class="faq" open>
+      <summary>Are these the official Etsy and Gumroad fees for 2026?</summary>
+      <p>They are the standard published rates as of November 2026 that this calculator ships with. Rates change and vary by country, shop and payment method, so every fee field is editable — put in the numbers from your own statement. Confirm with the platform's own fee page before you price a product.</p>
+    </details>
+    <details class="faq">
+      <summary>Why does the calculator include return rate?</summary>
+      <p>A refund removes the sale price but not everything else: outbound shipping is gone, the return or restocking cost is yours, and the fixed part of platform and card fees usually is not returned. Spreading those across every order is what makes the profit figure match your bank account.</p>
+    </details>
+    <details class="faq">
+      <summary>What is a break-even price?</summary>
+      <p>The lowest price at which you make exactly zero profit after fees, product cost, shipping, returns and ads. Below it, every sale loses money. The target-margin price is usually the more useful number, because zero profit is not a business.</p>
+    </details>
+    <details class="faq">
+      <summary>Does Gumroad Discover really take 30%?</summary>
+      <p>Discover sales — buyers the marketplace brought you — carry a flat 30%. Direct sales to your own audience carry the lower direct rate. Treating them as separate presets is the point: the same product has a very different margin depending on where the buyer came from.</p>
+    </details>
+    <details class="faq">
+      <summary>Do I need an account or an email address?</summary>
+      <p>No. The page runs entirely in your browser. Nothing you type is sent anywhere, and it keeps working once loaded, offline included.</p>
+    </details>
+    <details class="faq">
+      <summary>Can I use a currency other than US dollars?</summary>
+      <p>Yes. Choose the symbol in the form. No conversion is applied — enter every value in the same currency and the results follow.</p>
+    </details>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div><b>Seller Tools</b> · free calculators for online sellers.</div>
+    <div>Fee presets reflect standard published rates as of November 2026 and are editable on purpose. This calculator is an estimate, not tax, legal or accounting advice. Your platform's fee page and your own payout reports are the authority.</div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var PRESETS = {
+    etsy: {
+      label: "Etsy",
+      platformPct: 6.5, platformFixed: 0,
+      processingPct: 3, processingFixed: 0.25,
+      listing: 0.20, offsite: 0,
+      showOffsite: true, showProc: false,
+      note: "Etsy defaults: $0.20 listing, 6.5% transaction, 3% + $0.25 processing, as of Nov 2026. Verify on your own statement."
+    },
+    gumroadDirect: {
+      label: "Gumroad Direct",
+      platformPct: 10, platformFixed: 0.50,
+      processingPct: 2.9, processingFixed: 0.30,
+      listing: 0, offsite: 0,
+      showOffsite: false, showProc: true,
+      note: "Gumroad Direct defaults: 10% + $0.50, plus card processing 2.9% + $0.30. Untick processing if you account for it elsewhere."
+    },
+    gumroadDiscover: {
+      label: "Gumroad Discover",
+      platformPct: 30, platformFixed: 0,
+      processingPct: 0, processingFixed: 0,
+      listing: 0, offsite: 0,
+      showOffsite: false, showProc: false,
+      note: "Gumroad Discover defaults: a flat 30% on Discover-attributed sales."
+    },
+    custom: {
+      label: "Shopify / Custom",
+      platformPct: 0, platformFixed: 0,
+      processingPct: 2.9, processingFixed: 0.30,
+      listing: 0, offsite: 0,
+      showOffsite: false, showProc: false,
+      note: "Custom defaults: payment processing 2.9% + $0.30. Add a subscription or app cost per order into 'Listing / fixed per order' if you want it included."
+    }
+  };
+
+  var state = { platform: "etsy", currency: "$" };
+
+  function $(id) { return document.getElementById(id); }
+  function n(id) {
+    var v = parseFloat($(id).value);
+    return isFinite(v) ? v : 0;
+  }
+  function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+  function decimals() { return (state.currency === "₩" || state.currency === "¥") ? 0 : 2; }
+
+  function money(v) {
+    var a = Math.abs(v);
+    var d = decimals();
+    var s = a.toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+    return (v < 0 ? "-" : "") + state.currency + s;
+  }
+  function money0(v) {
+    var d = decimals();
+    var s = Math.abs(v).toLocaleString("en-US", { minimumFractionDigits: d, maximumFractionDigits: d });
+    return (v < 0 ? "-" : "") + state.currency + s;
+  }
+  function pct(v) { return (v).toFixed(1) + "%"; }
+
+  function readInputs() {
+    var returnRate = clamp(n("returnRate"), 0, 99);
+    var target = clamp(n("targetMargin"), 0, 95);
+    var price = Math.max(0, n("price"));
+    return {
+      price: price,
+      cogs: Math.max(0, n("cogs")),
+      shipping: Math.max(0, n("shipping")),
+      returnRate: returnRate,
+      returnCost: Math.max(0, n("returnCost")),
+      adCost: Math.max(0, n("adCost")),
+      target: target,
+      platformPct: clamp(n("platformPct"), 0, 99),
+      platformFixed: Math.max(0, n("platformFixed")),
+      processingPct: clamp(n("processingPct"), 0, 99),
+      processingFixed: Math.max(0, n("processingFixed")),
+      listing: Math.max(0, n("listingFee")),
+      offsite: clamp(parseFloat($("offsite").value) || 0, 0, 99)
+    };
+  }
+
+  function compute(i) {
+    var N = 100;
+    var d = 1 - i.returnRate / 100;         // share of orders kept
+    var sold = N * d;                        // kept orders out of 100
+    var returned = N - sold;
+
+    var pctRate = (i.platformPct + i.processingPct + i.offsite) / 100;
+    var fixedPerSale = i.platformFixed + i.processingFixed;
+
+    // Per 100 orders
+    var revenue = sold * i.price;
+    var platform = sold * (i.platformPct / 100) * i.price;
+    var processing = sold * (i.processingPct / 100) * i.price;
+    var offsiteFee = sold * (i.offsite / 100) * i.price;
+    var fixedSold = sold * fixedPerSale;
+    var fixedOnReturns = returned * fixedPerSale;   // fixed fees on refunded orders are not returned
+    var listingTotal = N * i.listing;               // listing / fixed per order, charged whether or not the order converts
+
+    var cogsT = sold * i.cogs;
+    var shipT = N * i.shipping;                     // outbound shipping is paid on returned orders too
+    var returnT = returned * i.returnCost;
+    var adT = N * i.adCost;
+
+    var feesTotal = platform + processing + offsiteFee + fixedSold + fixedOnReturns + listingTotal;
+    var costsTotal = cogsT + shipT + returnT + adT;
+    var net = revenue - feesTotal - costsTotal;
+
+    var netPerOrder = net / N;
+    var marginOnPrice = i.price > 0 ? (netPerOrder / i.price) * 100 : 0;
+
+    // Closed form: net(P) = d*(1 - pctRate)*P - K
+    var slope = d * (1 - pctRate);
+    var K = fixedPerSale + i.listing + d * i.cogs + i.shipping + (1 - d) * i.returnCost + i.adCost;
+
+    var breakEven = slope > 0 ? K / slope : null;
+    var targetM = i.target / 100;
+    var targetPrice = (slope - targetM) > 0.0000001 ? K / (slope - targetM) : null;
+    var maxMargin = slope * 100;
+
+    return {
+      d: d, sold: sold, returned: returned,
+      revenue: revenue, platform: platform, processing: processing, offsiteFee: offsiteFee,
+      fixedSold: fixedSold, fixedOnReturns: fixedOnReturns, listingTotal: listingTotal,
+      cogsT: cogsT, shipT: shipT, returnT: returnT, adT: adT,
+      feesTotal: feesTotal, costsTotal: costsTotal, net: net,
+      netPerOrder: netPerOrder, marginOnPrice: marginOnPrice,
+      breakEven: breakEven, targetPrice: targetPrice, maxMargin: maxMargin,
+      slope: slope, K: K
+    };
+  }
+
+  function badgeFor(i, r) {
+    if (r.netPerOrder < -0.005) {
+      return { cls: "badge bad", text: "LOSS · you lose " + money(Math.abs(r.netPerOrder)) + " on every order at " + money(i.price) };
+    }
+    if (r.netPerOrder < 0.005) {
+      return { cls: "badge mid", text: "Break-even · this price keeps nothing" };
+    }
+    if (r.targetPrice !== null && i.price + 0.000001 < r.targetPrice) {
+      return { cls: "badge mid", text: "Profitable, but below your " + i.target + "% target — " + money(r.targetPrice - i.price) + " more per sale needed" };
+    }
+    if (r.targetPrice === null) {
+      return { cls: "badge good", text: "Profitable · your fee structure cannot reach " + i.target + "% at any price (max " + pct(r.maxMargin) + ")" };
+    }
+    return { cls: "badge good", text: "On target · " + pct(r.marginOnPrice) + " net margin at this price" };
+  }
+
+  function row(label, a, b, cls) {
+    var c = cls || "";
+    return '<tr><td>' + label + '</td><td class="' + c + '">' + money0(a / 100) + '</td><td class="' + c + '">' + money0(b) + '</td></tr>';
+  }
+  function rowSum(label, a, b, cls) {
+    var c = cls || "";
+    return '<tr class="sum"><td>' + label + '</td><td class="' + c + '">' + money0(a / 100) + '</td><td class="' + c + '">' + money0(b) + '</td></tr>';
+  }
+
+  function render() {
+    var i = readInputs();
+    var r = compute(i);
+
+    // Hero
+    $("netPerOrder").textContent = money(r.netPerOrder);
+    $("netPerOrder").className = "big" + (r.netPerOrder < 0 ? " loss" : "");
+    $("netMargin").textContent = pct(r.marginOnPrice) + " net margin · " + pct(r.d * 100) + " of orders kept";
+
+    var b = badgeFor(i, r);
+    $("badge").className = b.cls;
+    $("badge").textContent = b.text;
+
+    // KPIs
+    $("breakEven").textContent = r.breakEven === null ? "—" : money(r.breakEven);
+    if (r.targetPrice === null) {
+      $("targetPrice").textContent = "Not reachable";
+      $("targetNote").textContent = "your fees cap net margin at " + pct(r.maxMargin) + " of price";
+    } else {
+      $("targetPrice").textContent = money(r.targetPrice);
+      $("targetNote").textContent = "at " + i.target + "% net margin";
+    }
+    $("monthlyNet").textContent = money(r.netPerOrder * 100);
+    $("monthlyNet").style.color = r.netPerOrder < 0 ? "var(--warn)" : "";
+
+    // Bar
+    var fees = r.feesTotal / 100;
+    var cogs = r.cogsT / 100;
+    var ship = r.shipT / 100;
+    var ret = r.returnT / 100;
+    var ads = r.adT / 100;
+    var profit = Math.max(0, r.netPerOrder);
+    var denom = Math.max(r.revenue / 100, fees + cogs + ship + ret + ads + profit);
+    if (denom <= 0) denom = 1;
+    function w(v) { return (v / denom * 100).toFixed(2) + "%"; }
+    $("segFees").style.width = w(fees);
+    $("segCogs").style.width = w(cogs);
+    $("segShip").style.width = w(ship);
+    $("segRet").style.width = w(ret);
+    $("segAds").style.width = w(ads);
+    $("segNet").style.width = w(profit);
+    $("lgFees").textContent = money(fees);
+    $("lgCogs").textContent = money(cogs);
+    $("lgShip").textContent = money(ship);
+    $("lgRet").textContent = money(ret);
+    $("lgAds").textContent = money(ads);
+    $("lgNet").textContent = money(r.netPerOrder);
+
+    // Table
+    var html = "";
+    html += row("Revenue kept (" + r.sold.toFixed(0) + " of 100 orders)", r.revenue, r.revenue);
+    html += row("Platform fee", r.platform, r.platform, "neg");
+    if (r.offsiteFee > 0) html += row("Offsite Ads fee", r.offsiteFee, r.offsiteFee, "neg");
+    html += row("Payment processing", r.processing, r.processing, "neg");
+    html += row("Fixed fees on kept orders", r.fixedSold, r.fixedSold, "neg");
+    html += row("Fixed fees lost on refunds", r.fixedOnReturns, r.fixedOnReturns, "neg");
+    if (r.listingTotal > 0) html += row("Listing / fixed per order", r.listingTotal, r.listingTotal, "neg");
+    html += row("Product cost (COGS)", r.cogsT, r.cogsT, "neg");
+    html += row("Shipping you pay", r.shipT, r.shipT, "neg");
+    html += row("Return handling", r.returnT, r.returnT, "neg");
+    html += row("Ad spend", r.adT, r.adT, "neg");
+    html += rowSum("Net profit", r.net, r.net, r.net < 0 ? "neg" : "pos");
+    $("tbody").innerHTML = html;
+
+    // Hidden loss
+    var outboundOnReturns = r.returned * i.shipping;
+    var refundedRevenue = r.returned * i.price;
+    var lost = [];
+    lost.push("<b>" + money(refundedRevenue) + "</b> of revenue refunded on " + r.returned.toFixed(0) + " returned orders per 100");
+    lost.push("<b>" + money(outboundOnReturns) + "</b> of outbound shipping on parcels that came back");
+    lost.push("<b>" + money(r.returnT) + "</b> of return labels and repacking");
+    lost.push("<b>" + money(r.fixedOnReturns) + "</b> of fixed platform and card fees that refunds do not return");
+    lost.push("<b>" + money(r.adT) + "</b> of ad spend against orders that were not kept");
+    lost.push("Total the price sheet forgets: <b>" + money(outboundOnReturns + r.returnT + r.fixedOnReturns) + "</b> per 100 orders, or <b>" + money((outboundOnReturns + r.returnT + r.fixedOnReturns) / 100) + "</b> per order.");
+    $("hiddenList").innerHTML = lost.map(function (s) { return "<li>" + s + "</li>"; }).join("");
+
+    // Notes
+    $("assumptionNote").textContent =
+      "Assumes: platform percentage fees are charged only on kept orders; fixed fees and listing fees are not returned on refunds; returned goods come back resellable; shipping is paid on every dispatched order. Change any fee field to match your statement.";
+
+    $("resultHint").textContent = (state.platform === "gumroadDiscover")
+      ? "Discover-attributed sales only. Direct sales use the lower direct rate — switch presets to compare."
+      : "Net profit per shipped order, with returns and refunded fixed fees spread across every order.";
+
+    updateCurrencyLabels();
+  }
+
+  function updateCurrencyLabels() {
+    var els = document.querySelectorAll("[data-cur]");
+    for (var k = 0; k < els.length; k++) els[k].textContent = state.currency;
+  }
+
+  function applyPreset(key, keepFees) {
+    state.platform = key;
+    var p = PRESETS[key];
+    if (!keepFees) {
+      if (key === "gumroadDirect") $("includeProcessing").checked = true;
+      $("platformPct").value = p.platformPct;
+      $("platformFixed").value = p.platformFixed;
+      $("processingPct").value = (key === "gumroadDirect" && !$("includeProcessing").checked) ? 0 : p.processingPct;
+      $("processingFixed").value = (key === "gumroadDirect" && !$("includeProcessing").checked) ? 0 : p.processingFixed;
+      $("listingFee").value = p.listing;
+      $("offsite").value = String(p.offsite);
+    }
+    $("offsiteWrap").hidden = !p.showOffsite;
+    $("procToggleWrap").hidden = !p.showProc;
+    $("presetNote").textContent = p.note;
+
+    var tabs = document.querySelectorAll(".tab");
+    for (var t = 0; t < tabs.length; t++) {
+      tabs[t].setAttribute("aria-selected", tabs[t].getAttribute("data-platform") === key ? "true" : "false");
+    }
+    render();
+  }
+
+  // Events
+  var tabs = document.querySelectorAll(".tab");
+  for (var t = 0; t < tabs.length; t++) {
+    tabs[t].addEventListener("click", function () {
+      applyPreset(this.getAttribute("data-platform"), false);
+    });
+  }
+  var inputs = document.querySelectorAll("input[type=number], select");
+  for (var k = 0; k < inputs.length; k++) {
+    inputs[k].addEventListener("input", function () {
+      if (this.id === "currency") { state.currency = this.value; }
+      render();
+    });
+    inputs[k].addEventListener("change", render);
+  }
+  $("includeProcessing").addEventListener("change", function () {
+    var p = PRESETS[state.platform];
+    if (state.platform === "gumroadDirect") {
+      $("processingPct").value = this.checked ? p.processingPct : 0;
+      $("processingFixed").value = this.checked ? p.processingFixed : 0;
+    }
+    render();
+  });
+  $("resetBtn").addEventListener("click", function () {
+    $("price").value = 25;
+    $("cogs").value = 8;
+    $("shipping").value = 4;
+    $("returnRate").value = 10;
+    $("returnCost").value = 3;
+    $("adCost").value = 1;
+    $("targetMargin").value = 20;
+    state.currency = "$";
+    $("currency").value = "$";
+    applyPreset("etsy", false);
+  });
+  $("copyBtn").addEventListener("click", function () {
+    var text = [
+      "Seller profit summary — " + PRESETS[state.platform].label,
+      "Price: " + money(n("price")),
+      "Net profit per order: " + $("netPerOrder").textContent,
+      "Net margin: " + $("netMargin").textContent,
+      "Break-even price: " + $("breakEven").textContent,
+      "Price for target margin: " + $("targetPrice").textContent,
+      "Net per 100 sales: " + $("monthlyNet").textContent
+    ].join("\n");
+    var btn = this;
+    function done(ok) {
+      btn.textContent = ok ? "Copied" : "Copy failed";
+      setTimeout(function () { btn.textContent = "Copy this summary"; }, 1600);
+    }
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+      } else { done(false); }
+    } catch (e) { done(false); }
+  });
+
+  applyPreset("etsy", false);
+})();
+</script>
+</body>
+</html>
