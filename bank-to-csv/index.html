@@ -464,7 +464,7 @@ var SAMPLE_TEXT = [
 
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var state = { rows: [], truncated: 0, source: '' };
+  var state = { rows: [], truncated: 0, source: '', file: 'statement' };
   var workerReady = false;
 
   function setStatus(msg, kind) {
@@ -479,12 +479,13 @@ var SAMPLE_TEXT = [
     return (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
 
-  function render(result, sourceLabel) {
+  function render(result, sourceLabel, fileName) {
     var all = result.transactions;
     var show = sliceForFree(all, FREE_ROW_LIMIT);
     state.rows = all;
     state.truncated = Math.max(0, all.length - show.length);
     state.source = sourceLabel;
+    state.file = fileName || 'statement';
 
     if (!all.length) {
       if (result.textChars < 50) {
@@ -584,7 +585,7 @@ var SAMPLE_TEXT = [
         })
         .then(function (pages) {
           if (!pages.length) { setStatus('That PDF has no pages.', 'err'); return; }
-          render(parsePages(pages), file.name);
+          render(parsePages(pages), file.name, file.name);
         })
         .catch(fail);
     };
@@ -618,7 +619,7 @@ var SAMPLE_TEXT = [
     var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
-    var base = (state.source || 'statement').replace(/\.[Pp][Dd][Ff]$/, '');
+    var base = (state.file || 'statement').replace(/\.[Pp][Dd][Ff]$/i, '');
     a.href = url;
     a.download = base.replace(/[^A-Za-z0-9._-]+/g, '-') + '_converted.csv';
     document.body.appendChild(a);
@@ -648,7 +649,7 @@ var SAMPLE_TEXT = [
   }
 
   function reset() {
-    state = { rows: [], truncated: 0, source: '' };
+    state = { rows: [], truncated: 0, source: '', file: 'statement' };
     $('result').classList.add('hidden');
     $('file').value = '';
     $('paste').value = '';
@@ -692,7 +693,7 @@ var SAMPLE_TEXT = [
   });
 
   $('sample').addEventListener('click', function () {
-    render(parseText(SAMPLE_TEXT), 'the built-in sample statement');
+    render(parseText(SAMPLE_TEXT), 'the built-in sample statement', 'sample-statement');
   });
 
   $('parse-text').addEventListener('click', function () {
@@ -703,12 +704,12 @@ var SAMPLE_TEXT = [
       setStatus('That text is too short to hold a transaction.', 'warn');
       return;
     }
-    render(res, 'the pasted text');
+    render(res, 'the pasted text', 'pasted-statement');
   });
 
   $('fill-sample').addEventListener('click', function () {
     $('paste').value = SAMPLE_TEXT;
-    render(parseText(SAMPLE_TEXT), 'the built-in sample statement');
+    render(parseText(SAMPLE_TEXT), 'the built-in sample statement', 'sample-statement');
   });
 
   $('download').addEventListener('click', download);
