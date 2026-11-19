@@ -75,12 +75,14 @@
   .presets{display:grid;grid-template-columns:1fr 1fr;gap:7px}
   .preset{position:relative;text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;
     padding:8px 9px;cursor:pointer;font:inherit;line-height:1.3}
-  .preset .nm{font-size:12.5px;font-weight:600;display:block;padding-right:14px}
+  .preset .nm{font-size:12.5px;font-weight:600;display:block}
   .preset .sz{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
   .preset[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px rgba(17,24,39,.09)}
   .preset.locked{background:#fafafa;color:#94a3b8}
   .preset.locked .nm{color:#64748b}
-  .preset .lock{position:absolute;top:7px;right:8px;font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.03em}
+  .preset .pro{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.06em;color:#64748b;
+    background:#eef2f7;border-radius:4px;padding:0 4px;margin-left:3px;vertical-align:1px}
+  .preset.locked .pro{background:#eef2f7}
   .preset:hover{border-color:#cbd5e1}
 
   label.chk{display:flex;align-items:center;gap:8px;font-size:13.5px;margin:0 0 8px;cursor:pointer}
@@ -272,8 +274,8 @@
 
 /* CORE-START ── pure logic, no DOM. Extracted by tests/run-tests.py ───────── */
 
-var PRODUCT_ID = "";                                   /* set at publish time */
-var PRO_URL = "https://8299181964131.gumroad.com/";    /* store root */
+var PRODUCT_ID = "_tg-esyYDVimnswSNoAIhA==";             /* Gumroad product id (listing-kit-pro) */
+var PRO_URL = "https://8299181964131.gumroad.com/l/listing-kit-pro";
 var PRO_PRICE = "$12";
 var VERIFY_ENDPOINT = "https://api.gumroad.com/v2/licenses/verify";
 var CACHE_KEY = "slk-web-license-v1";
@@ -522,8 +524,8 @@ if (typeof module !== "undefined" && module.exports) { module.exports = CORE; }
       b.className = "preset" + (allowed ? "" : " locked");
       b.setAttribute("aria-pressed", p.id === state.presetId ? "true" : "false");
       b.dataset.id = p.id;
-      b.innerHTML = '<span class="nm">' + p.name + '</span><span class="sz">' + p.w + "×" + p.h + '</span>' +
-                    (allowed ? "" : '<span class="lock">PRO</span>');
+      b.innerHTML = '<span class="nm">' + p.name + '</span><span class="sz">' + p.w + "×" + p.h +
+                    (allowed ? "" : ' <span class="pro">PRO</span>') + '</span>';
       b.addEventListener("click", function () {
         if (!isAllowed(p.id, state.pro)) {
           $("pro").scrollIntoView({ behavior:"smooth", block:"center" });
@@ -548,9 +550,6 @@ if (typeof module !== "undefined" && module.exports) { module.exports = CORE; }
     var c = document.createElement("canvas");
     c.width = 1600; c.height = 1600;
     var g = c.getContext("2d");
-    var bg = g.createLinearGradient(0, 0, 1600, 1600);
-    bg.addColorStop(0, "#efe9df"); bg.addColorStop(1, "#dcd3c5");
-    g.fillStyle = bg; g.fillRect(0, 0, 1600, 1600);
     g.save();
     g.translate(0, 40); g.scale(1.16, 1.16);
     g.fillStyle = "rgba(60,50,40,.16)";
