@@ -636,18 +636,22 @@ if (typeof module !== "undefined" && module.exports) { module.exports = CORE; }
   }
 
   function drawGuides(g, p, w, h, u) {
+    var bottom = overlayBottom(h, state.strip);
     if (state.safe && p.safe > 0) {
       var inset = p.safe;
-      var lw = Math.max(2, u * 2.4), dash = [u*18, u*12];
-      dashed(g, inset, inset, w - inset*2, h - inset*2, "rgba(255,255,255,.85)", lw * 2.1, dash);
-      dashed(g, inset, inset, w - inset*2, h - inset*2, "rgba(17,24,39,.75)", lw, dash);
+      var gw = w - inset*2, gh = bottom - inset*2;
+      if (gh > 0) {
+        var lw = Math.max(2, u * 2.4), dash = [u*18, u*12];
+        dashed(g, inset, inset, gw, gh, "rgba(255,255,255,.85)", lw * 2.1, dash);
+        dashed(g, inset, inset, gw, gh, "rgba(17,24,39,.75)", lw, dash);
+      }
     }
     if (state.thirds) {
       var lw2 = Math.max(1.4, u * 1.4);
       for (var i = 1; i <= 2; i++) {
-        var x = w * i / 3, y = h * i / 3;
+        var x = w * i / 3, y = bottom * i / 3;
         g.save(); g.setLineDash([u*12,u*10]); g.lineWidth = lw2; g.strokeStyle = "rgba(37,99,235,.55)";
-        g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); g.restore();
+        g.beginPath(); g.moveTo(x, 0); g.lineTo(x, bottom); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); g.restore();
       }
     }
     /* size chip, top right, preview only */
@@ -692,33 +696,40 @@ if (typeof module !== "undefined" && module.exports) { module.exports = CORE; }
     g.restore();
   }
 
-  function drawCallout(g, w, h, p, u) {
+  function calloutLayout(g, w, bottom, p, u) {
     var title = state.calloutTitle || "Hand-finished in small batches";
     var body = state.calloutBody || "";
-    var padX = u * 34, padY = u * 26, gap = u * 12;
+    var padX = u * 34, padY = u * 26, gap = u * 14;
     var tSize = Math.round(u * 38), bSize = Math.round(u * 28);
-    var maxW = Math.min(w * 0.78, 90 * u * 8);
-    var innerW = maxW - padX*2;
+    var maxW = Math.min(w * 0.78, u * 760);
+    var innerW = Math.max(60, maxW - padX*2);
     g.font = "700 " + tSize + "px " + FONT;
     var tLines = wrap(g, title, innerW);
     g.font = "400 " + bSize + "px " + FONT;
     var bLines = body ? wrap(g, body, innerW) : [];
-    var tLineH = tSize * 1.25, bLineH = bSize * 1.4;
+    var tLineH = tSize * 1.22, bLineH = bSize * 1.42;
     var boxH = padY*2 + tLines.length*tLineH + (bLines.length ? gap + bLines.length*bLineH : 0);
-    var box = calloutBox(w, h, p.safe, u, maxW, boxH);
+    var box = calloutBox(w, bottom, p.safe, u, maxW, boxH);
+    return { box:box, tLines:tLines, bLines:bLines, tSize:tSize, bSize:bSize,
+             tLineH:tLineH, bLineH:bLineH, padX:padX, padY:padY, gap:gap };
+  }
+
+  function drawCallout(g, lay) {
+    var box = lay.box;
     g.save();
-    g.fillStyle = "rgba(255,255,255,.96)";
-    roundRect(g, box.x, box.y, box.w, box.h, u*20); g.fill();
-    g.lineWidth = Math.max(2, u*3); g.strokeStyle = "#111827";
-    roundRect(g, box.x, box.y, box.w, box.h, u*20); g.stroke();
-    var tx = box.x + padX, ty = box.y + padY + tSize*0.86;
+    g.fillStyle = "rgba(255,255,255,.97)";
+    roundRect(g, box.x, box.y, box.w, box.h, 20 * (lay.tSize / 38)); g.fill();
+    g.lineWidth = Math.max(2, lay.tSize * 0.09); g.strokeStyle = "#111827";
+    roundRect(g, box.x, box.y, box.w, box.h, 20 * (lay.tSize / 38)); g.stroke();
+    var tx = box.x + lay.padX;
+    var y = box.y + lay.padY;
     g.textAlign = "left"; g.textBaseline = "alphabetic";
-    g.font = "700 " + tSize + "px " + FONT; g.fillStyle = "#111827";
-    tLines.forEach(function (line) { g.fillText(line, tx, ty); ty += tLineH; });
-    if (bLines.length) {
-      ty += gap - tLineH + bLineH*0.2;
-      g.font = "400 " + bSize + "px " + FONT; g.fillStyle = "#475569";
-      bLines.forEach(function (line) { g.fillText(line, tx, ty); ty += bLineH; });
+    g.font = "700 " + lay.tSize + "px " + FONT; g.fillStyle = "#111827";
+    lay.tLines.forEach(function (line) { g.fillText(line, tx, y + lay.tSize * 0.82); y += lay.tLineH; });
+    if (lay.bLines.length) {
+      y += lay.gap;
+      g.font = "400 " + lay.bSize + "px " + FONT; g.fillStyle = "#475569";
+      lay.bLines.forEach(function (line) { g.fillText(line, tx, y + lay.bSize * 0.82); y += lay.bLineH; });
     }
     g.restore();
   }
@@ -800,11 +811,14 @@ if (typeof module !== "undefined" && module.exports) { module.exports = CORE; }
       try { g.drawImage(state.image, box.x, box.y, box.w, box.h); }
       catch (e) { /* broken image: leave the background */ }
     }
-    if (state.strip) drawStrip(g, w, h, u);
-    if (state.callout) drawCallout(g, w, bottom, p, u);
-    if (state.price) drawPrice(g, w, bottom, p, u);
-    if (state.badge) drawBadge(g, w, h, p, u);
     if (withGuides) drawGuides(g, p, w, h, u);
+    var lay = state.callout ? calloutLayout(g, w, bottom, p, u) : null;
+    if (state.strip) drawStrip(g, w, h, u);
+    if (lay) drawCallout(g, lay);
+    /* price sits above the callout when both are on, so they never overlap */
+    var priceBottom = lay ? Math.max(u * 120, lay.box.y - u * 18) : bottom;
+    if (state.price) drawPrice(g, w, priceBottom, p, u);
+    if (state.badge) drawBadge(g, w, h, p, u);
     g.restore();
   }
 
