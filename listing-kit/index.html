@@ -1,1 +1,1032 @@
-<!-- placeholder: replaced by the real upload in the next commit -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Seller Listing &amp; Mockup Frame Kit — free listing image resizer for Etsy, Gumroad, Shopify</title>
+<meta name="description" content="Upload one product photo and export it at the exact listing sizes Etsy, Gumroad, Shopify, Pinterest and Amazon use, with safe-zone guides, badge, callout and price overlays. Free in the browser, no account.">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="Seller Listing &amp; Mockup Frame Kit">
+<meta property="og:description" content="One upload, every marketplace size. Safe zones, badges and price tags on a canvas that exports PNG. Free, no signup.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Seller Tools">
+<meta property="og:url" content="https://yougkxm.github.io/listing-kit/">
+<link rel="canonical" href="https://yougkxm.github.io/listing-kit/">
+<style>
+  :root{
+    --ink:#0f172a; --ink-2:#334155; --muted:#64748b; --line:#e2e8f0; --bg:#f8fafc;
+    --card:#ffffff; --accent:#111827; --accent-2:#2563eb; --ok:#047857; --warn:#b45309;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font:15px/1.55 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent-2);text-decoration:none}
+  a:hover{text-decoration:underline}
+  code,.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+
+  .top{background:#fff;border-bottom:1px solid var(--line)}
+  .top-in{max-width:1360px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:-.01em}
+  .brand .dot{width:11px;height:11px;border-radius:99px;background:var(--accent);display:inline-block}
+  .brand .sub{font-weight:500;color:var(--muted);font-size:13px}
+  .top nav{margin-left:auto;display:flex;gap:18px;font-size:14px;align-items:center}
+
+  .wrap{max-width:1360px;margin:0 auto;padding:22px 20px 56px}
+  .hero{display:flex;gap:14px;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;margin-bottom:18px}
+  h1{font-size:25px;line-height:1.25;margin:0 0 6px;letter-spacing:-.02em}
+  .hero p{margin:0;color:var(--ink-2);max-width:760px}
+  .badge-free{display:inline-flex;align-items:center;gap:6px;background:#ecfdf5;color:var(--ok);border:1px solid #a7f3d0;
+    font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;white-space:nowrap}
+
+  .app{display:grid;grid-template-columns:396px minmax(0,1fr);gap:20px;align-items:start}
+  @media (max-width:1080px){.app{grid-template-columns:1fr}}
+
+  .panel{display:flex;flex-direction:column;gap:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px}
+  .card h2{font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:0 0 12px;font-weight:700}
+  .card h2 .n{display:inline-flex;width:18px;height:18px;border-radius:99px;background:var(--accent);color:#fff;
+    align-items:center;justify-content:center;font-size:11px;margin-right:7px;vertical-align:1px}
+
+  .btn{border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:9px 13px;
+    font:inherit;font-size:14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+  .btn:hover{border-color:#cbd5e1;background:#fbfdff}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:#1f2937}
+  .btn[disabled]{opacity:.45;cursor:not-allowed}
+  .btn.wide{width:100%;justify-content:center}
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+  .row.tight{gap:6px}
+
+  .drop{border:1.5px dashed #cbd5e1;border-radius:12px;padding:16px;text-align:center;color:var(--muted);
+    font-size:13px;transition:.15s;background:#fcfdff}
+  .seg{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);border-radius:9px;overflow:hidden}
+  .seg button{border:0;background:#fff;padding:8px 6px;font:inherit;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer}
+  .seg button+button{border-left:1px solid var(--line)}
+  .seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+  .drop.over{border-color:var(--accent-2);background:#eff6ff;color:var(--ink-2)}
+  .drop b{color:var(--ink)}
+  .thumb{display:flex;gap:10px;align-items:center;margin-top:10px;font-size:13px;color:var(--muted)}
+  .thumb img{width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid var(--line)}
+
+  .presets{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+  .preset{position:relative;text-align:left;border:1px solid var(--line);background:#fff;border-radius:10px;
+    padding:8px 9px;cursor:pointer;font:inherit;line-height:1.3}
+  .preset .nm{font-size:12.5px;font-weight:600;display:block;padding-right:14px}
+  .preset .sz{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .preset[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px rgba(17,24,39,.09)}
+  .preset.locked{background:#fafafa;color:#94a3b8}
+  .preset.locked .nm{color:#64748b}
+  .preset .lock{position:absolute;top:7px;right:8px;font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:.03em}
+  .preset:hover{border-color:#cbd5e1}
+
+  label.chk{display:flex;align-items:center;gap:8px;font-size:13.5px;margin:0 0 8px;cursor:pointer}
+  label.chk input{width:15px;height:15px;accent-color:var(--accent)}
+  .field{margin-bottom:10px}
+  .field:last-child{margin-bottom:0}
+  .field > span{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:600}
+  input[type=text],input[type=color]{
+    width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;font:inherit;font-size:13.5px;background:#fff;color:var(--ink)}
+  input[type=text]:focus{outline:2px solid #bfdbfe;border-color:#93c5fd}
+  input[type=color]{padding:2px;height:36px;cursor:pointer}
+  .duo{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .ramp{display:flex;margin-top:7px;border-radius:7px;overflow:hidden;border:1px solid var(--line)}
+  .ramp button{flex:1;height:26px;border:0;padding:0;cursor:pointer}
+  .ramp button:focus-visible{outline:2px solid var(--accent-2);outline-offset:-2px}
+
+  .stage{position:sticky;top:14px}
+  @media (max-width:1080px){.stage{position:static}}
+  .stage-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .stage-head{display:flex;gap:12px;align-items:baseline;justify-content:space-between;flex-wrap:wrap;
+    padding:12px 16px;border-bottom:1px solid var(--line);background:#fff}
+  .stage-head .t{font-weight:700;font-size:14px}
+  .stage-head .m{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .canvas-wrap{padding:16px;background:
+    linear-gradient(45deg,#eef2f7 25%,transparent 25%,transparent 75%,#eef2f7 75%,#eef2f7) 0 0/22px 22px,
+    linear-gradient(45deg,#eef2f7 25%,transparent 25%,transparent 75%,#eef2f7 75%,#eef2f7) 11px 11px/22px 22px,#f8fafc;
+    display:flex;align-items:center;justify-content:center;min-height:360px}
+  #canvas{max-width:100%;max-height:min(72vh,760px);height:auto;width:auto;display:block;
+    box-shadow:0 10px 30px -12px rgba(15,23,42,.35);border-radius:4px;background:#fff}
+  .stage-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+  .status{font-size:12.5px;margin-top:9px;color:var(--muted);min-height:18px}
+  .status.ok{color:var(--ok)}
+  .status.warn{color:var(--warn)}
+  .status.err{color:#b91c1c}
+  .unconfigured{background:#fffbeb;border:1px solid #fde68a;color:#92400e;border-radius:9px;
+    padding:8px 10px;font-size:12.5px;margin-top:10px}
+  .pro-list{margin:0 0 12px;padding-left:18px;font-size:13px;color:var(--ink-2)}
+  .pro-list li{margin-bottom:3px}
+  .pro-lock{display:inline-flex;font-size:10.5px;font-weight:700;letter-spacing:.05em;background:#f1f5f9;
+    color:#475569;border:1px solid var(--line);border-radius:99px;padding:1px 7px;margin-left:6px;vertical-align:1px}
+  footer{max-width:1360px;margin:0 auto;padding:0 20px 40px;color:var(--muted);font-size:12.5px}
+  footer p{margin:4px 0}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><span class="dot"></span> Seller Tools <span class="sub">free tools for online sellers</span></div>
+    <nav>
+      <a href="https://yougkxm.github.io/">Profit calculator</a>
+      <a id="proLinkTop" href="#pro">Pro · $12</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <h1>Listing &amp; Mockup Frame Kit</h1>
+      <p>Upload one product photo, pick a marketplace size, and export a ready-to-upload PNG with the safe zone, a badge, a callout or a price tag already on it. Runs in your browser — no account, no upload to any server.</p>
+    </div>
+    <span class="badge-free">✓ Free presets, no signup</span>
+  </div>
+
+  <div class="app">
+    <aside class="panel">
+
+      <section class="card">
+        <h2><span class="n">1</span>Product image</h2>
+        <div class="drop" id="drop">
+          <b>Drop a photo here</b> or
+          <div class="row tight" style="justify-content:center;margin-top:8px">
+            <button class="btn" id="pickBtn" type="button">Choose image</button>
+            <button class="btn" id="sampleBtn" type="button">Use sample product</button>
+          </div>
+          <div class="thumb" id="thumbRow" hidden><img id="thumbImg" alt=""><span id="thumbMeta"></span></div>
+        </div>
+        <div class="field" style="margin-top:12px">
+          <span>Image fit on the canvas</span>
+          <div class="seg" id="fitSeg" role="group" aria-label="Image fit">
+            <button type="button" id="fitMargin" aria-pressed="true">Fit with margin</button>
+            <button type="button" id="fitFill" aria-pressed="false">Fill the frame</button>
+          </div>
+        </div>
+        <input type="file" id="file" accept="image/*" class="sr" aria-label="Choose a product image">
+      </section>
+
+      <section class="card">
+        <h2><span class="n">2</span>Marketplace size</h2>
+        <div class="presets" id="presets"></div>
+        <p class="status" id="presetNote" style="margin-top:10px"></p>
+      </section>
+
+      <section class="card">
+        <h2><span class="n">3</span>Background &amp; guides</h2>
+        <div class="field">
+          <span>Background colour</span>
+          <div class="duo">
+            <input type="color" id="bgColor" value="#f4f1ea" aria-label="Background colour">
+            <input type="text" id="bgHex" value="#F4F1EA" spellcheck="false" aria-label="Background hex">
+          </div>
+          <div class="ramp" id="ramp" title="Colour ramp from the base colour"></div>
+        </div>
+        <label class="chk"><input type="checkbox" id="safeOn" checked> Safe-zone guide (preview only)</label>
+        <label class="chk"><input type="checkbox" id="thirdsOn"> Rule-of-thirds grid (preview only)</label>
+        <label class="chk"><input type="checkbox" id="stripOn"> Brand strip on export <span class="pro-lock">PRO</span></label>
+        <div class="field" id="shopWrap" hidden style="margin-top:8px">
+          <span>Shop name on the strip</span>
+          <input type="text" id="shopName" value="Your Shop" maxlength="28" spellcheck="false">
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="n">4</span>Overlays</h2>
+        <label class="chk"><input type="checkbox" id="badgeOn"> Badge</label>
+        <div class="field" id="badgeWrap" hidden>
+          <span>Badge text</span>
+          <input type="text" id="badgeText" value="BESTSELLER" maxlength="24">
+        </div>
+        <label class="chk"><input type="checkbox" id="calloutOn"> Callout box</label>
+        <div id="calloutWrap" hidden>
+          <div class="field"><span>Title</span><input type="text" id="calloutTitle" value="Hand-finished in small batches" maxlength="60"></div>
+          <div class="field"><span>Body</span><input type="text" id="calloutBody" value="Ships in 2 days. Every order is checked before it leaves." maxlength="90"></div>
+        </div>
+        <label class="chk"><input type="checkbox" id="priceOn"> Price tag</label>
+        <div id="priceWrap" hidden>
+          <div class="duo">
+            <div class="field"><span>Price</span><input type="text" id="priceNow" value="$38" maxlength="12"></div>
+            <div class="field"><span>Was (optional)</span><input type="text" id="priceWas" value="$52" maxlength="12"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="n">5</span>Export</h2>
+        <button class="btn primary wide" id="downloadBtn" type="button">Download PNG</button>
+        <div class="row" style="margin-top:8px">
+          <button class="btn wide" id="sheetBtn" type="button">Size sheet — all 15 <span class="pro-lock">PRO</span></button>
+        </div>
+        <p class="status" id="exportNote">Guides are never exported, only shown in the preview.</p>
+      </section>
+
+      <section class="card" id="pro">
+        <h2>Pro · unlock</h2>
+        <ul class="pro-list">
+          <li>The other 12 marketplace presets (Pinterest, Shopify, Instagram, Amazon, eBay, KDP, print…)</li>
+          <li>Size sheet: all 15 sizes laid out in one captioned PNG</li>
+          <li>Brand strip with your shop name on every export</li>
+        </ul>
+        <div id="proState">
+          <a class="btn primary wide" id="proBuy" href="#pro">Get Pro — $12 on Gumroad</a>
+          <div class="field" style="margin-top:12px">
+            <span>Already bought? Paste the license key from your receipt</span>
+            <input type="text" id="licenseKey" placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" spellcheck="false" autocomplete="off">
+          </div>
+          <button class="btn wide" id="verifyBtn" type="button">Verify key</button>
+          <p class="status" id="verifyNote"></p>
+        </div>
+        <div class="unconfigured" id="unconfigured" hidden>This build has no Gumroad product ID yet, so keys cannot be checked here. The seller sets it at publish time.</div>
+      </section>
+
+    </aside>
+
+    <section class="stage">
+      <div class="stage-card">
+        <div class="stage-head">
+          <div class="t" id="stageTitle">Etsy Listing Photo</div>
+          <div class="m" id="stageMeta">2700 × 2025 · 4:3 · safe zone 120 px</div>
+        </div>
+        <div class="canvas-wrap"><canvas id="canvas" width="1200" height="900" role="img" aria-label="Listing image preview">Listing image preview — your browser needs canvas support to show it.</canvas></div>
+        <div class="stage-foot">
+          <span id="tierFoot">Free tier · 3 of 15 presets</span>
+          <span>Nothing leaves your browser. The only network call is a license check when you press Verify.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<footer>
+  <p><b>Seller Tools</b> — <a href="https://yougkxm.github.io/">free profit &amp; break-even calculator</a> · <a href="https://yougkxm.github.io/listing-kit/">listing kit</a></p>
+  <p>Preset sizes follow each marketplace's published guidance. Marketplaces change their specs; check the current size in your seller dashboard before a large batch. No income claims on this page — the free presets stay free.</p>
+</footer>
+
+<script>
+"use strict";
+
+/* CORE-START ── pure logic, no DOM. Extracted by tests/run-tests.py ───────── */
+
+var PRODUCT_ID = "";                                   /* set at publish time */
+var PRO_URL = "https://8299181964131.gumroad.com/";    /* store root */
+var PRO_PRICE = "$12";
+var VERIFY_ENDPOINT = "https://api.gumroad.com/v2/licenses/verify";
+var CACHE_KEY = "slk-web-license-v1";
+var CACHE_DAYS = 30;
+
+var PRESETS = [
+  { id:"etsy-listing",   name:"Etsy Listing Photo",    platform:"Etsy",      w:2700, h:2025, ratio:"4:3",     free:true,  safe:120, note:"Etsy shows listing photos at 4:3 and crops anything taller. Keep text and the product edge inside the safe zone." },
+  { id:"gumroad-cover",  name:"Gumroad Cover",         platform:"Gumroad",   w:1280, h:720,  ratio:"16:9",    free:true,  safe:48,  note:"Product cover on the Gumroad page; the same image is used as the card in Discover." },
+  { id:"gumroad-thumb",  name:"Gumroad Thumbnail",     platform:"Gumroad",   w:600,  h:600,  ratio:"1:1",     free:true,  safe:24,  note:"Library thumbnail shown next to the product name in a buyer's library." },
+  { id:"pinterest-pin",  name:"Pinterest Pin",         platform:"Pinterest", w:1000, h:1500, ratio:"2:3",     free:false, safe:60,  note:"2:3 is the ratio Pinterest gives full width in the feed; other ratios are letterboxed." },
+  { id:"shopify-product",name:"Shopify Product",       platform:"Shopify",   w:2048, h:2048, ratio:"1:1",     free:false, safe:96,  note:"Square master image. Themes crop to 1:1, 4:5 and 3:4 from this file." },
+  { id:"etsy-shop-icon", name:"Etsy Shop Icon",        platform:"Etsy",      w:500,  h:500,  ratio:"1:1",     free:false, safe:40,  note:"Shown as a circle, so keep the mark inside the inset." },
+  { id:"etsy-big-banner",name:"Etsy Big Banner",       platform:"Etsy",      w:1200, h:300,  ratio:"4:1",     free:false, safe:40,  note:"Desktop shop header. The shop name and icon sit over the centre." },
+  { id:"etsy-mini-banner",name:"Etsy Mini Banner",     platform:"Etsy",      w:1600, h:213,  ratio:"7.5:1",   free:false, safe:24,  note:"The shorter banner used on Etsy mobile and in narrow layouts." },
+  { id:"instagram-post", name:"Instagram Post",        platform:"Instagram", w:1080, h:1080, ratio:"1:1",     free:false, safe:60,  note:"Feed post. The caption and action icons cover part of the bottom edge in preview." },
+  { id:"instagram-story",name:"Instagram Story",       platform:"Instagram", w:1080, h:1920, ratio:"9:16",    free:false, safe:220, note:"The profile row and the reply bar cover roughly the top 250 px and bottom 400 px." },
+  { id:"facebook-link",  name:"Facebook Link Preview", platform:"Facebook",  w:1200, h:630,  ratio:"1.91:1",  free:false, safe:48,  note:"Link share card. Anything outside 1.91:1 is cropped in the feed." },
+  { id:"amazon-main",    name:"Amazon Main Image",     platform:"Amazon",    w:2000, h:2000, ratio:"1:1",     free:false, safe:0,   note:"Pure white background, product filling at least 85% of the frame — so there is no safe inset on this preset." },
+  { id:"ebay-listing",   name:"eBay Listing Image",    platform:"eBay",      w:1600, h:1600, ratio:"1:1",     free:false, safe:80,  note:"1600 px on the longest side or more, so the zoom tool appears." },
+  { id:"kdp-cover",      name:"KDP eBook Cover",       platform:"Amazon KDP",w:1600, h:2560, ratio:"1:1.6",   free:false, safe:120, note:"KDP eBook covers are 1:1.6. Keep the title inside the inset so nothing is lost in the thumbnail." },
+  { id:"print-a4",       name:"A4 Print (300 dpi)",    platform:"Print",     w:2480, h:3508, ratio:"1:1.414", free:false, safe:150, note:"A4 at 300 dpi. The dashed inner line is where text should stop." }
+];
+
+function presetById(id) {
+  for (var i = 0; i < PRESETS.length; i++) { if (PRESETS[i].id === id) return PRESETS[i]; }
+  return null;
+}
+function isAllowed(id, pro) {
+  var p = presetById(id);
+  if (!p) return false;
+  return pro === true || p.free === true;
+}
+function freeCount() { return PRESETS.filter(function (p) { return p.free; }).length; }
+function allowedIds(pro) {
+  return PRESETS.filter(function (p) { return pro === true || p.free === true; }).map(function (p) { return p.id; });
+}
+
+/* ── colour ───────────────────────────────────────────────────────────── */
+function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
+
+function normalizeHex(input) {
+  var hex = String(input == null ? "" : input).trim().replace(/^#/, "");
+  if (/^[0-9a-fA-F]{3}$/.test(hex)) hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+  if (!/^[0-9a-fA-F]{6}$/.test(hex)) return null;
+  return hex.toUpperCase();
+}
+function hexToRgb(hex) {
+  var h = normalizeHex(hex);
+  if (!h) return null;
+  return { r: parseInt(h.slice(0,2),16)/255, g: parseInt(h.slice(2,4),16)/255, b: parseInt(h.slice(4,6),16)/255 };
+}
+function rgbToHex(rgb) {
+  return [rgb.r, rgb.g, rgb.b].map(function (v) {
+    var s = Math.round(clamp(v,0,1)*255).toString(16).toUpperCase();
+    return s.length === 1 ? "0" + s : s;
+  }).join("");
+}
+function rgbToHsl(rgb) {
+  var r = rgb.r, g = rgb.g, b = rgb.b;
+  var max = Math.max(r,g,b), min = Math.min(r,g,b), h = 0, s = 0, l = (max+min)/2, d = max-min;
+  if (d !== 0) {
+    s = l > 0.5 ? d/(2-max-min) : d/(max+min);
+    if (max === r) h = ((g-b)/d) % 6;
+    else if (max === g) h = (b-r)/d + 2;
+    else h = (r-g)/d + 4;
+    h /= 6;
+    if (h < 0) h += 1;
+  }
+  return { h:h, s:s, l:l };
+}
+function hslToRgb(hsl) {
+  var h = ((hsl.h % 1) + 1) % 1, s = clamp(hsl.s,0,1), l = clamp(hsl.l,0,1);
+  if (s === 0) return { r:l, g:l, b:l };
+  var q = l < 0.5 ? l*(1+s) : l+s-l*s, p = 2*l-q;
+  function ch(t) {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q-p)*6*t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q-p)*(2/3-t)*6;
+    return p;
+  }
+  return { r: ch(h+1/3), g: ch(h), b: ch(h-1/3) };
+}
+function buildRamp(hex, steps) {
+  var base = normalizeHex(hex);
+  var count = Math.round(steps || 10);
+  if (!base || count < 2) return [];
+  var hsl = rgbToHsl(hexToRgb(base)), out = [];
+  for (var i = 0; i < count; i++) {
+    var t = i / (count - 1);
+    var l = 0.95 + (0.10 - 0.95) * t;
+    var s = clamp(hsl.s * (1 - 0.18 * Math.abs(t - 0.5) * 2), 0, 1);
+    out.push(rgbToHex(hslToRgb({ h:hsl.h, s:s, l:l })));
+  }
+  return out;
+}
+function brightnessOf(hex) {
+  var rgb = hexToRgb(hex);
+  if (!rgb) return 1;
+  return 0.2126*rgb.r + 0.7152*rgb.g + 0.0722*rgb.b;
+}
+function labelColorFor(hex) { return brightnessOf(hex) > 0.55 ? "#111111" : "#FFFFFF"; }
+
+/* ── geometry ─────────────────────────────────────────────────────────── */
+function gcd(a, b) { a = Math.abs(Math.round(a)); b = Math.abs(Math.round(b)); while (b) { var t = b; b = a % b; a = t; } return a || 1; }
+function ratioOf(w, h) { var g = gcd(w,h); return Math.round(w/g) + ":" + Math.round(h/g); }
+
+/** Always a usable CSS colour: "F4F1EA" or "#f4f1ea" -> "#F4F1EA". */
+function cssHex(input, fallback) {
+  var hex = normalizeHex(input) || normalizeHex(fallback) || "F4F1EA";
+  return "#" + hex;
+}
+
+/** "cover": fill the frame, crop the overflow. "contain": fit inside, letterbox. */
+function placeImage(imgW, imgH, frameW, frameH, mode, fillRatio) {
+  if (!(imgW > 0) || !(imgH > 0) || !(frameW > 0) || !(frameH > 0)) {
+    return { x:0, y:0, w:frameW, h:frameH };
+  }
+  var ratio = clamp(typeof fillRatio === "number" ? fillRatio : 1, 0.2, 1);
+  var scale = mode === "contain"
+    ? Math.min(frameW/imgW, frameH/imgH) * ratio
+    : Math.max(frameW/imgW, frameH/imgH);
+  var w = imgW * scale, h = imgH * scale;
+  return { x:(frameW - w)/2, y:(frameH - h)/2, w:w, h:h, scale:scale };
+}
+function maxRatio(imgW, imgH, frameW, frameH) { return Math.max(frameW/imgW, frameH/imgH); }
+function minRatio(imgW, imgH, frameW, frameH) { return Math.min(frameW/imgW, frameH/imgH); }
+
+/** Overlay scale factor: overlay metrics are authored against a 1200 px short side. */
+function overlayUnit(w, h) { return clamp(Math.min(w, h) / 1200, 0.3, 4); }
+
+/** Where the corner badge sits: inset from the safe zone, never less than 2% of the short side. */
+function badgeBox(w, h, safe, textW, unit) {
+  var pad = Math.max(unit * 22, safe * 0.6);
+  var bh = unit * 62;
+  return { x:pad, y:pad, w:textW + unit*72, h:bh, unit:unit };
+}
+function calloutBox(w, h, safe, unit, boxW, boxH) {
+  var pad = Math.max(unit * 22, safe * 0.6);
+  var bw = Math.min(boxW, w - pad*2);
+  return { x:(w - bw)/2, y:h - boxH - pad*1.6, w:bw, h:boxH };
+}
+function priceBox(w, h, safe, unit, boxW, boxH) {
+  var pad = Math.max(unit * 22, safe * 0.6);
+  return { x:pad, y:h - boxH - pad, w:boxW, h:boxH };
+}
+function stripHeight(h) { return Math.round(Math.max(16, Math.min(220, h * 0.075))); }
+
+/** Bottom edge available to overlays: pulled up above the Pro brand strip when it is on. */
+function overlayBottom(h, strip) { return strip === true ? h - stripHeight(h) : h; }
+
+function filenameFor(preset) { return "slk-" + preset.id + "-" + preset.w + "x" + preset.h + ".png"; }
+function sizeLabel(preset) { return preset.w + " × " + preset.h; }
+
+/* ── license ──────────────────────────────────────────────────────────── */
+/** Normalise Gumroad's licenses/verify answer into one shape. */
+function interpretLicense(json) {
+  if (!json || typeof json !== "object") return { ok:false, reason:"network", message:"No answer from Gumroad." };
+  if (json.success !== true) {
+    return { ok:false, reason:"invalid", message: (json.message || "That license key was not accepted.") };
+  }
+  var p = json.purchase || {};
+  if (p.refunded === true || p.chargebacked === true) {
+    return { ok:false, reason:"refunded", message:"This purchase was refunded or charged back." };
+  }
+  return { ok:true, reason:"ok", message:"Pro unlocked on this browser.", email: p.email || "" };
+}
+function cacheExpired(savedAt, now, days) {
+  var span = (days || CACHE_DAYS) * 86400000;
+  return !(typeof savedAt === "number") || !isFinite(savedAt) || (now - savedAt) > span;
+}
+
+var CORE = {
+  PRESETS: PRESETS, presetById: presetById, isAllowed: isAllowed, allowedIds: allowedIds, freeCount: freeCount,
+  normalizeHex: normalizeHex, cssHex: cssHex, hexToRgb: hexToRgb, rgbToHex: rgbToHex, rgbToHsl: rgbToHsl, hslToRgb: hslToRgb,
+  buildRamp: buildRamp, brightnessOf: brightnessOf, labelColorFor: labelColorFor,
+  ratioOf: ratioOf, placeImage: placeImage, overlayUnit: overlayUnit,
+  badgeBox: badgeBox, calloutBox: calloutBox, priceBox: priceBox, stripHeight: stripHeight,
+  overlayBottom: overlayBottom,
+  filenameFor: filenameFor, sizeLabel: sizeLabel,
+  interpretLicense: interpretLicense, cacheExpired: cacheExpired
+};
+if (typeof module !== "undefined" && module.exports) { module.exports = CORE; }
+/* CORE-END */
+
+/* ── app ──────────────────────────────────────────────────────────────── */
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var canvas = $("canvas");
+  var ctx = canvas.getContext("2d");
+
+  var state = {
+    presetId: "etsy-listing",
+    pro: false,
+    image: null,
+    imageMeta: "",
+    bg: "#F4F1EA",
+    fit: "contain",
+    safe: true, thirds: false, strip: false,
+    badge: false, callout: false, price: false,
+    shop: "Your Shop",
+    badgeText: "BESTSELLER",
+    calloutTitle: "Hand-finished in small batches",
+    calloutBody: "Ships in 2 days. Every order is checked before it leaves.",
+    priceNow: "$38", priceWas: "$52"
+  };
+
+  /* ---------- license cache ---------- */
+  function loadCache() {
+    try {
+      var raw = localStorage.getItem(CACHE_KEY);
+      if (!raw) return null;
+      var obj = JSON.parse(raw);
+      if (!obj || !obj.key) return null;
+      if (cacheExpired(obj.savedAt, Date.now())) { localStorage.removeItem(CACHE_KEY); return null; }
+      return obj;
+    } catch (e) { return null; }
+  }
+  function saveCache(key) {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify({ key:key, savedAt:Date.now() })); } catch (e) {}
+  }
+  function clearCache() { try { localStorage.removeItem(CACHE_KEY); } catch (e) {} }
+
+  function setStatus(el, text, kind) {
+    el.textContent = text || "";
+    el.className = "status" + (kind ? " " + kind : "");
+  }
+
+  function applyPro(on, message) {
+    state.pro = on === true;
+    $("tierFoot").textContent = state.pro ? "Pro unlocked · all 15 presets" : "Free tier · " + freeCount() + " of 15 presets";
+    if (message) setStatus($("verifyNote"), message, state.pro ? "ok" : "warn");
+    renderPresets();
+    render();
+  }
+
+  /* ---------- presets UI ---------- */
+  function renderPresets() {
+    var host = $("presets");
+    host.innerHTML = "";
+    PRESETS.forEach(function (p) {
+      var allowed = isAllowed(p.id, state.pro);
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "preset" + (allowed ? "" : " locked");
+      b.setAttribute("aria-pressed", p.id === state.presetId ? "true" : "false");
+      b.dataset.id = p.id;
+      b.innerHTML = '<span class="nm">' + p.name + '</span><span class="sz">' + p.w + "×" + p.h + '</span>' +
+                    (allowed ? "" : '<span class="lock">PRO</span>');
+      b.addEventListener("click", function () {
+        if (!isAllowed(p.id, state.pro)) {
+          $("pro").scrollIntoView({ behavior:"smooth", block:"center" });
+          setStatus($("verifyNote"), "“" + p.name + "” is a Pro preset. Unlock with a license key below.", "warn");
+          return;
+        }
+        state.presetId = p.id;
+        renderPresets();
+        render();
+      });
+      host.appendChild(b);
+    });
+  }
+
+  function currentPreset() {
+    var p = presetById(state.presetId);
+    return isAllowed(state.presetId, state.pro) ? p : presetById("etsy-listing");
+  }
+
+  /* ---------- sample artwork ---------- */
+  function sampleImage() {
+    var c = document.createElement("canvas");
+    c.width = 1600; c.height = 1600;
+    var g = c.getContext("2d");
+    var bg = g.createLinearGradient(0, 0, 1600, 1600);
+    bg.addColorStop(0, "#efe9df"); bg.addColorStop(1, "#dcd3c5");
+    g.fillStyle = bg; g.fillRect(0, 0, 1600, 1600);
+    g.save();
+    g.translate(0, 40); g.scale(1.16, 1.16);
+    g.fillStyle = "rgba(60,50,40,.16)";
+    g.beginPath(); g.ellipse(690, 1180, 300, 46, 0, 0, Math.PI*2); g.fill();
+    g.beginPath(); g.ellipse(690, 1180, 170, 24, 0, 0, Math.PI*2); g.fillStyle = "rgba(60,50,40,.20)"; g.fill();
+    var body = g.createLinearGradient(420, 0, 960, 0);
+    body.addColorStop(0, "#b9c3b4"); body.addColorStop(0.22, "#e7ece2");
+    body.addColorStop(0.5, "#d3dbcc"); body.addColorStop(0.82, "#aab5a4"); body.addColorStop(1, "#93a08e");
+    g.fillStyle = body;
+    g.beginPath();
+    g.moveTo(600, 300); g.lineTo(780, 300);
+    g.bezierCurveTo(790, 380, 860, 420, 880, 520);
+    g.lineTo(905, 1090);
+    g.bezierCurveTo(908, 1160, 850, 1185, 690, 1185);
+    g.bezierCurveTo(530, 1185, 472, 1160, 475, 1090);
+    g.lineTo(500, 520);
+    g.bezierCurveTo(520, 420, 590, 380, 600, 300);
+    g.closePath(); g.fill();
+    g.fillStyle = "#8f9a89";
+    g.beginPath(); g.roundRect ? g.roundRect(586, 258, 208, 62, 12) : g.rect(586, 258, 208, 62); g.fill();
+    g.fillStyle = "rgba(255,255,255,.42)";
+    g.beginPath(); g.ellipse(610, 700, 34, 240, 0.06, 0, Math.PI*2); g.fill();
+    g.fillStyle = "#f7f5f0";
+    g.fillRect(520, 700, 340, 250);
+    g.fillStyle = "#3c3730";
+    g.font = "600 40px ui-sans-serif,Helvetica,Arial,sans-serif";
+    g.textAlign = "center";
+    g.fillText("DAYLIGHT", 690, 792);
+    g.font = "400 24px ui-sans-serif,Helvetica,Arial,sans-serif";
+    g.fillStyle = "#7b746a";
+    g.fillText("ceramic · 500 ml", 690, 838);
+    g.fillStyle = "#3c3730";
+    g.fillRect(610, 880, 160, 2);
+    g.font = "400 20px ui-sans-serif,Helvetica,Arial,sans-serif";
+    g.fillStyle = "#7b746a";
+    g.fillText("HAND THROWN", 690, 918);
+    g.restore();
+    return c;
+  }
+
+  function useImage(source, meta) {
+    state.image = source;
+    state.imageMeta = meta;
+    var url = source.toDataURL ? source.toDataURL("image/png") : source.src;
+    $("thumbImg").src = url;
+    $("thumbMeta").textContent = meta;
+    $("thumbRow").hidden = false;
+    render();
+  }
+
+  function loadFile(file) {
+    if (!file || !/^image\//.test(file.type || "")) { return; }
+    var img = new Image();
+    var reader = new FileReader();
+    reader.onload = function () {
+      img.onload = function () {
+        useImage(img, img.naturalWidth + " × " + img.naturalHeight + " · " + (file.name || "photo"));
+      };
+      img.onerror = function () { setStatus($("exportNote"), "That file could not be read as an image.", "warn"); };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* ---------- drawing ---------- */
+  function roundRect(g, x, y, w, h, r) {
+    r = Math.min(r, w/2, h/2);
+    g.beginPath();
+    g.moveTo(x+r, y);
+    g.arcTo(x+w, y, x+w, y+h, r);
+    g.arcTo(x+w, y+h, x, y+h, r);
+    g.arcTo(x, y+h, x, y, r);
+    g.arcTo(x, y, x+w, y, r);
+    g.closePath();
+  }
+
+  function dashed(g, x, y, w, h, color, lw, dash) {
+    g.save();
+    g.setLineDash(dash);
+    g.lineWidth = lw;
+    g.strokeStyle = color;
+    g.strokeRect(x, y, w, h);
+    g.restore();
+  }
+
+  function drawGuides(g, p, w, h, u) {
+    if (state.safe && p.safe > 0) {
+      var inset = p.safe;
+      var lw = Math.max(2, u * 2.4), dash = [u*18, u*12];
+      dashed(g, inset, inset, w - inset*2, h - inset*2, "rgba(255,255,255,.85)", lw * 2.1, dash);
+      dashed(g, inset, inset, w - inset*2, h - inset*2, "rgba(17,24,39,.75)", lw, dash);
+    }
+    if (state.thirds) {
+      var lw2 = Math.max(1.4, u * 1.4);
+      for (var i = 1; i <= 2; i++) {
+        var x = w * i / 3, y = h * i / 3;
+        g.save(); g.setLineDash([u*12,u*10]); g.lineWidth = lw2; g.strokeStyle = "rgba(37,99,235,.55)";
+        g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); g.restore();
+      }
+    }
+    /* size chip, top right, preview only */
+    var label = p.w + " × " + p.h;
+    var fs = Math.round(u * 26);
+    g.save();
+    g.font = "600 " + fs + "px ui-sans-serif,Helvetica,Arial,sans-serif";
+    var tw = g.measureText(label).width;
+    var padx = fs * 0.7, pady = fs * 0.42;
+    var bw = tw + padx*2, bh = fs + pady*2;
+    g.fillStyle = "rgba(17,24,39,.78)";
+    roundRect(g, w - bw - u*20, u*20, bw, bh, fs*0.4); g.fill();
+    g.fillStyle = "#fff"; g.textBaseline = "middle"; g.textAlign = "left";
+    g.fillText(label, w - bw - u*20 + padx, u*20 + bh/2 + fs*0.04);
+    g.restore();
+  }
+
+  function fitText(g, text, maxW, startSize, weight, family) {
+    var size = startSize;
+    for (var i = 0; i < 40; i++) {
+      g.font = weight + " " + size + "px " + family;
+      if (g.measureText(text).width <= maxW || size <= startSize * 0.45) break;
+      size -= Math.max(1, Math.round(startSize * 0.03));
+    }
+    return size;
+  }
+
+  var FONT = 'ui-sans-serif,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif';
+
+  function drawBadge(g, w, h, p, u) {
+    var text = (state.badgeText || "BESTSELLER").toUpperCase();
+    var fs = Math.round(u * 40);
+    g.font = "700 " + fs + "px " + FONT;
+    var tw = g.measureText(text).width;
+    var box = badgeBox(w, h, p.safe, tw, u);
+    g.save();
+    g.fillStyle = "#111827";
+    roundRect(g, box.x, box.y, box.w, box.h, box.h/2); g.fill();
+    g.fillStyle = "#FFFFFF";
+    g.textAlign = "center"; g.textBaseline = "middle";
+    g.fillText(text, box.x + box.w/2, box.y + box.h/2 + fs*0.03);
+    g.restore();
+  }
+
+  function drawCallout(g, w, h, p, u) {
+    var title = state.calloutTitle || "Hand-finished in small batches";
+    var body = state.calloutBody || "";
+    var padX = u * 34, padY = u * 26, gap = u * 12;
+    var tSize = Math.round(u * 38), bSize = Math.round(u * 28);
+    var maxW = Math.min(w * 0.78, 90 * u * 8);
+    var innerW = maxW - padX*2;
+    g.font = "700 " + tSize + "px " + FONT;
+    var tLines = wrap(g, title, innerW);
+    g.font = "400 " + bSize + "px " + FONT;
+    var bLines = body ? wrap(g, body, innerW) : [];
+    var tLineH = tSize * 1.25, bLineH = bSize * 1.4;
+    var boxH = padY*2 + tLines.length*tLineH + (bLines.length ? gap + bLines.length*bLineH : 0);
+    var box = calloutBox(w, h, p.safe, u, maxW, boxH);
+    g.save();
+    g.fillStyle = "rgba(255,255,255,.96)";
+    roundRect(g, box.x, box.y, box.w, box.h, u*20); g.fill();
+    g.lineWidth = Math.max(2, u*3); g.strokeStyle = "#111827";
+    roundRect(g, box.x, box.y, box.w, box.h, u*20); g.stroke();
+    var tx = box.x + padX, ty = box.y + padY + tSize*0.86;
+    g.textAlign = "left"; g.textBaseline = "alphabetic";
+    g.font = "700 " + tSize + "px " + FONT; g.fillStyle = "#111827";
+    tLines.forEach(function (line) { g.fillText(line, tx, ty); ty += tLineH; });
+    if (bLines.length) {
+      ty += gap - tLineH + bLineH*0.2;
+      g.font = "400 " + bSize + "px " + FONT; g.fillStyle = "#475569";
+      bLines.forEach(function (line) { g.fillText(line, tx, ty); ty += bLineH; });
+    }
+    g.restore();
+  }
+
+  function drawPrice(g, w, h, p, u) {
+    var now = state.priceNow || "$38";
+    var was = state.priceWas || "";
+    var fsNow = Math.round(u * 58), fsWas = Math.round(u * 34);
+    var padX = u * 26, padY = u * 14, gap = u * 16;
+    g.font = "800 " + fsNow + "px " + FONT;
+    var wNow = g.measureText(now).width;
+    g.font = "400 " + fsWas + "px " + FONT;
+    var wWas = was ? g.measureText(was).width : 0;
+    var boxW = padX*2 + wNow + (was ? gap + wWas : 0);
+    var boxH = padY*2 + Math.max(fsNow, fsWas) * 1.16;
+    var box = priceBox(w, h, p.safe, u, boxW, boxH);
+    g.save();
+    g.fillStyle = "#F1F5F9";
+    roundRect(g, box.x, box.y, box.w, box.h, u*24); g.fill();
+    g.textAlign = "left"; g.textBaseline = "middle";
+    var cy = box.y + box.h/2 + fsNow*0.03;
+    g.font = "800 " + fsNow + "px " + FONT; g.fillStyle = "#111827";
+    g.fillText(now, box.x + padX, cy);
+    if (was) {
+      g.font = "400 " + fsWas + "px " + FONT; g.fillStyle = "#94A3B8";
+      var wx = box.x + padX + wNow + gap;
+      g.fillText(was, wx, cy);
+      var mw = g.measureText(was).width;
+      g.strokeStyle = "#94A3B8"; g.lineWidth = Math.max(1.5, u*2.4);
+      g.beginPath(); g.moveTo(wx, cy + fsWas*0.02); g.lineTo(wx + mw, cy + fsWas*0.02); g.stroke();
+    }
+    g.restore();
+  }
+
+  function drawStrip(g, w, h, u) {
+    var sh = stripHeight(h);
+    var ramp = buildRamp(state.bg, 10);
+    var dark = cssHex(ramp[ramp.length-1], "111827");
+    g.save();
+    g.fillStyle = dark;
+    g.fillRect(0, h - sh, w, sh);
+    g.fillStyle = labelColorFor(dark);
+    g.textAlign = "left"; g.textBaseline = "middle";
+    var fs = Math.round(clamp(sh * 0.34, 9, u * 40));
+    g.font = "600 " + fs + "px " + FONT;
+    g.fillText(state.shop || "Your Shop", u*24, h - sh/2);
+    var dotR = sh * 0.16, gap = dotR * 2.4, n = 6;
+    var sx = w - u*24 - (n * (gap*2));
+    for (var i = 0; i < n; i++) {
+      g.beginPath();
+      g.arc(sx + i*gap*2 + dotR, h - sh/2, dotR, 0, Math.PI*2);
+      g.fillStyle = cssHex(ramp[Math.min(ramp.length-1, 1 + i)], "FFFFFF");
+      g.fill();
+    }
+    g.restore();
+  }
+
+  function wrap(g, text, maxW) {
+    var words = String(text).split(/\s+/).filter(Boolean);
+    var lines = [], line = "";
+    for (var i = 0; i < words.length; i++) {
+      var tryLine = line ? line + " " + words[i] : words[i];
+      if (g.measureText(tryLine).width > maxW && line) { lines.push(line); line = words[i]; }
+      else { line = tryLine; }
+    }
+    if (line) lines.push(line);
+    return lines.slice(0, 4);
+  }
+
+  function drawTo(g, p, w, h, withGuides) {
+    var u = overlayUnit(w, h);
+    var bottom = overlayBottom(h, state.strip);
+    g.save();
+    g.clearRect(0, 0, w, h);
+    g.fillStyle = cssHex(state.bg); g.fillRect(0, 0, w, h);
+    if (state.image) {
+      var box = placeImage(state.image.naturalWidth || state.image.width, state.image.naturalHeight || state.image.height,
+                           w, h, state.fit, state.fit === "contain" ? 0.86 : 1);
+      try { g.drawImage(state.image, box.x, box.y, box.w, box.h); }
+      catch (e) { /* broken image: leave the background */ }
+    }
+    if (state.strip) drawStrip(g, w, h, u);
+    if (state.callout) drawCallout(g, w, bottom, p, u);
+    if (state.price) drawPrice(g, w, bottom, p, u);
+    if (state.badge) drawBadge(g, w, h, p, u);
+    if (withGuides) drawGuides(g, p, w, h, u);
+    g.restore();
+  }
+
+  function render() {
+    var p = currentPreset();
+    var w = p.w, h = p.h;
+    canvas.width = w; canvas.height = h;
+    drawTo(ctx, p, w, h, true);
+    $("stageTitle").textContent = p.name;
+    $("stageMeta").textContent = p.w + " × " + p.h + " · " + ratioOf(p.w, p.h) + " · safe zone " + p.safe + " px";
+    $("presetNote").textContent = p.note;
+    $("presetNote").className = "status";
+    $("downloadBtn").textContent = "Download PNG · " + p.w + "×" + p.h;
+  }
+
+  function renderAll() { renderPresets(); render(); }
+
+  /* ---------- export ---------- */
+  function exportPreset(p) {
+    var c = document.createElement("canvas");
+    c.width = p.w; c.height = p.h;
+    drawTo(c.getContext("2d"), p, p.w, p.h, false);
+    return c;
+  }
+
+  function download(canvasEl, name) {
+    canvasEl.toBlob(function (blob) {
+      if (!blob) { setStatus($("exportNote"), "Could not create the PNG in this browser.", "warn"); return; }
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 4000);
+      setStatus($("exportNote"), "Saved " + name + " (" + Math.round(blob.size/1024) + " KB).", "ok");
+    }, "image/png");
+  }
+
+  function sizeSheet() {
+    var cols = 3, cellW = 660, cellH = 520, pad = 40;
+    var rows = Math.ceil(PRESETS.length / cols);
+    var c = document.createElement("canvas");
+    c.width = cols*cellW + pad*2;
+    c.height = rows*cellH + pad*2 + 90;
+    var g = c.getContext("2d");
+    g.fillStyle = "#FFFFFF"; g.fillRect(0, 0, c.width, c.height);
+    g.fillStyle = "#111827";
+    g.font = "800 40px " + FONT; g.textAlign = "left"; g.textBaseline = "alphabetic";
+    g.fillText("Listing size sheet", pad, pad + 34);
+    g.font = "400 24px " + FONT; g.fillStyle = "#64748B";
+    g.fillText(PRESETS.length + " marketplace sizes · " + (state.shop || "Your Shop") + " · Seller Tools", pad, pad + 70);
+    PRESETS.forEach(function (p, i) {
+      var col = i % cols, row = Math.floor(i / cols);
+      var x = pad + col*cellW, y = pad + 90 + row*cellH;
+      var maxW = cellW - 70, maxH = cellH - 150;
+      var s = Math.min(maxW / p.w, maxH / p.h);
+      var dw = p.w*s, dh = p.h*s;
+      var dx = x + (cellW - 40 - dw)/2, dy = y + (maxH - dh)/2;
+      g.save();
+      g.shadowColor = "rgba(15,23,42,.16)"; g.shadowBlur = 10; g.shadowOffsetY = 3;
+      g.fillStyle = "#fff"; g.fillRect(dx, dy, dw, dh);
+      g.restore();
+      var tmp = exportPreset(p);
+      try { g.drawImage(tmp, dx, dy, dw, dh); } catch (e) {}
+      g.strokeStyle = "#E2E8F0"; g.lineWidth = 1; g.strokeRect(dx, dy, dw, dh);
+      g.fillStyle = "#111827"; g.font = "700 22px " + FONT;
+      g.fillText(p.name, x + 4, y + maxH + 44);
+      g.fillStyle = "#64748B"; g.font = "400 20px " + FONT;
+      g.fillText(p.w + " × " + p.h + " · " + p.ratio, x + 4, y + maxH + 72);
+    });
+    return c;
+  }
+
+  /* ---------- license ---------- */
+  function verifyKey() {
+    var key = ($("licenseKey").value || "").trim();
+    if (!key) { setStatus($("verifyNote"), "Paste the license key from your receipt.", "warn"); return; }
+    if ($("verifyBtn").disabled) return;
+    $("verifyBtn").disabled = true;
+    setStatus($("verifyNote"), "Checking the key with Gumroad…");
+    var body = new URLSearchParams();
+    body.set("product_id", PRODUCT_ID);
+    body.set("license_key", key);
+    body.set("increment_uses_count", "false");
+    fetch(VERIFY_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: body.toString()
+    })
+      .then(function (r) { return r.json().catch(function () { return null; }); })
+      .then(function (json) {
+        var res = interpretLicense(json);
+        if (res.ok) {
+          saveCache(key);
+          applyPro(true, "Pro unlocked. Keys are remembered on this browser for 30 days.");
+        } else {
+          setStatus($("verifyNote"), res.reason === "network"
+            ? "Could not reach Gumroad. Check the connection and try again."
+            : res.message, "warn");
+        }
+      })
+      .catch(function () { setStatus($("verifyNote"), "Could not reach Gumroad. Check the connection and try again.", "warn"); })
+      .then(function () { $("verifyBtn").disabled = false; });
+  }
+
+  /* ---------- wiring ---------- */
+  $("pickBtn").addEventListener("click", function () { $("file").click(); });
+  $("file").addEventListener("change", function (e) { loadFile(e.target.files && e.target.files[0]); });
+  $("sampleBtn").addEventListener("click", function () { useImage(sampleImage(), "Sample product · 1600 × 1600"); });
+
+  var drop = $("drop");
+  ["dragenter", "dragover"].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add("over"); });
+  });
+  ["dragleave", "drop"].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove("over"); });
+  });
+  drop.addEventListener("drop", function (e) {
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    loadFile(f);
+  });
+
+  $("bgColor").addEventListener("input", function (e) {
+    state.bg = cssHex(e.target.value, state.bg);
+    $("bgHex").value = state.bg;
+    renderRamp(); render();
+  });
+  $("bgHex").addEventListener("input", function (e) {
+    var hex = normalizeHex(e.target.value);
+    if (!hex) return;
+    state.bg = cssHex(hex); $("bgColor").value = state.bg; renderRamp(); render();
+  });
+
+  function renderRamp() {
+    var host = $("ramp");
+    host.innerHTML = "";
+    buildRamp(state.bg, 10).forEach(function (hex) {
+      var b = document.createElement("button");
+      b.type = "button"; b.style.background = "#" + hex;
+      b.title = "#" + hex;
+      b.setAttribute("aria-label", "Use #" + hex);
+      b.addEventListener("click", function () {
+        state.bg = cssHex(hex); $("bgColor").value = state.bg; $("bgHex").value = state.bg; render();
+      });
+      host.appendChild(b);
+    });
+  }
+
+  $("safeOn").addEventListener("change", function (e) { state.safe = e.target.checked; render(); });  $("thirdsOn").addEventListener("change", function (e) { state.thirds = e.target.checked; render(); });
+  $("stripOn").addEventListener("change", function (e) {
+    if (e.target.checked && !state.pro) {
+      e.target.checked = false;
+      $("pro").scrollIntoView({ behavior:"smooth", block:"center" });
+      setStatus($("verifyNote"), "The brand strip is Pro. Unlock with a license key below.", "warn");
+      return;
+    }
+    state.strip = e.target.checked;
+    $("shopWrap").hidden = !state.strip;
+    render();
+  });
+  $("shopName").addEventListener("input", function (e) { state.shop = e.target.value; render(); });
+
+  function setFit(mode) {
+    state.fit = mode === "cover" ? "cover" : "contain";
+    $("fitMargin").setAttribute("aria-pressed", state.fit === "contain" ? "true" : "false");
+    $("fitFill").setAttribute("aria-pressed", state.fit === "cover" ? "true" : "false");
+    render();
+  }
+  $("fitMargin").addEventListener("click", function () { setFit("contain"); });
+  $("fitFill").addEventListener("click", function () { setFit("cover"); });
+
+  function bindOverlay(id, wrapId, key) {
+    $(id).addEventListener("change", function (e) {
+      state[key] = e.target.checked;
+      if (wrapId) $(wrapId).hidden = !e.target.checked;
+      render();
+    });
+  }
+  bindOverlay("badgeOn", "badgeWrap", "badge");
+  bindOverlay("calloutOn", "calloutWrap", "callout");
+  bindOverlay("priceOn", "priceWrap", "price");
+  $("badgeText").addEventListener("input", function (e) { state.badgeText = e.target.value; render(); });
+  $("calloutTitle").addEventListener("input", function (e) { state.calloutTitle = e.target.value; render(); });
+  $("calloutBody").addEventListener("input", function (e) { state.calloutBody = e.target.value; render(); });
+  $("priceNow").addEventListener("input", function (e) { state.priceNow = e.target.value; render(); });
+  $("priceWas").addEventListener("input", function (e) { state.priceWas = e.target.value; render(); });
+
+  $("downloadBtn").addEventListener("click", function () {
+    var p = currentPreset();
+    download(exportPreset(p), filenameFor(p));
+  });
+  $("sheetBtn").addEventListener("click", function () {
+    if (!state.pro) {
+      $("pro").scrollIntoView({ behavior:"smooth", block:"center" });
+      setStatus($("verifyNote"), "The size sheet is Pro. Unlock with a license key below.", "warn");
+      return;
+    }
+    var c = sizeSheet();
+    download(c, "slk-size-sheet-" + PRESETS.length + "-sizes.png");
+  });
+  $("verifyBtn").addEventListener("click", verifyKey);
+
+  /* ---------- boot ---------- */
+  var cached = loadCache();
+  if (PRODUCT_ID) {
+    if (cached) applyPro(true, "Pro remembered from a verified key on this browser (30 days).");
+    else { applyPro(false); setStatus($("verifyNote"), "The key is checked once with Gumroad and remembered on this browser for 30 days."); }
+  } else {
+    $("unconfigured").hidden = false;
+    $("verifyBtn").disabled = true;
+    $("verifyBtn").title = "This build has no product ID configured.";
+    applyPro(false, "This build cannot check keys yet.");
+    $("verifyNote").className = "status warn";
+  }
+  $("proBuy").href = PRO_URL;
+  $("proBuy").textContent = "Get Pro — " + PRO_PRICE + " on Gumroad";
+
+  if (state.pro) $("tierFoot").textContent = "Pro unlocked · all 15 presets";
+  renderRamp();
+  renderAll();
+  useImage(sampleImage(), "Sample product · 1600 × 1600");
+})();
+</script>
+</body>
+</html>
