@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bank Statement PDF to CSV — free browser converter | Seller Tools</title>
+<meta name="description" content="Convert a PDF bank statement to CSV in your browser. Nothing is uploaded: the file is read locally. Handles -64.28 DR, (123.45) and 100.00 CR amount formats. Free up to 20 rows.">
+<link rel="canonical" href="https://yougkxm.github.io/bank-to-csv/">
+<meta property="og:title" content="Bank Statement PDF to CSV — free browser converter">
+<meta property="og:description" content="Drop a PDF statement, get clean CSV rows. 100% private — runs locally in your browser, zero server uploads.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yougkxm.github.io/bank-to-csv/">
+<meta property="og:site_name" content="Seller Tools">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23142236'/%3E%3Ctext x='32' y='43' font-family='system-ui,sans-serif' font-size='26' font-weight='800' fill='%23fff' text-anchor='middle'%3EST%3C/text%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --ink:#142236; --muted:#5b6b81; --line:#e3e7ee;
+    --accent:#1668c4; --accent-soft:#e8f1fb; --pos:#0f7a4a; --neg:#b3261e; --warn:#8a5300;
+    --radius:14px; --shadow:0 1px 2px rgba(20,34,54,.06),0 8px 24px rgba(20,34,54,.06);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Apple SD Gothic Neo",sans-serif}
+  a{color:var(--accent)}
+  header{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
+  .bar{max-width:1000px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:750;letter-spacing:-.01em;text-decoration:none;color:var(--ink)}
+  .brand .mark{width:26px;height:26px;border-radius:8px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:800}
+  nav.top{display:flex;gap:16px;margin-left:auto;font-size:14px}
+  nav.top a{color:var(--muted);text-decoration:none}
+  nav.top a:hover{color:var(--accent)}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 18px}
+  .hero{padding:40px 0 22px}
+  .hero h1{margin:0 0 12px;font-size:clamp(26px,4.4vw,40px);line-height:1.15;letter-spacing:-.02em}
+  .hero p{margin:0;color:var(--muted);max-width:64ch;font-size:17px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+  .chip{font-size:13px;font-weight:600;color:var(--accent);background:var(--accent-soft);border:1px solid #cfe1f6;border-radius:999px;padding:5px 11px}
+  .chip.green{color:var(--pos);background:#e7f5ee;border-color:#c6e6d6}
+  section.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin:0 0 22px}
+  .tabs{display:flex;gap:6px;background:#eef1f6;border-radius:10px;padding:4px;margin-bottom:16px;max-width:420px}
+  .tabs button{flex:1;border:0;background:transparent;font:inherit;font-size:14px;font-weight:650;color:var(--muted);padding:9px 10px;border-radius:8px;cursor:pointer}
+  .tabs button[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(20,34,54,.12)}
+  .drop{border:2px dashed #c6d2e2;border-radius:12px;padding:34px 18px;text-align:center;background:#fbfcfe;transition:border-color .15s,background .15s}
+  .drop.over{border-color:var(--accent);background:var(--accent-soft)}
+  .drop h2{margin:0 0 6px;font-size:18px}
+  .drop p{margin:0 0 14px;color:var(--muted);font-size:14px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:650;font-size:14px;padding:10px 15px;cursor:pointer;text-decoration:none}
+  .btn:hover{border-color:#b9c8db}
+  .btn.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+  .btn.primary:hover{background:#1d3350}
+  .btn.accent{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.accent:hover{background:#12579f}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+  .row-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+  textarea{width:100%;min-height:220px;border:1px solid var(--line);border-radius:12px;padding:12px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;resize:vertical;background:#fbfcfe;color:var(--ink)}
+  .privacy{margin:14px 0 0;font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:flex-start}
+  .privacy b{color:var(--pos)}
+  .hidden{display:none !important}
+  .status{margin:14px 0 0;font-size:14px;padding:11px 13px;border-radius:10px;background:#eef3fa;color:#274a72;border:1px solid #d5e3f3}
+  .status.err{background:#fdecea;border-color:#f6c9c4;color:#8f1d16}
+  .status.warn{background:#fff6e6;border-color:#f2dcb0;color:var(--warn)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 16px}
+  .stat{background:#f8fafd;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .stat .k{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+  .stat .v{font-size:20px;font-weight:750;margin-top:2px;letter-spacing:-.01em}
+  .stat .v.pos{color:var(--pos)} .stat .v.neg{color:var(--neg)}
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+  th,td{padding:9px 12px;text-align:left;border-bottom:1px solid #eef1f6;white-space:nowrap}
+  th{position:sticky;top:0;background:#f3f6fb;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);z-index:2}
+  td.desc{white-space:normal;min-width:200px}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  td.num.neg{color:var(--neg)}
+  tbody tr:nth-child(even){background:#fafbfe}
+  .banner{margin:0 0 14px;padding:14px 15px;border-radius:12px;border:1px solid #f0d9a8;background:#fffaf0}
+  .banner h3{margin:0 0 6px;font-size:15px}
+  .banner p{margin:0 0 10px;font-size:14px;color:#5c4a2a}
+  .upsell{margin-top:18px;padding:16px;border:1px solid #cfe1f6;background:linear-gradient(180deg,#f4f9ff,#ffffff);border-radius:12px}
+  .upsell h3{margin:0 0 8px;font-size:16px}
+  .upsell ul{margin:0 0 14px;padding-left:18px;color:var(--muted);font-size:14px}
+  .upsell li{margin:3px 0}
+  .price{font-weight:750}
+  .content{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;margin:0 0 22px}
+  .content h2{margin:0 0 10px;font-size:21px;letter-spacing:-.01em}
+  .content p{color:#33465e;margin:0 0 12px}
+  .content code{background:#eef1f6;border-radius:5px;padding:1px 6px;font-size:.92em}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .split ul{margin:0;padding-left:18px;color:#33465e;font-size:14.5px}
+  .split li{margin:5px 0}
+  footer{border-top:1px solid var(--line);margin-top:10px;padding:24px 0 40px;color:var(--muted);font-size:13.5px}
+  footer .links{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:10px}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  @media (max-width:640px){
+    .wrap{padding:0 14px}
+    .hero{padding:26px 0 16px}
+    .hero p{font-size:15.5px}
+    section.card{padding:14px;border-radius:12px}
+    .split{grid-template-columns:1fr}
+    nav.top{width:100%;margin-left:0;overflow-x:auto;padding-top:2px}
+    .drop{padding:24px 12px}
+    .stat .v{font-size:18px}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="brand" href="https://yougkxm.github.io/"><span class="mark">ST</span> Seller Tools</a>
+    <nav class="top">
+      <a href="https://yougkxm.github.io/">Margin Calculator</a>
+      <a href="https://yougkxm.github.io/listing-kit/">Listing Kit</a>
+      <a href="https://yougkxm.github.io/bank-to-csv/">Bank → CSV</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Bank statement PDF → CSV, in your browser</h1>
+    <p>Drop a PDF statement and get one clean row per transaction: date, description, amount and running balance. The file never leaves your computer — the page reads it in memory and writes the CSV on your own device.</p>
+    <div class="chips">
+      <span class="chip green">100% private</span>
+      <span class="chip">No sign-up</span>
+      <span class="chip">Free · first 20 rows</span>
+      <span class="chip">DR / CR / ( ) amounts</span>
+    </div>
+  </div>
+
+  <section class="card" aria-label="Converter">
+    <div class="tabs" role="tablist" aria-label="Input method">
+      <button role="tab" id="tab-file" aria-selected="true" aria-controls="pane-file">PDF file</button>
+      <button role="tab" id="tab-text" aria-selected="false" aria-controls="pane-text">Paste text</button>
+    </div>
+
+    <div id="pane-file" role="tabpanel" aria-labelledby="tab-file">
+      <div class="drop" id="drop">
+        <h2>Drop your PDF statement here</h2>
+        <p>or choose a file from your device · PDF up to about 30 MB</p>
+        <button class="btn primary" id="pick">Choose PDF file</button>
+        <input type="file" id="file" accept="application/pdf,.pdf" class="sr">
+        <div class="row-actions" style="justify-content:center">
+          <button class="btn" id="sample">Try a sample statement (29 rows)</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="pane-text" role="tabpanel" aria-labelledby="tab-text" class="hidden">
+      <label class="sr" for="paste">Paste statement text</label>
+      <textarea id="paste" spellcheck="false" placeholder="Paste the text you copied out of your statement PDF, e.g.&#10;10/02/2026  ONLINE PAYMENT TO ADOBE  -54.99  4,945.01&#10;10/05/2026  DIRECT DEPOSIT CLIENT RETAINER  2,500.00  7,445.01"></textarea>
+      <div class="row-actions">
+        <button class="btn primary" id="parse-text">Convert pasted text</button>
+        <button class="btn" id="fill-sample">Fill with sample text</button>
+      </div>
+    </div>
+
+    <p class="privacy"><span aria-hidden="true">🔒</span><span><b>100% Private — Runs locally in your browser. Zero server uploads.</b> There is no upload endpoint on this site; the PDF is parsed by JavaScript on this page and the CSV is generated in memory.</span></p>
+    <div class="status hidden" id="status" role="status" aria-live="polite"></div>
+  </section>
+
+  <section class="card hidden" id="result" aria-label="Result">
+    <div class="stats" id="stats"></div>
+    <div class="banner hidden" id="banner"></div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Date</th><th>Description</th><th style="text-align:right">Amount</th><th style="text-align:right">Balance</th><th>Page</th></tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div class="row-actions">
+      <button class="btn accent" id="download">Download CSV</button>
+      <button class="btn" id="copy">Copy CSV</button>
+      <button class="btn" id="reset">Clear</button>
+    </div>
+    <div class="upsell hidden" id="upsell">
+      <h3>Need the whole statement — and an Excel file?</h3>
+      <ul>
+        <li><span class="price">$12</span> early-bird (normally $19): unlimited rows, formatted <code>.xlsx</code> workbook, batch-convert a folder of PDFs, runs offline as a desktop script.</li>
+        <li><span class="price">$0</span> Lite desktop version: same parser, 1 PDF and 20 rows per run, no account needed.</li>
+      </ul>
+      <div class="row-actions">
+        <a class="btn accent" href="https://8299181964131.gumroad.com/l/bank-statement-to-excel/EARLY50" target="_blank" rel="noopener">Get the full version — $12</a>
+        <a class="btn" href="https://8299181964131.gumroad.com/l/bank-converter-free" target="_blank" rel="noopener">Free Lite desktop version</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="content">
+    <h2>Why the sign is where most converters break</h2>
+    <p>A bank statement writes an outgoing payment in at least five different ways, and they do not all mean the same thing to a spreadsheet:</p>
+    <div class="split">
+      <ul>
+        <li><code>-64.28</code> — a plain minus sign.</li>
+        <li><code>64.28 DR</code> — the bank's own debit marker, no minus.</li>
+        <li><code>(123.45)</code> — accounting parentheses, meaning negative.</li>
+      </ul>
+      <ul>
+        <li><code>100.00 CR</code> — a credit, so positive.</li>
+        <li><code>−64.28</code> — the Unicode minus (U+2212) some PDFs use instead of the hyphen.</li>
+        <li>Split layouts — date, description, amount and balance printed on four separate lines.</li>
+      </ul>
+    </div>
+    <p>Invert a minus twice and a $64 purchase becomes a $64 deposit, which quietly doubles the error: the total is off by $128 by the time you reconcile. This tool reads the marker, the parentheses and any minus sign that is already there, and applies the sign once. It also groups multi-line blocks before reading them, so the running balance stays attached to the transaction it belongs to.</p>
+    <p>Statements that are scans or phone photos have no text layer to read. The tool says so instead of returning an empty table, because a silent blank file is worse than an honest error.</p>
+  </section>
+
+  <section class="content">
+    <h2>What it does, and what it does not</h2>
+    <div class="split">
+      <ul>
+        <li>Reads electronic PDF statements from Chase, Bank of America, Wells Fargo, Citi, Capital One and other tabular layouts.</li>
+        <li>Gives you date, description, amount and running balance, plus the page each row came from.</li>
+        <li>Exports standard CSV that QuickBooks, Xero and Google Sheets open directly.</li>
+      </ul>
+      <ul>
+        <li>No OCR: a scanned or photographed statement is reported as unreadable, not guessed at.</li>
+        <li>No categorising and no tax logic — that is the paid workbook's job, not this page's.</li>
+        <li>No account, no email, no upload, no cookie-based tracking of what you converted.</li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="links">
+      <a href="https://yougkxm.github.io/">Etsy / Gumroad fee &amp; profit calculator</a>
+      <a href="https://yougkxm.github.io/listing-kit/">Listing &amp; mockup frame kit</a>
+      <a href="https://8299181964131.gumroad.com/l/bank-statement-to-excel/EARLY50">Full converter ($12)</a>
+      <a href="https://8299181964131.gumroad.com/l/bank-converter-free">Free Lite version</a>
+    </div>
+    <div>Seller Tools · free browser tools for online sellers. Built as a single page: nothing you load here is sent to a server.</div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+/* CORE-START — parser mirror of bank_statement_converter.py v1.1 (keep in sync) */
+var FREE_ROW_LIMIT = 20;
+
+var DATE_SRC = '(?:\\d{1,2}[\\/-]\\d{1,2}(?:[\\/-]\\d{2,4})?|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\\.?\\s+\\d{1,2}(?:,?\\s+\\d{2,4})?)';
+var DATE_AT_START = new RegExp('^(?:' + DATE_SRC + ')', 'i');
+var AMOUNT_SRC = '[-+]?\\$?\\s*\\(?\\d{1,3}(?:,\\d{3})*\\.\\d{2}\\)?(?:\\s*(?:CR|DR))?';
+
+function allMatches(src, flags, text) {
+  var re = new RegExp(src, flags + 'g');
+  var out = [], m;
+  while ((m = re.exec(text)) !== null) {
+    out.push(m[0]);
+    if (m.index === re.lastIndex) re.lastIndex++;
+  }
+  return out;
+}
+
+function countAmounts(text) {
+  return allMatches(AMOUNT_SRC, 'i', text).length;
+}
+
+/* Normalise an amount string to a number.
+   Handles -1,234.56 / (1,234.56) / 64.28 DR / 64.28 CR / U+2212 minus.
+   A parenthesised or DR amount is negative; a sign already present on the
+   number is never inverted a second time. */
+function cleanAmount(value) {
+  if (value === null || value === undefined) return null;
+  var s = String(value).trim().replace(/\$/g, '').replace(/,/g, '').replace(/\u2212/g, '-');
+  var negative = false;
+  if (s.charAt(0) === '(' && s.charAt(s.length - 1) === ')') {
+    negative = true;
+    s = s.slice(1, -1).trim();
+  }
+  var upper = s.toUpperCase();
+  if (upper.slice(-2) === 'DR') {
+    negative = true;
+    s = s.slice(0, -2).trim();
+  } else if (upper.slice(-2) === 'CR') {
+    s = s.slice(0, -2).trim();
+  }
+  if (s.charAt(0) === '-') {
+    negative = true;
+    s = s.slice(1).trim();
+  } else if (s.charAt(0) === '+') {
+    s = s.slice(1).trim();
+  }
+  if (s === '' || !/^[0-9]+(\.[0-9]+)?$/.test(s)) return null;
+  var val = parseFloat(s);
+  if (!isFinite(val)) return null;
+  return negative ? -val : val;
+}
+
+/* Group lines into blocks that start at a date line and end before the next one.
+   Reads both "one line per transaction" and "one column per line" layouts. */
+function splitBlocks(lines) {
+  var blocks = [], current = null, i, line, total;
+  for (i = 0; i < lines.length; i++) {
+    line = String(lines[i]).trim();
+    if (!line) continue;
+    if (DATE_AT_START.test(line)) {
+      if (current) blocks.push(current);
+      current = [line];
+    } else if (current !== null && current.length < 6) {
+      total = 0;
+      for (var j = 0; j < current.length; j++) total += countAmounts(current[j]);
+      if (total < 2) current.push(line);
+    }
+  }
+  if (current) blocks.push(current);
+  return blocks;
+}
+
+/* pages: [{lines:[...]}, ...] in document order. */
+function parsePages(pages) {
+  var transactions = [], textChars = 0;
+  for (var p = 0; p < pages.length; p++) {
+    var lines = (pages[p].lines || []).map(function (l) { return String(l).trim(); }).filter(function (l) { return l.length > 0; });
+    textChars += lines.join('').length;
+    var blocks = splitBlocks(lines);
+    for (var b = 0; b < blocks.length; b++) {
+      var block = blocks[b];
+      var first = block[0];
+      var dm = first.match(DATE_AT_START);
+      if (!dm) continue;
+      var dateStr = dm[0];
+      var bodyParts = [first.slice(dateStr.length).trim()].concat(block.slice(1));
+      var body = bodyParts.join(' ').replace(/\s+/g, ' ').trim();
+
+      var amounts = allMatches(AMOUNT_SRC, 'i', body);
+      var parsed = [];
+      for (var a = 0; a < amounts.length; a++) {
+        var val = cleanAmount(amounts[a]);
+        if (val !== null) parsed.push(val);
+      }
+      if (!parsed.length) continue;
+
+      var desc = body;
+      for (var k = 0; k < amounts.length; k++) desc = desc.replace(amounts[k], ' ');
+      desc = desc.replace(/\s+/g, ' ').replace(/^[ \-|]+/, '').replace(/[ \-|]+$/, '');
+
+      var amount, balance;
+      if (parsed.length >= 2) {
+        var candidates = parsed.slice(0, -1).filter(function (v) { return v !== 0; });
+        amount = candidates.length ? candidates[0] : parsed[parsed.length - 2];
+        balance = parsed[parsed.length - 1];
+      } else {
+        amount = parsed[0];
+        balance = null;
+      }
+
+      transactions.push({
+        Page: p + 1,
+        Date: dateStr,
+        Description: desc || 'Transaction',
+        Amount: amount,
+        Balance: balance
+      });
+    }
+  }
+  return { transactions: transactions, textChars: textChars };
+}
+
+function parseText(text) {
+  var pages = String(text).replace(/\r\n?/g, '\n').split('\f');
+  var mapped = pages.map(function (chunk) {
+    return { lines: chunk.split('\n') };
+  });
+  return parsePages(mapped);
+}
+
+/* Python floats print 2500.0, not 2500 — keep the CSV identical to the desktop tool. */
+function fmtAmount(v) {
+  if (v === null || v === undefined || v === '') return '';
+  var n = Number(v);
+  if (!isFinite(n)) return '';
+  if (Number.isInteger(n)) return n.toFixed(1);
+  return String(n);
+}
+
+function csvEscape(field) {
+  var s = (field === null || field === undefined) ? '' : String(field);
+  if (/[",\r\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+  return s;
+}
+
+function buildCSV(rows) {
+  var lines = ['Date,Description,Amount,Balance'];
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    lines.push([
+      csvEscape(r.Date),
+      csvEscape(r.Description),
+      csvEscape(fmtAmount(r.Amount)),
+      csvEscape(fmtAmount(r.Balance))
+    ].join(','));
+  }
+  return lines.join('\r\n') + '\r\n';
+}
+
+function summarize(rows) {
+  var inSum = 0, outSum = 0;
+  for (var i = 0; i < rows.length; i++) {
+    var v = Number(rows[i].Amount) || 0;
+    if (v < 0) outSum += v; else inSum += v;
+  }
+  return { count: rows.length, moneyIn: inSum, moneyOut: outSum, net: inSum + outSum };
+}
+
+function sliceForFree(rows, limit) {
+  var cap = (limit === undefined || limit === null) ? FREE_ROW_LIMIT : limit;
+  return rows.slice(0, cap);
+}
+
+var SAMPLE_TEXT = [
+  'CHASE BUSINESS COMPLETE CHECKING',
+  'Account Number: ...1234',
+  'Statement Period: Oct 01, 2026 - Oct 31, 2026',
+  'TRANSACTION DETAIL',
+  'Date        Description                             Amount         Balance',
+  '10/02/2026  ONLINE PAYMENT TO ADOBE INC             -54.99         4,945.01',
+  '10/05/2026  DIRECT DEPOSIT CLIENT RETAINER          2,500.00       7,445.01',
+  '10/07/2026',
+  'CARD PURCHASE STAPLES #1123',
+  '64.28 DR',
+  '7,380.73',
+  '10/09/2026  AMAZON WEB SERVICES CLOUD HOSTING       -120.50        7,260.23',
+  '10/10/2026',
+  'CHECK #2041',
+  '(45.00)',
+  '7,215.23',
+  '10/12/2026  STRIPE PAYOUT DIGITAL SALES             1,850.00       9,065.23',
+  '10/14/2026  ATM WITHDRAWAL BROADWAY                  100.00 DR      8,965.23',
+  '10/15/2026',
+  'INTEREST PAYMENT',
+  '100.00 CR',
+  '9,065.23',
+  '10/16/2026  OFFICE DEPOT SUPPLIES                   -84.20         8,981.03',
+  '10/17/2026  UBER TRIP                               -22.40         8,958.63',
+  '10/18/2026  STARBUCKS COFFEE STORE #492             -6.75          8,951.88',
+  '10/19/2026  CLIENT INVOICE 1188 WIRE                3,200.00       12,151.88',
+  '10/20/2026  GOOGLE WORKSPACE                        -72.00         12,079.88',
+  '10/21/2026',
+  'CARD PURCHASE SHELL OIL 4471',
+  '58.10 DR',
+  '12,021.78',
+  '10/22/2026  SHOPIFY SUBSCRIPTION                    -39.00         11,982.78',
+  '10/23/2026  CUSTOMER REFUND ORDER 8821              (129.00)       11,853.78',
+  '10/24/2026  STRIPE PAYOUT DIGITAL SALES             1,420.00       13,273.78',
+  '10/25/2026  FEDEX SHIPPING 7781                     -46.32         13,227.46',
+  '10/26/2026',
+  'CARD PURCHASE ADOBE CREATIVE CLOUD',
+  '64.28 DR',
+  '13,163.18',
+  '10/27/2026  USPS POSTAGE                            -18.60         13,144.58',
+  '10/28/2026  CLIENT INVOICE 1191 ACH                 2,750.00       15,894.58',
+  '10/29/2026  MONTHLY ACCOUNT SERVICE FEE             -15.00         15,879.58',
+  '10/30/2026  VENDOR PAYMENT PRINT LAB                -310.44        15,569.14',
+  '10/31/2026  MARKETPLACE PAYOUT ETSY                 986.40         16,555.54',
+  '10/31/2026  CARD PURCHASE BEST BUY 331             (249.99)       16,305.55',
+  '10/30/2026  CARD PURCHASE UPS STORE                 -14.75        15,554.39',
+  '10/29/2026  WIRE FEE                                35.00 DR      15,844.58',
+  '10/28/2026  CARD PURCHASE MCDONALDS 8821           -9.85         15,884.43',
+  '10/27/2026  ETSY SHIPPING LABEL                    -22.10        13,122.48'
+].join('\n');
+/* CORE-END */
+
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var state = { rows: [], truncated: 0, source: '' };
+  var workerReady = false;
+
+  function setStatus(msg, kind) {
+    var el = $('status');
+    if (!msg) { el.className = 'status hidden'; el.textContent = ''; return; }
+    el.className = 'status' + (kind ? ' ' + kind : '');
+    el.textContent = msg;
+  }
+
+  function money(v) {
+    var n = Number(v) || 0;
+    return (n < 0 ? '-' : '') + '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function render(result, sourceLabel) {
+    var all = result.transactions;
+    var show = sliceForFree(all, FREE_ROW_LIMIT);
+    state.rows = all;
+    state.truncated = Math.max(0, all.length - show.length);
+    state.source = sourceLabel;
+
+    if (!all.length) {
+      if (result.textChars < 50) {
+        setStatus('This PDF appears to have no selectable text layer (scanned image/photo). This tool reads electronic statements only — run OCR first, or download the PDF version from your bank.', 'err');
+      } else {
+        setStatus('No dated transaction lines were found in this PDF. The layout may be unsupported; the four-line (date / description / amount / balance) and single-line layouts are both covered.', 'warn');
+      }
+      $('result').classList.add('hidden');
+      return;
+    }
+
+    var sum = summarize(all);
+    $('stats').innerHTML = '';
+    [
+      ['Transactions found', String(sum.count), ''],
+      ['Money in', money(sum.moneyIn), 'pos'],
+      ['Money out', money(sum.moneyOut), 'neg'],
+      ['Net', money(sum.net), sum.net < 0 ? 'neg' : '']
+    ].forEach(function (pair) {
+      var div = document.createElement('div');
+      div.className = 'stat';
+      var k = document.createElement('div'); k.className = 'k'; k.textContent = pair[0];
+      var v = document.createElement('div'); v.className = 'v ' + pair[2]; v.textContent = pair[1];
+      div.appendChild(k); div.appendChild(v);
+      $('stats').appendChild(div);
+    });
+
+    var tbody = $('rows');
+    tbody.innerHTML = '';
+    show.forEach(function (t) {
+      var tr = document.createElement('tr');
+      var td1 = document.createElement('td'); td1.textContent = t.Date;
+      var td2 = document.createElement('td'); td2.className = 'desc'; td2.textContent = t.Description;
+      var td3 = document.createElement('td'); td3.className = 'num' + (t.Amount < 0 ? ' neg' : ''); td3.textContent = money(t.Amount);
+      var td4 = document.createElement('td'); td4.className = 'num'; td4.textContent = t.Balance === null ? '' : money(t.Balance);
+      var td5 = document.createElement('td'); td5.textContent = t.Page;
+      [td1, td2, td3, td4, td5].forEach(function (td) { tr.appendChild(td); });
+      tbody.appendChild(tr);
+    });
+
+    var banner = $('banner');
+    var upsell = $('upsell');
+    if (state.truncated > 0) {
+      banner.className = 'banner';
+      banner.innerHTML = '';
+      var h = document.createElement('h3');
+      h.textContent = 'Showing the first ' + FREE_ROW_LIMIT + ' of ' + all.length + ' transactions';
+      var p = document.createElement('p');
+      p.textContent = state.truncated + ' more row' + (state.truncated === 1 ? '' : 's') + ' were read correctly, but the free web tool exports at most ' + FREE_ROW_LIMIT + ' rows per file. The full desktop version exports every row, and writes an Excel workbook as well.';
+      banner.appendChild(h); banner.appendChild(p);
+      upsell.classList.remove('hidden');
+    } else {
+      banner.className = 'banner hidden';
+      banner.innerHTML = '';
+      upsell.classList.add('hidden');
+    }
+
+    $('result').classList.remove('hidden');
+    setStatus('Read ' + all.length + ' transactions from ' + sourceLabel + '. ' + (state.truncated > 0 ? 'CSV export is limited to ' + FREE_ROW_LIMIT + ' rows.' : 'All rows are included in the CSV.'), 'ok');
+  }
+
+  function fail(err) {
+    console.error(err);
+    setStatus('Could not read this PDF: ' + (err && err.message ? err.message : String(err)) + '. If the file is password-protected, remove the password first.', 'err');
+  }
+
+  function ensureWorker() {
+    if (workerReady) return true;
+    if (!window.pdfjsLib) return false;
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    workerReady = true;
+    return true;
+  }
+
+  function readPdf(file) {
+    if (!ensureWorker()) {
+      setStatus('The PDF engine (pdf.js) did not load — a content blocker or offline connection may be stopping cdnjs. Use the “Paste text” tab instead: copy the text out of the PDF and paste it there.', 'err');
+      return;
+    }
+    setStatus('Reading ' + file.name + ' locally…');
+    var reader = new FileReader();
+    reader.onerror = function () { fail(reader.error || new Error('could not read the file')); };
+    reader.onload = function () {
+      window.pdfjsLib.getDocument({ data: new Uint8Array(reader.result), isEvalSupported: false }).promise
+        .then(function (pdf) {
+          var pages = [];
+          var chain = Promise.resolve();
+          for (var i = 1; i <= pdf.numPages; i++) {
+            (function (pageNo) {
+              chain = chain.then(function () {
+                return pdf.getPage(pageNo).then(function (page) { return page.getTextContent(); })
+                  .then(function (content) { pages.push({ lines: linesFromItems(content.items) }); });
+              });
+            })(i);
+          }
+          return chain.then(function () { return pages; });
+        })
+        .then(function (pages) {
+          if (!pages.length) { setStatus('That PDF has no pages.', 'err'); return; }
+          render(parsePages(pages), file.name);
+        })
+        .catch(fail);
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  /* pdf.js hands text back as positioned items; rebuild visual lines by y, left to right. */
+  function linesFromItems(items) {
+    var buckets = [];
+    items.forEach(function (it) {
+      if (!it || typeof it.str !== 'string' || !it.str.length) return;
+      var tr = it.transform || [1, 0, 0, 1, 0, 0];
+      var x = tr[4], y = tr[5];
+      var bucket = null;
+      for (var i = 0; i < buckets.length; i++) {
+        if (Math.abs(buckets[i].y - y) <= 2.5) { bucket = buckets[i]; break; }
+      }
+      if (!bucket) { bucket = { y: y, items: [] }; buckets.push(bucket); }
+      bucket.items.push({ x: x, s: it.str });
+    });
+    buckets.sort(function (a, b) { return b.y - a.y; });
+    return buckets.map(function (b) {
+      b.items.sort(function (a, c) { return a.x - c.x; });
+      return b.items.map(function (it) { return it.s; }).join(' ').replace(/[ \t]+/g, ' ').trim();
+    }).filter(function (l) { return l.length > 0; });
+  }
+
+  function download() {
+    var rows = sliceForFree(state.rows, FREE_ROW_LIMIT);
+    var csv = buildCSV(rows);
+    var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    var base = (state.source || 'statement').replace(/\.[Pp][Dd][Ff]$/, '');
+    a.href = url;
+    a.download = base.replace(/[^A-Za-z0-9._-]+/g, '-') + '_converted.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  }
+
+  function copy() {
+    var csv = buildCSV(sliceForFree(state.rows, FREE_ROW_LIMIT));
+    var done = function () { setStatus('CSV copied — ' + sliceForFree(state.rows, FREE_ROW_LIMIT).length + ' rows on the clipboard.', 'ok'); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(csv).then(copyDone => done()).catch(function () { fallbackCopy(csv, done); });
+    } else {
+      fallbackCopy(csv, done);
+    }
+  }
+
+  function fallbackCopy(text, done) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); done(); }
+    catch (e) { setStatus('Copying is blocked in this browser — use Download CSV instead.', 'err'); }
+    document.body.removeChild(ta);
+  }
+
+  function reset() {
+    state = { rows: [], truncated: 0, source: '' };
+    $('result').classList.add('hidden');
+    $('file').value = '';
+    $('paste').value = '';
+    setStatus('');
+  }
+
+  /* tabs */
+  $('tab-file').addEventListener('click', function () {
+    $('tab-file').setAttribute('aria-selected', 'true');
+    $('tab-text').setAttribute('aria-selected', 'false');
+    $('pane-file').classList.remove('hidden');
+    $('pane-text').classList.add('hidden');
+  });
+  $('tab-text').addEventListener('click', function () {
+    $('tab-text').setAttribute('aria-selected', 'true');
+    $('tab-file').setAttribute('aria-selected', 'false');
+    $('pane-text').classList.remove('hidden');
+    $('pane-file').classList.add('hidden');
+  });
+
+  $('pick').addEventListener('click', function () { $('file').click(); });
+  $('file').addEventListener('change', function (e) {
+    if (e.target.files && e.target.files[0]) readPdf(e.target.files[0]);
+  });
+
+  var drop = $('drop');
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); });
+  });
+  drop.addEventListener('drop', function (e) {
+    var f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+    if (!f) return;
+    if (!/\.pdf$/i.test(f.name) && f.type !== 'application/pdf') {
+      setStatus('That is not a PDF. Drop a PDF statement, or use the “Paste text” tab.', 'err');
+      return;
+    }
+    readPdf(f);
+  });
+
+  $('sample').addEventListener('click', function () {
+    render(parseText(SAMPLE_TEXT), 'the built-in sample statement');
+  });
+
+  $('parse-text').addEventListener('click', function () {
+    var text = $('paste').value;
+    if (!text.trim()) { setStatus('Paste the statement text first.', 'warn'); return; }
+    var res = parseText(text);
+    if (!res.transactions.length && res.textChars < 50) {
+      setStatus('That text is too short to hold a transaction.', 'warn');
+      return;
+    }
+    render(res, 'the pasted text');
+  });
+
+  $('fill-sample').addEventListener('click', function () {
+    $('paste').value = SAMPLE_TEXT;
+    render(parseText(SAMPLE_TEXT), 'the built-in sample statement');
+  });
+
+  $('download').addEventListener('click', download);
+  $('copy').addEventListener('click', copy);
+  $('reset').addEventListener('click', reset);
+})();
+</script>
+</body>
+</html>
