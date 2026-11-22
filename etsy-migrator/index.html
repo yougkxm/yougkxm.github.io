@@ -1,0 +1,2435 @@
+<!doctype html>
+<html lang="en" data-mode="free">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Etsy Listing Audit &amp; Shopify CSV Migrator — free browser tool | Seller Tools</title>
+<meta name="description" content="Audit an Etsy listing CSV against Etsy's 13-tag and 20-character rules and turn it into a Shopify product import CSV in your browser. Fee-parity pricing for Shopify and Gumroad. Free for 3 listings; nothing is uploaded.">
+<link rel="canonical" href="https://yougkxm.github.io/etsy-migrator/">
+<meta property="og:title" content="Etsy Listing Audit &amp; Shopify CSV Migrator — free browser tool">
+<meta property="og:description" content="Audit all 13 Etsy tags, export a Shopify product CSV, and see the price that keeps your take-home. Runs entirely in your browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yougkxm.github.io/etsy-migrator/">
+<meta property="og:site_name" content="Seller Tools">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  :root{
+    --bg:#f4f6f9; --card:#ffffff; --ink:#111d2e; --ink-2:#31435c; --muted:#5f7189;
+    --line:#e2e8f0; --line-2:#eef2f7; --accent:#e8590c; --accent-ink:#b8460a;
+    --accent-soft:#fff1e8; --navy:#132338; --navy-2:#1d3350;
+    --ok:#0f7a4a; --ok-soft:#e7f5ee; --warn:#8a5300; --warn-soft:#fff7e6;
+    --bad:#b3261e; --bad-soft:#fdecea; --info:#1d4f91; --info-soft:#eaf2fd;
+    --radius:16px; --shadow:0 1px 2px rgba(17,29,46,.05),0 10px 30px rgba(17,29,46,.06);
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+  a{color:var(--accent-ink)}
+  h1,h2,h3,h4{line-height:1.2;letter-spacing:-.015em}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+  .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);border:0}
+  :focus-visible{outline:3px solid #7aa7e0;outline-offset:2px}
+
+  /* top bar */
+  header.top{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+  .bar{max-width:1060px;margin:0 auto;padding:11px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:750;text-decoration:none;color:var(--ink);letter-spacing:-.01em}
+  .brand .mark{width:28px;height:28px;border-radius:9px;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:800;letter-spacing:.02em}
+  .top .spacer{flex:1}
+  .top nav{display:flex;gap:14px;font-size:14px;align-items:center}
+  .top nav a{color:var(--muted);text-decoration:none}
+  .top nav a:hover{color:var(--accent-ink)}
+  .mode{font-size:11px;font-weight:800;letter-spacing:.09em;padding:5px 9px;border-radius:999px;text-transform:uppercase}
+  .mode.free{background:var(--ok-soft);color:var(--ok);border:1px solid #c6e6d6}
+  .mode.pro{background:var(--accent-soft);color:var(--accent-ink);border:1px solid #f6cfb6}
+
+  /* hero */
+  .hero{background:radial-gradient(1200px 420px at 12% -10%,#22405f 0%,var(--navy) 45%,#0d1a2b 100%);color:#fff;padding:44px 0 40px;border-bottom:1px solid #0a1421}
+  .hero h1{margin:0 0 14px;font-size:clamp(28px,4.6vw,44px);letter-spacing:-.03em;max-width:21ch}
+  .hero h1 em{font-style:normal;color:#ffb27a}
+  .hero p{margin:0;color:#c7d5e5;max-width:66ch;font-size:17px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+  .chip{font-size:13px;font-weight:650;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#dbe6f2}
+  .chip.good{background:rgba(34,197,94,.14);border-color:rgba(74,222,128,.32);color:#b6f0cd}
+  .chip.hot{background:rgba(232,89,12,.16);border-color:rgba(255,138,76,.35);color:#ffc9a8}
+
+  main{padding:26px 0 40px}
+  section.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin:0 0 20px}
+  .card>h2{margin:0 0 4px;font-size:20px}
+  .card>.sub{margin:0 0 16px;color:var(--muted);font-size:14.5px}
+
+  /* tabs */
+  .tabs{display:inline-flex;gap:4px;background:#eef1f6;border-radius:11px;padding:4px;margin-bottom:16px}
+  .tabs button{border:0;background:transparent;font:inherit;font-size:14px;font-weight:650;color:var(--muted);padding:8px 14px;border-radius:8px;cursor:pointer}
+  .tabs button[aria-selected="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(17,29,46,.14)}
+  .tabpanel[hidden]{display:none}
+
+  /* drop zone */
+  .drop{border:2px dashed #c7d3e2;border-radius:14px;padding:30px 18px;text-align:center;background:#fbfcfe;transition:border-color .15s,background .15s}
+  .drop.over{border-color:var(--accent);background:var(--accent-soft)}
+  .drop .big{font-size:17px;font-weight:700;margin:0 0 6px}
+  .drop p{margin:0 0 14px;color:var(--muted);font-size:14px}
+  .row-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-weight:650;font-size:14px;padding:10px 15px;cursor:pointer;text-decoration:none;transition:border-color .15s,background .15s,transform .05s}
+  .btn:hover{border-color:#b9c8db}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+  .btn.primary:hover{background:var(--navy-2)}
+  .btn.accent{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.accent:hover{background:#cf4d09}
+  .btn.ghost{background:transparent}
+  .btn[disabled],.btn[aria-disabled="true"]{opacity:.55;cursor:not-allowed}
+  .btn small{font-weight:600;opacity:.75}
+  .link-btn{border:0;background:none;color:var(--accent-ink);font:inherit;font-weight:650;font-size:13.5px;cursor:pointer;padding:0;text-decoration:underline;text-underline-offset:2px}
+
+  textarea,input[type=text],input[type=number],input[type=password],select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;font-size:14.5px;color:var(--ink);background:#fbfcfe}
+  textarea{min-height:120px;font-family:var(--mono);font-size:13px;line-height:1.5;resize:vertical}
+  input[type=number]{max-width:160px}
+  label.fld,div.fld{display:block;margin:0 0 12px}
+  label.fld>span,div.fld>span{display:block;font-size:13px;font-weight:700;color:var(--ink-2);margin-bottom:5px}
+  label.fld small,div.fld small{display:block;color:var(--muted);font-size:12.5px;font-weight:500;margin-top:4px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 18px}
+  .inline{display:flex;gap:8px;align-items:center}
+  .privacy{margin:14px 0 0;font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:flex-start}
+  .privacy b{color:var(--ok)}
+
+  details.settings{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:#fbfcfe;margin:0 0 18px}
+  details.settings summary{cursor:pointer;font-weight:700;font-size:15px;color:var(--ink)}
+  details.settings summary span{font-weight:500;color:var(--muted);font-size:13px;margin-left:6px}
+  details.settings[open] summary{margin-bottom:14px}
+
+  .alert{margin:0 0 18px;padding:13px 15px;border-radius:12px;font-size:14px;border:1px solid #d5e3f3;background:var(--info-soft);color:#1c3f6e}
+  .alert.bad{background:var(--bad-soft);border-color:#f6c9c4;color:#8f1d16}
+  .alert.warn{background:var(--warn-soft);border-color:#f0dcb4;color:#6d4400}
+  .alert.ok{background:var(--ok-soft);border-color:#c6e6d6;color:#0b5c38}
+  .alert h3{margin:0 0 5px;font-size:15px}
+  .alert p{margin:0}
+  .alert ul{margin:8px 0 0;padding-left:18px}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 18px}
+  .stat{background:#f8fafd;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .stat .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:750}
+  .stat .v{font-size:23px;font-weight:780;margin-top:3px;letter-spacing:-.02em}
+  .stat .v.bad{color:var(--bad)} .stat .v.warn{color:var(--warn)} .stat .v.ok{color:var(--ok)}
+  .stat .n{font-size:12px;color:var(--muted);margin-top:2px}
+
+  .listing{border:1px solid var(--line);border-radius:14px;margin:0 0 12px;background:#fff;overflow:hidden}
+  .listing>summary{cursor:pointer;padding:14px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;list-style:none}
+  .listing>summary::-webkit-details-marker{display:none}
+  .listing>summary:hover{background:#fbfcfe}
+  .listing .ltitle{font-weight:700;font-size:15px;flex:1 1 320px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .listing .lmeta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+  .badge{font-size:11.5px;font-weight:800;letter-spacing:.04em;padding:4px 8px;border-radius:7px;background:#eef1f6;color:var(--ink-2);white-space:nowrap}
+  .badge.A{background:var(--ok-soft);color:var(--ok)} .badge.B{background:var(--info-soft);color:var(--info)}
+  .badge.C{background:var(--warn-soft);color:var(--warn)} .badge.D{background:var(--bad-soft);color:var(--bad)}
+  .badge.err{background:var(--bad-soft);color:var(--bad)} .badge.wrn{background:var(--warn-soft);color:var(--warn)}
+  .badge.inf{background:#eef1f6;color:var(--muted)} .badge.pass{background:var(--ok-soft);color:var(--ok)}
+  .lbody{padding:0 16px 16px;border-top:1px solid var(--line-2)}
+  .lbody h4{margin:16px 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+  .preview{background:#0f1c2e;color:#e9f0f8;border-radius:10px;padding:12px 14px;font-family:var(--mono);font-size:13px;line-height:1.5;word-break:break-word}
+  .preview .cut{color:#ffb27a}
+  .preview .dim{color:#8fa3ba}
+  .preview .more{color:#ffd7bb}
+  .note{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin:0}
+  .tag{display:inline-flex;align-items:center;gap:6px;border:1px solid #d9e2ee;background:#f8fafd;border-radius:8px;padding:4px 8px;font-size:13px}
+  .tag .n{font-family:var(--mono);font-size:11px;color:var(--muted)}
+  .tag.err{border-color:#f0b9b3;background:var(--bad-soft);color:#8f1d16}
+  .tag.err .n{color:#b3261e}
+  .tag.warn{border-color:#f0dcb4;background:var(--warn-soft);color:#6d4400}
+  .issues{list-style:none;margin:0;padding:0}
+  .issues li{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--line-2);font-size:14px;color:var(--ink-2)}
+  .issues li:last-child{border-bottom:0}
+  .issues .dot{flex:0 0 auto;margin-top:5px;width:7px;height:7px;border-radius:50%;background:var(--muted)}
+  .issues li.error .dot{background:var(--bad)} .issues li.warn .dot{background:#e0a01a} .issues li.info .dot{background:#7c93ad}
+  .issues .txt{flex:1}
+  .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:#fff;-webkit-overflow-scrolling:touch}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:520px}
+  th,td{padding:9px 12px;text-align:left;border-bottom:1px solid var(--line-2);vertical-align:top}
+  th{background:#f3f6fb;font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:750;position:sticky;top:0}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:nth-child(even){background:#fafbfe}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  td.title{min-width:180px}
+  .money-pos{color:var(--ok);font-weight:700}
+
+  .exports{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .exports .btn{flex:1 1 220px}
+  .locknote{margin:10px 0 0;font-size:13px;color:var(--muted)}
+  .locked{position:relative}
+
+  .upsell{background:radial-gradient(900px 320px at 100% 0%,#2a4767 0%,var(--navy) 55%,#0d1a2b 100%);color:#fff;border:0}
+  .upsell h2{color:#fff;margin:0 0 6px}
+  .upsell .sub{color:#c7d5e5}
+  .upsell .price{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap;margin:0 0 14px}
+  .upsell .price b{font-size:34px;letter-spacing:-.03em}
+  .upsell .price s{color:#9fb3c9}
+  .upsell .price span{font-size:13px;color:#ffc9a8;font-weight:700}
+  .upsell ul{margin:0 0 16px;padding-left:20px;color:#d8e3ef;font-size:14.5px}
+  .upsell li{margin:5px 0}
+  .upsell .btn.accent{width:auto}
+  .upsell .fine{margin:12px 0 0;font-size:12.5px;color:#9fb3c9}
+  .upsell .bundle{margin:14px 0 0;font-size:14px;color:#d8e3ef}
+  .upsell .bundle a{color:#ffc9a8;font-weight:700}
+
+  .content h2{margin:0 0 12px;font-size:22px}
+  .content h3{margin:22px 0 8px;font-size:16px}
+  .content p{color:var(--ink-2);margin:0 0 12px}
+  .content ul{color:var(--ink-2);margin:0 0 12px;padding-left:20px}
+  .content li{margin:4px 0}
+  .content code{background:#eef1f6;border-radius:5px;padding:1px 6px;font-family:var(--mono);font-size:.9em}
+  .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0 0 8px}
+  .mini{background:#f8fafd;border:1px solid var(--line);border-radius:12px;padding:14px}
+  .mini h3{margin:0 0 6px;font-size:15px}
+  .mini p{margin:0;font-size:13.5px;color:var(--muted)}
+  .mini .ic{width:30px;height:30px;border-radius:9px;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center;font-weight:800;font-size:13px;margin:0 0 9px}
+  .faq details{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:#fbfcfe;margin:0 0 10px}
+  .faq summary{cursor:pointer;font-weight:700;font-size:14.5px}
+  .faq p{margin:10px 0 0;font-size:14px;color:var(--ink-2)}
+
+  footer{border-top:1px solid var(--line);background:#fff;padding:24px 0 34px;color:var(--muted);font-size:13px}
+  footer .fw{display:flex;gap:20px;flex-wrap:wrap;justify-content:space-between;align-items:flex-start}
+  footer a{color:var(--muted)}
+  footer a:hover{color:var(--accent-ink)}
+  .tiny{font-size:12px;line-height:1.6}
+
+  @media(max-width:820px){
+    .grid2,.grid3,.cards3{grid-template-columns:1fr}
+    .hero{padding:34px 0 30px}
+    .stat .v{font-size:20px}
+    section.card{padding:16px}
+    .listing .ltitle{white-space:normal}
+    .top nav .hide-sm{display:none}
+  }
+  @media print{
+    header.top,.hero .chips,.upsell,.exports,footer nav{display:none}
+    body{background:#fff}
+    section.card{box-shadow:none;border-color:#ccc}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="bar">
+    <a class="brand" href="https://yougkxm.github.io/"><span class="mark">ST</span>Seller Tools</a>
+    <span class="mode free">Free</span>
+    <span class="spacer"></span>
+    <nav>
+      <a class="hide-sm" href="#how">How it works</a>
+      <a class="hide-sm" href="#fees">Fees</a>
+      <a href="#tool" class="btn primary" style="padding:7px 12px;font-size:13px">Open the tool</a>
+    </nav>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <h1>Etsy audit in, <em>Shopify CSV</em> out.</h1>
+    <p>Load the CSV you download from Etsy's Shop Manager and get three things in one pass: a tag-by-tag SEO check, a Shopify product import file, and the price each listing needs on Shopify or Gumroad to keep the same take-home pay. Nothing is uploaded — the file is read in this page.</p>
+    <div class="chips">
+      <span class="chip good">100% offline</span>
+      <span class="chip">No account</span>
+      <span class="chip">CSV never leaves your device</span>
+      <span class="chip hot">Free: 3 listings · 3-row CSV preview</span>
+    </div>
+  </div>
+</div>
+
+<main id="tool">
+  <div class="wrap">
+
+    <div id="topAlert" aria-live="polite"></div>
+
+    <section class="card">
+      <h2>1. Load your listings</h2>
+      <p class="sub">Etsy Shop Manager → Settings → Options → Download Data → <strong>Download CSV</strong>. The file is called <code>EtsyListingsDownload.csv</code>.</p>
+
+      <div class="tabs" role="tablist" aria-label="Input method">
+        <button role="tab" id="tabUpload" aria-controls="panelUpload" aria-selected="true">Upload CSV</button>
+        <button role="tab" id="tabPaste" aria-controls="panelPaste" aria-selected="false">Paste one listing</button>
+      </div>
+
+      <div id="panelUpload" class="tabpanel" role="tabpanel" aria-labelledby="tabUpload">
+        <div class="drop" id="dropZone">
+          <p class="big">Drop your Etsy CSV here</p>
+          <p>or choose the file — it is read in this page, not sent anywhere</p>
+          <input type="file" id="fileInput" accept=".csv,text/csv" class="sr">
+          <button class="btn primary" id="pickFile" type="button">Choose CSV file</button>
+          <div class="row-actions" style="justify-content:center">
+            <button class="btn ghost" id="sampleBtn" type="button">Load the 8-listing sample</button>
+            <span id="fileName" class="note" style="margin:0"></span>
+          </div>
+        </div>
+        <p class="privacy"><span aria-hidden="true">🔒</span><span><b>Private by design.</b> There is no upload endpoint, no analytics script and no account. Your listings are parsed and turned into files by JavaScript running on this device.</span></p>
+      </div>
+
+      <div id="panelPaste" class="tabpanel" role="tabpanel" aria-labelledby="tabPaste" hidden>
+        <div class="grid2">
+          <label class="fld"><span>Title</span><input type="text" id="pTitle" placeholder="Printable Weekly Planner | Instant Download"></label>
+          <label class="fld"><span>Price</span><input type="text" id="pPrice" placeholder="4.50"></label>
+        </div>
+        <label class="fld"><span>Tags (comma separated, up to 13)</span><input type="text" id="pTags" placeholder="weekly planner, printable planner, a4 planner"></label>
+        <label class="fld"><span>Description</span><textarea id="pDesc" placeholder="What the buyer gets, file formats, size…"></textarea></label>
+        <div class="row-actions">
+          <button class="btn primary" id="pasteBtn" type="button">Audit this listing</button>
+          <button class="btn ghost" id="pasteClear" type="button">Clear</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>2. Settings</h2>
+      <p class="sub">These change the files you download. The audit uses them too, so a warning matches what the export will contain.</p>
+      <details class="settings" id="settingsBox" open>
+        <summary>Export and pricing options <span>defaults are safe for a first import</span></summary>
+        <div class="grid3">
+          <label class="fld"><span>Shopify CSV headers</span>
+            <select id="setHeader">
+              <option value="classic" selected>Classic (Handle, Body (HTML)…)</option>
+              <option value="current">Current 2026 (URL handle, Description…)</option>
+            </select>
+            <small>Shopify still accepts both. Never mix them in one file.</small>
+          </label>
+          <label class="fld"><span>Product status</span>
+            <select id="setStatus">
+              <option value="draft" selected>Draft — review, then publish</option>
+              <option value="active">Active — for sale immediately</option>
+            </select>
+            <small>Draft keeps an import off your storefront until you check it.</small>
+          </label>
+          <label class="fld"><span>Shipping</span>
+            <select id="setDigital">
+              <option value="auto" selected>Auto-detect per listing</option>
+              <option value="digital">All digital (no shipping)</option>
+              <option value="physical">All physical (ships)</option>
+            </select>
+            <small>Auto looks for "instant download", "printable", "PDF" and similar.</small>
+          </label>
+        </div>
+        <div class="grid3">
+          <label class="fld"><span>Vendor (optional)</span><input type="text" id="setVendor" placeholder="Your shop name"></label>
+          <label class="fld"><span>Product type (optional)</span><input type="text" id="setType" placeholder="e.g. Digital Download"></label>
+          <label class="fld"><span>Prices in the CSV</span>
+            <select id="setPriceMode">
+              <option value="keep" selected>Keep my Etsy price</option>
+              <option value="shopify">Reprice for Shopify (same net)</option>
+              <option value="gumroad_direct">Reprice for Gumroad Direct (same net)</option>
+              <option value="gumroad_discover">Reprice for Gumroad Discover (same net)</option>
+            </select>
+            <small>Repricing uses the fee table below, not a guess.</small>
+          </label>
+        </div>
+        <div class="grid3">
+          <label class="fld"><span>Etsy Offsite Ads on the sale</span>
+            <select id="setOffsite">
+              <option value="0" selected>None</option>
+              <option value="15">15% (shop under $10,000)</option>
+              <option value="12">12% ($10,000+ shop)</option>
+            </select>
+            <small>Applied to this order only; capped at $100.</small>
+          </label>
+          <label class="fld"><span>Shopify plan / month</span><input type="number" id="setMonthly" min="0" step="1" value="29"><small>Basic is $29 at the time of writing.</small></label>
+          <label class="fld"><span>Orders / month for that plan</span><input type="number" id="setOrders" min="1" step="1" value="50"><small>Spreads the subscription across orders.</small></label>
+        </div>
+        <div class="grid3">
+          <div class="fld" style="margin:0"><span>Tags</span>
+            <label style="display:flex;gap:8px;align-items:flex-start;font-weight:500;font-size:14px"><input type="checkbox" id="setTrim" style="margin-top:3px"> Shorten tags over 20 characters</label>
+            <small>Off by default: your tags go out as written, duplicates removed.</small>
+          </div>
+          <div class="fld" style="margin:0"><span>Variations</span>
+            <label style="display:flex;gap:8px;align-items:flex-start;font-weight:500;font-size:14px"><input type="checkbox" id="setVariants" checked style="margin-top:3px"> Expand variations into variant rows</label>
+            <small>Prices copy from the listing price — check them after import.</small>
+          </div>
+          <div class="fld" style="margin:0"><span>Images</span>
+            <label style="display:flex;gap:8px;align-items:flex-start;font-weight:500;font-size:14px"><input type="checkbox" id="setImages" checked style="margin-top:3px"> Add Etsy image URLs</label>
+            <small>Shopify downloads them during import; keep the Etsy listing up until it does.</small>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <div id="results" hidden>
+      <section class="card">
+        <h2>3. Your audit</h2>
+        <p class="sub" id="resultSub"></p>
+        <div class="stats" id="statBox"></div>
+        <div id="capNotice"></div>
+        <div id="listingBox"></div>
+      </section>
+
+      <section class="card">
+        <h2>4. Fee-parity repricing</h2>
+        <p class="sub">What each listing has to cost on another platform to leave you the same amount as Etsy does today. Platform fees only — your product cost, shipping and ad spend are not in this number.</p>
+        <div class="tablewrap"><table id="feeTable">
+          <thead><tr><th>Listing</th><th>Etsy price</th><th>You keep on Etsy</th><th>Shopify price</th><th>Gumroad Direct</th><th>Gumroad Discover</th></tr></thead>
+          <tbody></tbody>
+          <tfoot></tfoot>
+        </table></div>
+        <p class="note" id="feeNote"></p>
+      </section>
+
+      <section class="card">
+        <h2>5. Download</h2>
+        <p class="sub" id="exportSub"></p>
+        <div class="exports">
+          <button class="btn accent" id="btnShopify" type="button">Download Shopify product CSV</button>
+          <button class="btn" id="btnAudit" type="button">Download audit report CSV</button>
+          <button class="btn" id="btnReprice" type="button">Download repriced prices CSV</button>
+          <button class="btn ghost" id="btnTags" type="button">Copy cleaned tags</button>
+        </div>
+        <p class="locknote" id="exportNote"></p>
+        <div id="buildNotes"></div>
+      </section>
+    </div>
+
+    <section id="emptyState" class="card" style="text-align:center">
+      <h2 style="margin-bottom:6px">No file loaded yet</h2>
+      <p class="sub" style="margin-bottom:16px">Pick your Etsy CSV above, or press the sample button to see what the audit and the Shopify file look like with 8 real-shaped listings.</p>
+      <button class="btn primary" id="sampleBtn2" type="button">Load the 8-listing sample</button>
+    </section>
+
+    
+    <section class="card upsell" id="pro">
+      <h2>The Pro app lifts the cap</h2>
+      <p class="sub">One HTML file you keep. No install, no Python, no terminal, no subscription — open it in Chrome, Edge, Safari or on a Chromebook with the network off.</p>
+      <div class="price"><b>$19</b><span>or $14.25 with code MIGRATE25 at checkout</span></div>
+      <ul>
+        <li><strong>Every listing, every row</strong> — the whole Etsy export, not 3 listings and a 3-row preview.</li>
+        <li><strong>Full Shopify product CSV</strong> with unique handles, variants and all ten image columns.</li>
+        <li><strong>Audit report CSV</strong> — one line per listing with score, errors, warnings, long tags, duplicates and a cleaned tag list.</li>
+        <li><strong>Repriced prices CSV</strong> — the Shopify and Gumroad price that keeps each listing's take-home.</li>
+        <li><strong>Tag cleaner</strong> that removes duplicates and can shorten tags to Etsy's 20 characters.</li>
+        <li>The 8-listing sample file and a printable Quick Start guide.</li>
+      </ul>
+      <a class="btn accent" href="https://8299181964131.gumroad.com/l/etsy-shopify-migrator-pro">Get the Pro app — $19</a>
+      <p class="bundle">Or take the <a href="https://8299181964131.gumroad.com/l/seller-tools-bundle">$49 bundle of six other Seller Tools</a> — $131.98 bought separately.</p>
+      <p class="fine">One-time purchase. Works offline for as long as you keep the file. Your listings still never leave your device.</p>
+    </section>
+
+
+    <section class="card content" id="how">
+      <h2>What happens in one pass</h2>
+      <div class="cards3">
+        <div class="mini"><div class="ic">1</div><h3>Tag and title audit</h3><p>Every tag is measured against Etsy's 20-character limit and its 13 slots, duplicates and repeated words are counted, and the title is shown as searchers see it — cut at about 40 characters.</p></div>
+        <div class="mini"><div class="ic">2</div><h3>Shopify product CSV</h3><p>One row per product, one per variant, one per photo, joined by a handle that stays unique across the file. Descriptions are escaped into HTML, not pasted raw.</p></div>
+        <div class="mini"><div class="ic">3</div><h3>Fee-parity price</h3><p>The take-home on Etsy is calculated with the published fees, then solved backwards for the price that leaves the same amount on Shopify or Gumroad.</p></div>
+      </div>
+      <p class="note">The Etsy export only contains listings that are currently for sale. Drafts, expired and sold-out listings are not in it — renew or re-export them first if you need them.</p>
+    </section>
+
+    <section class="card content" id="fees">
+      <h2>Where the numbers come from</h2>
+      <p>Fees checked on 2026-11-22. Rates differ by country and account, so treat these as the published defaults and check your own statement for the exact figure.</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Platform</th><th>What is charged</th><th>Used here</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>Etsy</td><td>$0.20 listing, 6.5% transaction, 3% + $0.25 payment processing (US)</td><td>All three, plus optional Offsite Ads at 15% or 12%, capped at $100 per order</td><td>Etsy Fees &amp; Payments Policy, updated Oct 5, 2026</td></tr>
+          <tr><td>Shopify</td><td>2.9% + $0.30 per online card payment on Basic ($29/month)</td><td>Card fee plus the plan share you enter</td><td>shopify.com/pricing</td></tr>
+          <tr><td>Gumroad Direct</td><td>10% + $0.50 per sale (payment processing included)</td><td>The published all-in fee, no extra card fee</td><td>gumroad.com/pricing</td></tr>
+          <tr><td>Gumroad Discover</td><td>30% per sale from Gumroad's marketplace</td><td>The published all-in fee</td><td>gumroad.com/pricing</td></tr>
+        </tbody>
+      </table></div>
+      <h3>The calculation, in plain arithmetic</h3>
+      <p>Etsy take-home at price <code>P</code>: <code>P − 0.20 − 0.065P − (0.03P + 0.25) − offsite</code>. Shopify take-home: <code>Q − 0.029Q − 0.30 − plan/orders</code>. Setting them equal and solving for <code>Q</code> is the price shown in the table, rounded up to the next cent so you are never short.</p>
+      <p>Example: a $38.00 sale on Etsy keeps $33.94 with no Offsite Ads. On Shopify Basic at 50 orders a month the same $33.94 needs $35.86; on Gumroad Direct it needs $38.27.</p>
+      <p class="note">Etsy's payment processing is charged on the order total including tax and shipping, while the 6.5% transaction fee is charged on the item price plus shipping. This tool assumes no shipping and no sales tax in the price, which is the usual case for digital listings.</p>
+    </section>
+
+    <section class="card content">
+      <h2>Limits, stated plainly</h2>
+      <ul>
+        <li><strong>Active listings only.</strong> That is all Etsy's export contains.</li>
+        <li><strong>Variants get the listing price.</strong> Etsy's export does not carry a separate price per variation, so every expanded variant starts at the base price and the product is worth a look after import.</li>
+        <li><strong>Stock per variant is empty.</strong> Etsy gives one combined quantity for a listing; it is written on single-variant products only.</li>
+        <li><strong>No product category.</strong> Etsy's export has no Shopify taxonomy category, and a wrong one changes tax handling. Set it in Shopify after import.</li>
+        <li><strong>Currency is copied as-is.</strong> If your Shopify store currency differs from your Etsy shop currency, convert the prices before importing.</li>
+        <li><strong>Images are linked, not uploaded.</strong> Shopify fetches each URL during the import; keep the Etsy listing live until it finishes.</li>
+      </ul>
+    </section>
+
+    <section class="card content faq">
+      <h2>Questions sellers ask</h2>
+      <details><summary>Does this upload my listings anywhere?</summary><p>No. There is no server behind this page. The CSV is read with the browser's FileReader, and the download is built in memory. You can open the file with the network disconnected and everything still works.</p></details>
+      <details><summary>Will Shopify accept the CSV it makes?</summary><p>The columns are Shopify's own product import columns, in either the classic header names or the 2026 names, and every product row carries a unique handle. Import it as a draft first — that is what the default status is for — and check a few products before publishing.</p></details>
+      <details><summary>Why is the Shopify price lower (or higher) than my Etsy price?</summary><p>Because the fees differ. Shopify charges a card fee and a monthly plan instead of Etsy's listing, transaction and payment fees, so the price that leaves you the same amount moves. If you would rather keep your prices and accept a different margin, set prices to "Keep my Etsy price".</p></details>
+      <details><summary>What about Offsite Ads?</summary><p>An Offsite Ads fee only applies to orders attributed to an ad. Choose 15% or 12% if you want the repriced price to survive an attributed sale; leave it on None for an ordinary order. The fee is capped at $100 per order, and this tool applies that cap.</p></details>
+      <details><summary>Can I migrate to Gumroad instead of Shopify?</summary><p>This app writes a Shopify product CSV. The repricing table gives you the Gumroad Direct and Discover price to carry across, and the audit CSV works as the checklist for re-listing by hand.</p></details>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap fw">
+    <div>
+      <strong style="color:var(--ink)">Seller Tools</strong> · Etsy Listing Audit &amp; Shopify CSV Migrator 1.0<br>
+      <span class="tiny">Independent tool. Not affiliated with Etsy, Shopify or Gumroad. Fee rates are the published defaults as of 2026-11-22; confirm them for your country and account.</span>
+    </div>
+    <div class="tiny" style="text-align:right">
+      <a href="#how">How it works</a> · <a href="#fees">Fee sources</a> · <a href="https://yougkxm.github.io/">Other free seller tools</a><br>
+      This page is free to use; the Pro file adds unlimited rows and the extra CSV exports.
+    </div>
+  </div>
+</footer>
+
+<script>/*!
+ * Seller Tools — Etsy Listing Audit & Shopify CSV Migrator
+ * Core engine v1.0 — shared by the free browser tool and the Pro offline app.
+ *
+ * Pure functions only: no DOM, no network, no storage. Every value that
+ * reaches the screen or a downloaded file comes from here, so the same
+ * engine can be exercised outside a browser.
+ *
+ * Rates and limits below are the ones documented for 2026-11-22 and are
+ * repeated in README.txt and the Quick Start guide.
+ */
+var SellerMigrator = (function () {
+  "use strict";
+
+  var VERSION = "1.0";
+  var RATES_ASOF = "2026-11-22";
+
+  var LIMITS = {
+    tags: 13,            // Etsy allows up to 13 tags per listing
+    tagChars: 20,        // each tag: 20 characters or fewer
+    titleChars: 140,     // Etsy title limit
+    titleSnippet: 40,    // characters most search results show
+    altText: 125,        // Shopify's suggested alt text length
+    maxImages: 20,       // image columns we will read (IMAGE1..IMAGE20)
+    maxVariants: 200,    // rows one listing may expand to
+    freeListings: 3,     // free tool: listings analysed
+    freeRows: 3          // free tool: Shopify CSV data rows exported
+  };
+
+  var RATES = {
+    asof: RATES_ASOF,
+    etsy: {
+      listing: 0.20,
+      transaction: 0.065,
+      processingPct: 0.03,
+      processingFixed: 0.25,
+      offsite: { under10k: 0.15, over10k: 0.12, cap: 100 }
+    },
+    shopify: { plan: "Basic", monthly: 29, cardPct: 0.029, cardFixed: 0.30 },
+    gumroad: { directPct: 0.10, directFixed: 0.50, discoverPct: 0.30 },
+    sources: {
+      etsy: "Etsy Fees & Payments Policy (updated Oct 5, 2026); Etsy Help: payment processing fees by country",
+      shopify: "shopify.com/pricing, checked 2026-11-22",
+      gumroad: "gumroad.com/pricing, checked 2026-11-22"
+    }
+  };
+
+  var CURRENCY_SYMBOLS = {
+    USD: "$", EUR: "\u20ac", GBP: "\u00a3", CAD: "C$", AUD: "A$",
+    JPY: "\u00a5", KRW: "\u20a9", INR: "\u20b9", NZD: "NZ$", CHF: "CHF "
+  };
+
+  var STOPWORDS = {
+    "a": 1, "an": 1, "and": 1, "the": 1, "for": 1, "of": 1, "to": 1,
+    "in": 1, "on": 1, "with": 1, "your": 1, "my": 1, "our": 1, "by": 1,
+    "or": 1, "at": 1, "is": 1, "it": 1, "this": 1, "that": 1, "from": 1
+  };
+
+  var DIGITAL_HINTS = [
+    "instant download", "digital download", "digital file", "downloadable",
+    "printable", "no physical item", "no physical product", "pdf file",
+    "svg file", "png file", "zip file", "digital product"
+  ];
+
+  /* ------------------------------------------------------------------ *
+   * Small text and number helpers
+   * ------------------------------------------------------------------ */
+
+  function stripBOM(text) {
+    text = String(text == null ? "" : text);
+    return text.charCodeAt(0) === 0xFEFF ? text.slice(1) : text;
+  }
+
+  /* Count characters as a reader sees them, so an emoji counts as one. */
+  function charLength(text) {
+    var s = String(text == null ? "" : text), n = 0, i, c;
+    for (i = 0; i < s.length; i++) {
+      c = s.charCodeAt(i);
+      if (c >= 0xD800 && c <= 0xDBFF && i + 1 < s.length) {
+        var next = s.charCodeAt(i + 1);
+        if (next >= 0xDC00 && next <= 0xDFFF) { i++; }
+      }
+      n++;
+    }
+    return n;
+  }
+
+  /* Cut to a character count without splitting a surrogate pair. */
+  function charSlice(text, count) {
+    var s = String(text == null ? "" : text), n = 0, i, c;
+    for (i = 0; i < s.length; i++) {
+      c = s.charCodeAt(i);
+      if (c >= 0xD800 && c <= 0xDBFF && i + 1 < s.length) {
+        var next = s.charCodeAt(i + 1);
+        if (next >= 0xDC00 && next <= 0xDFFF) {
+          if (n + 1 > count) { return s.slice(0, i); }
+          i++; n++;
+          continue;
+        }
+      }
+      if (n + 1 > count) { return s.slice(0, i); }
+      n++;
+    }
+    return s;
+  }
+
+  function collapseSpaces(text) {
+    return String(text == null ? "" : text).replace(/\s+/g, " ").replace(/^ | $/g, "");
+  }
+
+  function r2(value) {
+    if (!isFinite(value)) { return 0; }
+    return Math.round((value + (value >= 0 ? 1e-9 : -1e-9)) * 100) / 100;
+  }
+
+  function ceil2(value) {
+    if (!isFinite(value)) { return 0; }
+    return Math.ceil(value * 100 - 1e-9) / 100;
+  }
+
+  function money(value, currency) {
+    var symbol = CURRENCY_SYMBOLS[String(currency || "USD").toUpperCase()] || "";
+    var n = Math.abs(r2(value));
+    var parts = n.toFixed(2).split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return (value < 0 ? "-" : "") + symbol + parts[0] + "." + parts[1];
+  }
+
+  function plainNumber(value) {
+    return r2(value).toFixed(2);
+  }
+
+  function isCJK(code) {
+    return (code >= 0x3040 && code <= 0x30FF) ||   /* kana */
+           (code >= 0x3400 && code <= 0x9FFF) ||   /* CJK */
+           (code >= 0xAC00 && code <= 0xD7AF) ||   /* Hangul */
+           (code >= 0xF900 && code <= 0xFAFF);
+  }
+
+  function isWordChar(ch) {
+    var c = ch.charCodeAt(0);
+    if ((c >= 48 && c <= 57) || (c >= 65 && c <= 90) || (c >= 97 && c <= 122)) { return true; }
+    if (c === 39 || c === 45) { return true; }                 /* ' - */
+    if (c >= 0xC0 && c <= 0x24F) { return true; }              /* Latin-1 supplement */
+    if (c >= 0x370 && c <= 0x4FF) { return true; }             /* Greek, Cyrillic */
+    if (isCJK(c)) { return true; }
+    if (c >= 0xD800 && c <= 0xDBFF) { return true; }           /* surrogate pairs */
+    return false;
+  }
+
+  function words(text) {
+    var s = String(text == null ? "" : text).toLowerCase();
+    var out = [], current = "", i, ch;
+    for (i = 0; i < s.length; i++) {
+      ch = s.charAt(i);
+      if (isWordChar(ch)) {
+        current += ch;
+      } else if (current) {
+        out.push(current.replace(/^['-]+|['-]+$/g, ""));
+        current = "";
+      }
+    }
+    if (current) { out.push(current.replace(/^['-]+|['-]+$/g, "")); }
+    return out.filter(function (w) { return w.length > 0; });
+  }
+
+  /* ------------------------------------------------------------------ *
+   * RFC 4180 CSV reader / writer
+   * ------------------------------------------------------------------ */
+
+  /*
+   * parseCSV returns { rows, error, warnings }.
+   * rows is an array of arrays of strings. A quoted field may contain
+   * commas, doubled quotes and line breaks. CRLF, LF and CR all end a row.
+   * A byte-order mark at the start is dropped. When a quote is opened and
+   * never closed the parse stops and reports the row, instead of silently
+   * guessing where the file ends.
+   */
+  function parseCSV(text, options) {
+    var opts = options || {};
+    var input = stripBOM(text);
+    var rows = [], row = [], field = "", inQuotes = false, i = 0, c, next;
+    var line = 1, warnings = [], started = false;
+
+    while (i < input.length) {
+      c = input.charAt(i);
+
+      if (inQuotes) {
+        if (c === '"') {
+          next = input.charAt(i + 1);
+          if (next === '"') { field += '"'; i += 2; continue; }
+          inQuotes = false; i++; continue;
+        }
+        if (c === "\r") {
+          if (input.charAt(i + 1) === "\n") { i += 2; } else { i++; }
+          field += "\n"; line++;
+          continue;
+        }
+        if (c === "\n") { field += "\n"; line++; i++; continue; }
+        field += c; i++; continue;
+      }
+
+      if (c === '"') {
+        if (field === "") { inQuotes = true; i++; started = true; continue; }
+        /* A quote inside an unquoted field: keep it and note the file. */
+        field += c;
+        warnings.push({ code: "stray_quote", line: line, message: "A quote inside an unquoted field was kept as text (line " + line + ")." });
+        i++; continue;
+      }
+      if (c === ",") {
+        row.push(field); field = ""; started = true; i++; continue;
+      }
+      if (c === "\r" || c === "\n") {
+        if (c === "\r" && input.charAt(i + 1) === "\n") { i += 2; } else { i++; }
+        row.push(field); field = ""; started = false;
+        if (!(row.length === 1 && row[0] === "")) { rows.push(row); }
+        row = []; line++; continue;
+      }
+      field += c; started = true; i++;
+    }
+
+    if (inQuotes) {
+      return {
+        rows: rows,
+        error: {
+          code: "unterminated_quote",
+          line: line,
+          message: "A quoted field opened on line " + line + " is never closed. Etsy cells that contain commas, quotes or line breaks must be wrapped in double quotes (\")."
+        },
+        warnings: warnings
+      };
+    }
+
+    if (started || field !== "" || row.length) {
+      row.push(field);
+      if (!(row.length === 1 && row[0] === "")) { rows.push(row); }
+    }
+
+    return { rows: rows, error: null, warnings: warnings };
+  }
+
+  function quoteField(value) {
+    var s = value == null ? "" : String(value);
+    if (s.indexOf(",") !== -1 || s.indexOf('"') !== -1 || s.indexOf("\n") !== -1 ||
+        s.indexOf("\r") !== -1 || /^\s|\s$/.test(s)) {
+      return '"' + s.replace(/"/g, '""') + '"';
+    }
+    return s;
+  }
+
+  function toCSV(rows, options) {
+    var opts = options || {};
+    var eol = opts.eol || "\r\n";
+    var lines = [], i, j, cells;
+    for (i = 0; i < rows.length; i++) {
+      cells = [];
+      for (j = 0; j < rows[i].length; j++) { cells.push(quoteField(rows[i][j])); }
+      lines.push(cells.join(","));
+    }
+    return (opts.bom ? "\uFEFF" : "") + lines.join(eol) + (lines.length ? eol : "");
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Etsy export parsing
+   * ------------------------------------------------------------------ */
+
+  function headerKey(header) {
+    return String(header == null ? "" : header)
+      .replace(/^\uFEFF/, "")
+      .replace(/\([^)]*\)/g, " ")          /* drop language suffixes: TITLE (EN) */
+      .replace(/[_\s]+/g, " ")
+      .replace(/^ | $/g, "")
+      .toUpperCase();
+  }
+
+  function etsyHeaderMap(headerRow) {
+    var map = {
+      title: -1, description: -1, price: -1, currency: -1, quantity: -1,
+      tags: -1, materials: -1, sku: -1, images: [], imageUrls: -1,
+      variationNames: [], variationValues: [], skus: [], mapped: {}, unmapped: []
+    };
+    var i, key, m;
+    for (i = 0; i < headerRow.length; i++) {
+      key = headerKey(headerRow[i]);
+      if (key === "" ) { continue; }
+      if (key === "TITLE" || key === "LISTING TITLE" || key === "NAME") { map.title = map.title === -1 ? i : map.title; }
+      else if (key === "DESCRIPTION" || key === "LISTING DESCRIPTION" || key === "BODY") { map.description = map.description === -1 ? i : map.description; }
+      else if (key === "PRICE" || key === "LISTING PRICE" || key === "UNIT PRICE") { map.price = map.price === -1 ? i : map.price; }
+      else if (key === "CURRENCY CODE" || key === "CURRENCY") { map.currency = map.currency === -1 ? i : map.currency; }
+      else if (key === "QUANTITY" || key === "AVAILABLE QUANTITY" || key === "STOCK") { map.quantity = map.quantity === -1 ? i : map.quantity; }
+      else if (key === "TAGS" || key === "TAG") { map.tags = map.tags === -1 ? i : map.tags; }
+      else if (key === "MATERIALS" || key === "MATERIAL") { map.materials = map.materials === -1 ? i : map.materials; }
+      else if (key === "SKU" || key === "SKU CODE" || key === "PRODUCT SKU") { map.sku = map.sku === -1 ? i : map.sku; }
+      else if (key === "IMAGE URLS" || key === "IMAGE URL" || key === "IMAGES" || key === "PHOTOS") { map.imageUrls = map.imageUrls === -1 ? i : map.imageUrls; }
+      else if ((m = key.match(/^IMAGE\s*(\d+)$/))) { map.images.push({ index: i, n: parseInt(m[1], 10) }); }
+      else if ((m = key.match(/^SKU\s*(\d+)$/))) { map.skus.push({ index: i, n: parseInt(m[1], 10) }); }
+      else if ((m = key.match(/^VARIATION\s*(\d+)\s*NAMES?$/))) { map.variationNames.push({ index: i, n: parseInt(m[1], 10) }); }
+      else if ((m = key.match(/^VARIATION\s*(\d+)\s*VALUES?$/))) { map.variationValues.push({ index: i, n: parseInt(m[1], 10) }); }
+      else { map.unmapped.push(String(headerRow[i]).replace(/^\uFEFF/, "")); continue; }
+      map.mapped[key] = i;
+    }
+    map.images.sort(function (a, b) { return a.n - b.n; });
+    map.skus.sort(function (a, b) { return a.n - b.n; });
+    map.variationNames.sort(function (a, b) { return a.n - b.n; });
+    map.variationValues.sort(function (a, b) { return a.n - b.n; });
+    return map;
+  }
+
+  function parsePrice(raw) {
+    if (raw == null) { return null; }
+    var s = String(raw).replace(/\u00a0/g, " ").replace(/^ | $/g, "");
+    if (s === "") { return null; }
+    s = s.replace(/[^0-9.,\-+]/g, "");
+    if (s.indexOf(",") !== -1 && s.indexOf(".") === -1) {
+      /* 1.234,56 style or 12,50 style */
+      if (/,\d{1,2}$/.test(s)) { s = s.replace(/\./g, "").replace(",", "."); }
+      else { s = s.replace(/,/g, ""); }
+    } else {
+      s = s.replace(/,/g, "");
+    }
+    if (s === "" || s === "-" || s === "+") { return null; }
+    var n = parseFloat(s);
+    return isFinite(n) ? n : null;
+  }
+
+  function splitList(value) {
+    var out = [], parts, i;
+    if (value == null) { return out; }
+    parts = String(value).split(",");
+    for (i = 0; i < parts.length; i++) {
+      var t = collapseSpaces(parts[i]);
+      if (t !== "") { out.push(t); }
+    }
+    return out;
+  }
+
+  function looksLikeUrl(value) {
+    return /^https?:\/\/[^\s]+\.[^\s]+/i.test(String(value || "").replace(/^ | $/g, ""));
+  }
+
+  function parseEtsyCSV(text) {
+    var parsed = parseCSV(text);
+    if (parsed.error) {
+      return { listings: [], meta: null, error: parsed.error, warnings: parsed.warnings };
+    }
+    var rows = parsed.rows;
+    if (!rows.length) {
+      return { listings: [], meta: null, error: { code: "empty", message: "The file is empty." }, warnings: [] };
+    }
+    var headerRow = rows[0];
+    var map = etsyHeaderMap(headerRow);
+    if (map.title === -1) {
+      return {
+        listings: [], meta: null,
+        error: {
+          code: "no_title_column",
+          message: "No TITLE column found. This does not look like an Etsy listing export (EtsyListingsDownload.csv). Use Shop Manager > Settings > Options > Download Data > Download CSV."
+        },
+        warnings: []
+      };
+    }
+
+    var listings = [], warnings = [], i, j, r, listing, cell;
+    for (i = 1; i < rows.length; i++) {
+      r = rows[i];
+      var blank = true;
+      for (j = 0; j < r.length; j++) { if (String(r[j]).replace(/^\s+|\s+$/g, "") !== "") { blank = false; break; } }
+      if (blank) { continue; }
+
+      listing = {
+        rowNumber: i + 1,
+        title: map.title >= 0 ? String(r[map.title] == null ? "" : r[map.title]).replace(/^\s+|\s+$/g, "") : "",
+        description: map.description >= 0 ? String(r[map.description] == null ? "" : r[map.description]) : "",
+        price: map.price >= 0 ? parsePrice(r[map.price]) : null,
+        priceRaw: map.price >= 0 ? String(r[map.price] == null ? "" : r[map.price]).replace(/^\s+|\s+$/g, "") : "",
+        currency: map.currency >= 0 ? String(r[map.currency] == null ? "" : r[map.currency]).replace(/^\s+|\s+$/g, "").toUpperCase() : "",
+        quantity: null,
+        quantityRaw: "",
+        tags: map.tags >= 0 ? splitList(r[map.tags]) : [],
+        materials: map.materials >= 0 ? splitList(r[map.materials]) : [],
+        images: [],
+        imageNotes: [],
+        sku: map.sku >= 0 ? collapseSpaces(r[map.sku] || "") : "",
+        skus: [],
+        variations: []
+      };
+
+      if (map.quantity >= 0) {
+        listing.quantityRaw = String(r[map.quantity] == null ? "" : r[map.quantity]).replace(/^\s+|\s+$/g, "");
+        var q = parseInt(listing.quantityRaw.replace(/[^0-9]/g, ""), 10);
+        listing.quantity = isFinite(q) ? q : null;
+      }
+
+      if (map.imageUrls >= 0) {
+        var urls = String(r[map.imageUrls] || "").split(/[\s;,]+/);
+        for (j = 0; j < urls.length; j++) {
+          if (urls[j]) { listing.images.push(urls[j]); }
+        }
+      }
+      for (j = 0; j < map.images.length; j++) {
+        cell = String(r[map.images[j].index] == null ? "" : r[map.images[j].index]).replace(/^\s+|\s+$/g, "");
+        if (cell) { listing.images.push(cell); }
+      }
+      for (j = 0; j < map.skus.length; j++) {
+        cell = String(r[map.skus[j].index] == null ? "" : r[map.skus[j].index]).replace(/^\s+|\s+$/g, "");
+        listing.skus.push(cell);
+      }
+
+      var names = {}, vals = {}, k;
+      for (j = 0; j < map.variationNames.length; j++) {
+        k = map.variationNames[j].n;
+        names[k] = collapseSpaces(r[map.variationNames[j].index] || "");
+      }
+      for (j = 0; j < map.variationValues.length; j++) {
+        k = map.variationValues[j].n;
+        vals[k] = splitList(r[map.variationValues[j].index] || "");
+      }
+      for (j = 1; j <= 3; j++) {
+        if (names[j] && vals[j] && vals[j].length) {
+          listing.variations.push({ name: names[j], values: vals[j] });
+        }
+      }
+
+      if (r.length < headerRow.length) {
+        warnings.push({
+          code: "short_row",
+          message: "Row " + (i + 1) + " has " + r.length + " cells but the header has " + headerRow.length + ". Missing cells were read as empty."
+        });
+      }
+      listings.push(listing);
+    }
+
+    var currency = "";
+    for (i = 0; i < listings.length; i++) {
+      if (listings[i].currency) { currency = listings[i].currency; break; }
+    }
+
+    var meta = {
+      columns: headerRow.length,
+      listingCount: listings.length,
+      unmapped: map.unmapped,
+      hasImages: map.images.length > 0 || map.imageUrls >= 0,
+      hasVariations: map.variationNames.length > 0,
+      hasTags: map.tags >= 0,
+      hasSku: map.sku >= 0,
+      detectedCurrency: currency
+    };
+    for (i = 0; i < warnings.length; i++) { warnings[i].rowNumber = null; }
+    return { listings: listings, meta: meta, error: null, warnings: warnings };
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Tags
+   * ------------------------------------------------------------------ */
+
+  function trimTagTo20(tag) {
+    if (charLength(tag) <= LIMITS.tagChars) { return tag; }
+    var cut = charSlice(tag, LIMITS.tagChars);
+    var lastSpace = cut.lastIndexOf(" ");
+    if (lastSpace >= 10) { cut = cut.slice(0, lastSpace); }
+    return cut.replace(/[ ,]+$/, "");
+  }
+
+  /*
+   * cleanTags dedupes case-insensitively and trims whitespace.
+   * With options.trimLong it also shortens tags over 20 characters at a
+   * word boundary; without it, long tags are left exactly as exported.
+   */
+  function cleanTags(tags, options) {
+    var opts = options || {};
+    var seen = Object.create(null), out = [], removed = [], i, tag, key, cleaned;
+    for (i = 0; i < (tags || []).length; i++) {
+      tag = collapseSpaces(tags[i]);
+      if (!tag) { removed.push({ tag: String(tags[i]), reason: "empty" }); continue; }
+      key = tag.toLowerCase();
+      if (seen[key]) { removed.push({ tag: tag, reason: "duplicate" }); continue; }
+      seen[key] = true;
+      cleaned = opts.trimLong ? trimTagTo20(tag) : tag;
+      if (cleaned !== tag) { removed.push({ tag: tag, reason: "shortened", replacement: cleaned }); }
+      if (opts.trimLong && charLength(tag) > LIMITS.tagChars && cleaned.toLowerCase() !== key) {
+        /* the shortened tag may collide with one already kept */
+        var sk = cleaned.toLowerCase();
+        if (seen[sk]) { removed.push({ tag: cleaned, reason: "duplicate" }); continue; }
+        seen[sk] = true;
+      }
+      out.push(cleaned);
+    }
+    if (out.length > LIMITS.tags) {
+      for (i = LIMITS.tags; i < out.length; i++) { removed.push({ tag: out[i], reason: "over_limit" }); }
+      out = out.slice(0, LIMITS.tags);
+    }
+    return { tags: out, removed: removed, changed: removed.length > 0 };
+  }
+
+  /* ------------------------------------------------------------------ *
+   * SEO audit
+   * ------------------------------------------------------------------ */
+
+  function issue(level, code, field, message, extra) {
+    var o = { level: level, code: code, field: field, message: message };
+    if (extra) { for (var k in extra) { if (extra.hasOwnProperty(k)) { o[k] = extra[k]; } } }
+    return o;
+  }
+
+  function auditListing(listing, options) {
+    var opts = options || {};
+    var issues = [];
+    listing = listing || {};
+    if (!listing.tags) { listing.tags = []; }
+    if (!listing.images) { listing.images = []; }
+    if (!listing.variations) { listing.variations = []; }
+    if (!listing.materials) { listing.materials = []; }
+    if (!listing.skus) { listing.skus = []; }
+    if (listing.price === undefined) { listing.price = null; }
+    var title = listing.title || "";
+    var titleLen = charLength(title);
+    var tags = listing.tags || [];
+    var i, t, w, key;
+
+    /* Title */
+    if (!collapseSpaces(title)) {
+      issues.push(issue("error", "title_empty", "title", "The listing has no title, so it cannot be imported as a product."));
+    } else {
+      if (titleLen > LIMITS.titleChars) {
+        issues.push(issue("error", "title_too_long", "title",
+          "Title is " + titleLen + " characters. Etsy allows " + LIMITS.titleChars + "; the extra " + (titleLen - LIMITS.titleChars) + " will be lost.", { length: titleLen }));
+      }
+      if (titleLen < LIMITS.titleSnippet) {
+        issues.push(issue("warn", "title_short", "title",
+          "Title is only " + titleLen + " characters. Search results show about " + LIMITS.titleSnippet + ", so short titles give away keyword room.", { length: titleLen }));
+      }
+      if (title !== title.replace(/^\s+|\s+$/g, "") || /\s{2,}/.test(title)) {
+        issues.push(issue("warn", "title_spacing", "title", "Title has doubled or edge spaces; they are collapsed on import."));
+      }
+    }
+
+    /* Tags */
+    var tagDetails = [], seenTags = {}, longTags = [], duplicateTags = [], symbolTags = [], emptyTags = 0;
+    var wordTags = Object.create(null), wordList = [], repeatWordTags = [], tagWords = [];
+    for (i = 0; i < tags.length; i++) {
+      t = collapseSpaces(tags[i]);
+      if (!t) { emptyTags++; continue; }
+      key = t.toLowerCase();
+      var detail = { tag: t, length: charLength(t), status: "ok", notes: [] };
+      if (charLength(t) > LIMITS.tagChars) {
+        detail.status = "error";
+        detail.notes.push("over " + LIMITS.tagChars + " characters");
+        longTags.push(t);
+      }
+      if (seenTags[key]) {
+        detail.status = "error";
+        detail.notes.push("duplicate tag");
+        duplicateTags.push(t);
+      } else {
+        seenTags[key] = true;
+      }
+      if (!/^[0-9A-Za-z\u00C0-\u024F\u0370-\u04FF\u3040-\u30FF\u3400-\u9FFF\uAC00-\uD7AF\s'\-]+$/.test(t)) {
+        if (detail.status === "ok") { detail.status = "warn"; }
+        detail.notes.push("special characters");
+        symbolTags.push(t);
+      }
+      var tw = words(t);
+      for (var q = 0; q < tw.length; q++) {
+        if (STOPWORDS[tw[q]]) { continue; }
+        if (charLength(tw[q]) < 2 && !isCJK(tw[q].charCodeAt(0))) { continue; }
+        tagWords.push(tw[q]);
+        if (!Object.prototype.hasOwnProperty.call(wordTags, tw[q])) { wordTags[tw[q]] = []; wordList.push(tw[q]); }
+        if (wordTags[tw[q]].indexOf(i) === -1) { wordTags[tw[q]].push(i); }
+      }
+      var counts = Object.create(null);
+      for (var q2 = 0; q2 < tw.length; q2++) {
+        if (STOPWORDS[tw[q2]]) { continue; }
+        counts[tw[q2]] = (counts[tw[q2]] || 0) + 1;
+      }
+      var repeated = [];
+      for (var k2 in counts) {
+        if (counts[k2] > 1) { repeated.push(k2); }
+      }
+      if (repeated.length) {
+        detail.status = detail.status === "error" ? "error" : "warn";
+        detail.notes.push("repeats \"" + repeated.join('", "') + "\"");
+        repeatWordTags.push({ tag: t, words: repeated });
+      }
+      tagDetails.push(detail);
+    }
+
+    if (tags.length === 0) {
+      issues.push(issue("warn", "tags_none", "tags", "No tags on this listing. Etsy gives 13 free keyword slots."));
+    } else if (tags.length > LIMITS.tags) {
+      issues.push(issue("error", "tags_over_limit", "tags",
+        tags.length + " tags. Etsy keeps the first " + LIMITS.tags + "; " + (tags.length - LIMITS.tags) + " will be dropped.", { count: tags.length }));
+    } else if (tags.length < LIMITS.tags) {
+      issues.push(issue("info", "tags_unused_slots", "tags",
+        (LIMITS.tags - tags.length) + " of " + LIMITS.tags + " tag slots are unused.", { count: tags.length }));
+    }
+    for (i = 0; i < longTags.length; i++) {
+      issues.push(issue("error", "tag_too_long", "tags",
+        "\"" + longTags[i] + "\" is " + charLength(longTags[i]) + " characters; Etsy allows " + LIMITS.tagChars + ".", { tag: longTags[i] }));
+    }
+    for (i = 0; i < duplicateTags.length; i++) {
+      issues.push(issue("error", "tag_duplicate", "tags", "\"" + duplicateTags[i] + "\" is used more than once.", { tag: duplicateTags[i] }));
+    }
+    for (i = 0; i < symbolTags.length; i++) {
+      issues.push(issue("warn", "tag_symbols", "tags",
+        "\"" + symbolTags[i] + "\" contains punctuation or symbols; Etsy's tag field takes letters, numbers and spaces.", { tag: symbolTags[i] }));
+    }
+    if (emptyTags) {
+      issues.push(issue("warn", "tag_empty", "tags", emptyTags + " empty tag slot(s) between commas."));
+    }
+    if (repeatWordTags.length) {
+      issues.push(issue("warn", "tag_word_repeat", "tags",
+        repeatWordTags.length + " tag(s) repeat a word inside the tag, e.g. \"" + repeatWordTags[0].tag + "\"."));
+    }
+
+    var shared = [];
+    for (i = 0; i < wordList.length; i++) {
+      if (wordTags[wordList[i]].length > 1) {
+        shared.push({ word: wordList[i], tags: wordTags[wordList[i]].length });
+      }
+    }
+    shared.sort(function (a, b) { return b.tags - a.tags || (a.word < b.word ? -1 : 1); });
+    if (shared.length) {
+      var top = shared.slice(0, 3).map(function (x) { return "\"" + x.word + "\" (" + x.tags + ")"; }).join(", ");
+      var wasted = 0;
+      for (i = 0; i < shared.length; i++) { wasted += shared[i].tags - 1; }
+      issues.push(issue("warn", "tag_word_overlap", "tags",
+        shared.length + " word(s) appear in more than one tag; that is " + wasted + " repeated slot(s). Top: " + top + "."));
+    }
+
+    var titleWords = Object.create(null);
+    var tl = words(title);
+    for (i = 0; i < tl.length; i++) { titleWords[tl[i]] = true; }
+    var overlap = [];
+    for (i = 0; i < wordList.length; i++) {
+      if (titleWords[wordList[i]] && overlap.indexOf(wordList[i]) === -1) { overlap.push(wordList[i]); }
+    }
+    if (overlap.length) {
+      issues.push(issue("info", "tag_title_overlap", "tags",
+        overlap.length + " tag word(s) already in the title (" + overlap.slice(0, 6).join(", ") + "). Etsy reads both, so this is a choice, not an error."));
+    }
+
+    /* Price */
+    if (listing.price == null || !isFinite(listing.price)) {
+      issues.push(issue("error", "price_missing", "price",
+        listing.priceRaw ? "Price \"" + listing.priceRaw + "\" is not a number." : "No price in this row."));
+    } else if (listing.price <= 0) {
+      issues.push(issue("error", "price_zero", "price", "Price is " + money(listing.price, listing.currency) + "; a Shopify product would import at 0.00."));
+    } else if (listing.price < 1) {
+      issues.push(issue("warn", "price_very_low", "price", "A price under 1.00 leaves almost nothing after fixed fees."));
+    }
+
+    /* SKU */
+    if (!collapseSpaces(listing.sku) && (!listing.skus || !listing.skus.join("").replace(/\s/g, ""))) {
+      issues.push(issue("warn", "sku_missing", "sku", "No SKU. Shopify can import without one, but orders and stock are harder to match later."));
+    }
+
+    /* Description */
+    var desc = listing.description || "";
+    if (!collapseSpaces(desc)) {
+      issues.push(issue("warn", "description_empty", "description", "No description; the Shopify product body would be empty."));
+    } else if (charLength(collapseSpaces(desc)) < 80) {
+      issues.push(issue("warn", "description_short", "description", "Description is under 80 characters."));
+    }
+    if (/<\/?[a-z][^>]*>/i.test(desc)) {
+      issues.push(issue("info", "description_html", "description", "Description already contains HTML; it will be treated as text and shown as typed on Shopify."));
+    }
+
+    /* Images */
+    if (listing.images.length === 0) {
+      issues.push(issue("warn", "images_none", "images", "No image URL. Shopify will import the product without a photo."));
+    }
+    for (i = 0; i < listing.images.length; i++) {
+      if (!looksLikeUrl(listing.images[i])) {
+        issues.push(issue("warn", "image_not_url", "images", "Image " + (i + 1) + " is not an http(s) URL and will be skipped."));
+      }
+    }
+    if (listing.images.length > 10) {
+      issues.push(issue("info", "images_many", "images", listing.images.length + " images; Etsy listings hold up to 10 photos."));
+    }
+
+    /* Quantity */
+    if (listing.quantity != null && listing.quantity === 0) {
+      issues.push(issue("warn", "quantity_zero", "quantity", "Quantity is 0; the listing shows as sold out."));
+    }
+
+    /* Variations */
+    if (listing.variations.length) {
+      var combos = 1;
+      var names = [];
+      for (i = 0; i < listing.variations.length; i++) {
+        combos *= listing.variations[i].values.length;
+        names.push(listing.variations[i].name + " (" + listing.variations[i].values.length + ")");
+      }
+      issues.push(issue("info", "variations", "variants",
+        "Variations found: " + names.join(", ") + " = " + combos + " variant row(s) in Shopify. Prices are copied from the listing price, so check them after import."));
+    }
+
+    /* Currency */
+    if (!listing.currency) {
+      issues.push(issue("info", "currency_missing", "currency", "No currency code; USD is assumed for the fee math."));
+    }
+
+    var errors = 0, warnings = 0, infos = 0;
+    for (i = 0; i < issues.length; i++) {
+      if (issues[i].level === "error") { errors++; }
+      else if (issues[i].level === "warn") { warnings++; }
+      else { infos++; }
+    }
+    var score = Math.max(0, 100 - errors * 12 - warnings * 4 - (infos > 6 ? 2 : 0));
+    var grade = score >= 90 ? "A" : score >= 75 ? "B" : score >= 55 ? "C" : "D";
+
+    return {
+      issues: issues,
+      counts: { errors: errors, warnings: warnings, infos: infos },
+      score: score,
+      grade: grade,
+      title: {
+        text: title,
+        length: titleLen,
+        snippet: charSlice(title, LIMITS.titleSnippet),
+        truncatedSnippet: titleLen > LIMITS.titleSnippet,
+        overLimit: titleLen > LIMITS.titleChars,
+        remaining: LIMITS.titleChars - titleLen
+      },
+      tags: {
+        count: tags.length,
+        details: tagDetails,
+        long: longTags,
+        duplicates: duplicateTags,
+        symbols: symbolTags,
+        sharedWords: shared,
+        titleOverlap: overlap,
+        cleaned: cleanTags(tags, { trimLong: !!opts.trimTags })
+      },
+      fixes: {
+        title: charSlice(title.replace(/^\s+|\s+$/g, ""), LIMITS.titleChars),
+        tags: cleanTags(tags, { trimLong: true }).tags
+      }
+    };
+  }
+
+  function auditAll(listings, options) {
+    var opts = options || {};
+    var limit = opts.limitListings && opts.limitListings > 0 ? opts.limitListings : listings.length;
+    var perListing = [], totals = { errors: 0, warnings: 0, infos: 0, analyzed: 0, skipped: Math.max(0, listings.length - limit) };
+    var i;
+    for (i = 0; i < listings.length && i < limit; i++) {
+      var audit = auditListing(listings[i], opts);
+      perListing.push({ listing: listings[i], audit: audit });
+      totals.errors += audit.counts.errors;
+      totals.warnings += audit.counts.warnings;
+      totals.infos += audit.counts.infos;
+      totals.analyzed++;
+    }
+    return { perListing: perListing, totals: totals };
+  }
+
+  /* ------------------------------------------------------------------ *
+   * Shopify handles and product rows
+   * ------------------------------------------------------------------ */
+
+  function slugify(title, used, fallback) {
+    var base = String(title == null ? "" : title);
+    try { base = base.normalize("NFKD"); } catch (e) { /* older engine: keep as is */ }
+    base = base.replace(/[\u0300-\u036f]/g, "");
+    base = base.toLowerCase()
+      .replace(/['\u2019\u2018]/g, "")
+      .replace(/&/g, " and ")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+    if (base.length > 100) {
+      base = base.slice(0, 100);
+      var cut = base.lastIndexOf("-");
+      if (cut > 60) { base = base.slice(0, cut); }
+      base = base.replace(/-+$/, "");
+    }
+    if (base.length < 2) {
+      base = "etsy-listing-" + (fallback || 1);
+    }
+    var candidate = base, n = 2;
+    while (used && Object.prototype.hasOwnProperty.call(used, candidate)) {
+      candidate = base + "-" + n;
+      n++;
+    }
+    if (used) { used[candidate] = true; }
+    return candidate;
+  }
+
+  function escapeHtml(text) {
+    return String(text == null ? "" : text)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function descriptionToHtml(text) {
+    var s = String(text == null ? "" : text).replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+    s = s.replace(/^\n+|\n+$/g, "");
+    if (!s) { return ""; }
+    var blocks = s.split(/\n{2,}/), out = [], i, lines, j;
+    for (i = 0; i < blocks.length; i++) {
+      lines = blocks[i].split("\n");
+      for (j = 0; j < lines.length; j++) { lines[j] = escapeHtml(lines[j]); }
+      out.push("<p>" + lines.join("<br>") + "</p>");
+    }
+    return out.join("\n");
+  }
+
+  function detectDigital(listing) {
+    var text = ((listing.title || "") + " " + (listing.description || "")).toLowerCase();
+    var i;
+    for (i = 0; i < DIGITAL_HINTS.length; i++) {
+      if (text.indexOf(DIGITAL_HINTS[i]) !== -1) {
+        return { digital: true, reason: "Description or title mentions \"" + DIGITAL_HINTS[i] + "\"." };
+      }
+    }
+    return { digital: false, reason: "No digital-download wording found; treated as a physical product." };
+  }
+
+  var HEADERS = {
+    classic: [
+      ["handle", "Handle"],
+      ["title", "Title"],
+      ["body", "Body (HTML)"],
+      ["vendor", "Vendor"],
+      ["type", "Type"],
+      ["tags", "Tags"],
+      ["published", "Published"],
+      ["status", "Status"],
+      ["opt1n", "Option1 Name"], ["opt1v", "Option1 Value"],
+      ["opt2n", "Option2 Name"], ["opt2v", "Option2 Value"],
+      ["opt3n", "Option3 Name"], ["opt3v", "Option3 Value"],
+      ["sku", "Variant SKU"],
+      ["price", "Variant Price"],
+      ["grams", "Variant Grams"],
+      ["invTracker", "Variant Inventory Tracker"],
+      ["invQty", "Variant Inventory Qty"],
+      ["invPolicy", "Variant Inventory Policy"],
+      ["fulfillment", "Variant Fulfillment Service"],
+      ["requiresShipping", "Variant Requires Shipping"],
+      ["imageSrc", "Image Src"],
+      ["imagePos", "Image Position"],
+      ["imageAlt", "Image Alt Text"]
+    ],
+    current: [
+      ["handle", "URL handle"],
+      ["title", "Title"],
+      ["body", "Description"],
+      ["vendor", "Vendor"],
+      ["type", "Type"],
+      ["tags", "Tags"],
+      ["published", "Published on online store"],
+      ["status", "Status"],
+      ["opt1n", "Option1 name"], ["opt1v", "Option1 value"],
+      ["opt2n", "Option2 name"], ["opt2v", "Option2 value"],
+      ["opt3n", "Option3 name"], ["opt3v", "Option3 value"],
+      ["sku", "SKU"],
+      ["price", "Price"],
+      ["grams", "Weight value (grams)"],
+      ["invTracker", "Inventory tracker"],
+      ["invQty", "Inventory quantity"],
+      ["invPolicy", "Continue selling when out of stock"],
+      ["fulfillment", "Fulfillment service"],
+      ["requiresShipping", "Requires shipping"],
+      ["imageSrc", "Product image URL"],
+      ["imagePos", "Image position"],
+      ["imageAlt", "Image alt text"]
+    ]
+  };
+
+  function headerList(style) {
+    var defs = HEADERS[style] || HEADERS.classic, keys = [], names = [], i;
+    for (i = 0; i < defs.length; i++) { keys.push(defs[i][0]); names.push(defs[i][1]); }
+    return { keys: keys, names: names };
+  }
+
+  function optionCombos(variations, max) {
+    var lists = [], i, j;
+    for (i = 0; i < variations.length; i++) {
+      var vals = variations[i].values || [];
+      if (!vals.length) { return []; }
+      lists.push(vals);
+    }
+    if (!lists.length) { return []; }
+    var combos = [], current = [null, null, null];
+    function walk(depth) {
+      if (combos.length >= max) { return; }
+      if (depth === lists.length) {
+        combos.push(current.slice(0, lists.length));
+        return;
+      }
+      for (var k = 0; k < lists[depth].length; k++) {
+        current[depth] = lists[depth][k];
+        walk(depth + 1);
+        if (combos.length >= max) { return; }
+      }
+    }
+    walk(0);
+    return combos;
+  }
+
+  function defaultSettings() {
+    return {
+      headerStyle: "classic",
+      vendor: "",
+      type: "",
+      status: "draft",
+      published: false,
+      digital: "auto",
+      includeImages: true,
+      expandVariants: true,
+      trimTags: false,
+      priceMode: "keep",
+      offsitePct: 0,
+      shopifyMonthly: RATES.shopify.monthly,
+      monthlyOrders: 50,
+      limitRows: 0,
+      maxVariants: LIMITS.maxVariants
+    };
+  }
+
+  function feeLines(platform, price, opts) {
+    var o = opts || {};
+    var p = Number(price) || 0;
+    var lines = [];
+    var monthly = Number(o.shopifyMonthly);
+    if (!isFinite(monthly)) { monthly = RATES.shopify.monthly; }
+    var orders = Number(o.monthlyOrders);
+    if (!isFinite(orders) || orders < 0) { orders = 0; }
+    var monthlyPerOrder = orders > 0 ? monthly / orders : 0;
+
+    if (platform === "etsy") {
+      var offsiteRate = Number(o.offsitePct) || 0;
+      var offsite = Math.min(offsiteRate / 100 * p, RATES.etsy.offsite.cap);
+      lines.push({ key: "listing", label: "Listing fee", amount: RATES.etsy.listing });
+      lines.push({ key: "transaction", label: "Transaction fee 6.5%", amount: RATES.etsy.transaction * p });
+      lines.push({ key: "processing", label: "Payment processing 3% + $0.25", amount: RATES.etsy.processingPct * p + RATES.etsy.processingFixed });
+      if (offsiteRate > 0) {
+        lines.push({ key: "offsite", label: "Offsite Ads " + offsiteRate + "%" + (offsiteRate / 100 * p > RATES.etsy.offsite.cap ? " (capped at $100)" : ""), amount: offsite });
+      }
+    } else if (platform === "shopify") {
+      lines.push({ key: "card", label: "Card processing 2.9% + $0.30", amount: RATES.shopify.cardPct * p + RATES.shopify.cardFixed });
+      if (monthlyPerOrder > 0) {
+        lines.push({ key: "subscription", label: "Plan share ($" + monthly + " / " + orders + " orders)", amount: monthlyPerOrder });
+      }
+    } else if (platform === "gumroad_direct") {
+      lines.push({ key: "gumroad", label: "Gumroad 10% + $0.50", amount: RATES.gumroad.directPct * p + RATES.gumroad.directFixed });
+    } else if (platform === "gumroad_discover") {
+      lines.push({ key: "gumroad", label: "Gumroad Discover 30%", amount: RATES.gumroad.discoverPct * p });
+    } else {
+      lines.push({ key: "none", label: "No platform fee", amount: 0 });
+    }
+
+    var total = 0, i;
+    for (i = 0; i < lines.length; i++) { total += lines[i].amount; }
+    return { platform: platform, price: r2(p), lines: lines, total: r2(total), net: r2(p - total) };
+  }
+
+  function platformRate(platform, opts) {
+    var o = opts || {};
+    if (platform === "shopify") {
+      var monthly = Number(o.shopifyMonthly);
+      if (!isFinite(monthly)) { monthly = RATES.shopify.monthly; }
+      var orders = Number(o.monthlyOrders);
+      if (!isFinite(orders) || orders < 0) { orders = 0; }
+      return { percent: RATES.shopify.cardPct, fixed: RATES.shopify.cardFixed + (orders > 0 ? monthly / orders : 0) };
+    }
+    if (platform === "gumroad_direct") {
+      return { percent: RATES.gumroad.directPct, fixed: RATES.gumroad.directFixed };
+    }
+    if (platform === "gumroad_discover") {
+      return { percent: RATES.gumroad.discoverPct, fixed: 0 };
+    }
+    return { percent: 0, fixed: 0 };
+  }
+
+  /*
+   * parityPrice returns the lowest whole-cent price on another platform
+   * that leaves the seller with at least targetNet.
+   */
+  function parityPrice(targetNet, platform, opts) {
+    var rate = platformRate(platform, opts);
+    var target = Number(targetNet);
+    if (!isFinite(target)) {
+      return { platform: platform, price: null, net: null, feasible: false, reason: "Target net is not a number." };
+    }
+    if (rate.percent >= 1) {
+      return { platform: platform, price: null, net: null, feasible: false, reason: "Fees take the whole sale on this platform." };
+    }
+    var exact = (target + rate.fixed) / (1 - rate.percent);
+    if (exact <= 0) {
+      return {
+        platform: platform, price: null, net: null, feasible: false,
+        reason: "At this Etsy price the seller keeps a loss, which no positive price can reproduce here. Raise the Etsy price first."
+      };
+    }
+    var price = ceil2(exact);
+    var net = feeLines(platform, price, opts).net;
+    return {
+      platform: platform,
+      price: price,
+      net: net,
+      delta: r2(net - target),
+      feasible: true,
+      reason: ""
+    };
+  }
+
+  function buildShopifyRows(listings, settings) {
+    var st = {};
+    var base = defaultSettings();
+    for (var key in base) { if (base.hasOwnProperty(key)) { st[key] = base[key]; } }
+    if (settings) { for (var k in settings) { if (settings.hasOwnProperty(k)) { st[k] = settings[k]; } } }
+
+    var head = headerList(st.headerStyle);
+    var rows = [], warnings = [], usedHandles = Object.create(null);
+    var stats = { products: 0, rows: 0, images: 0, variants: 0, skipped: 0 };
+    var i, j, n;
+
+    for (i = 0; i < listings.length; i++) {
+      var listing = listings[i] || {};
+      if (!listing.tags) { listing.tags = []; }
+      if (!listing.images) { listing.images = []; }
+      if (!listing.variations) { listing.variations = []; }
+      if (!listing.skus) { listing.skus = []; }
+      if (listing.price === undefined) { listing.price = null; }
+      if (!collapseSpaces(listing.title)) {
+        warnings.push({ code: "no_title", listing: listing.rowNumber, message: "Row " + listing.rowNumber + " has no title and was skipped." });
+        stats.skipped++;
+        continue;
+      }
+
+      var handle = slugify(listing.title, usedHandles, i + 1);
+      var digitalInfo = st.digital === "digital" ? { digital: true, reason: "Settings: every listing is digital." }
+        : st.digital === "physical" ? { digital: false, reason: "Settings: every listing ships." }
+        : detectDigital(listing);
+      var digital = digitalInfo.digital;
+
+      var cleaned = cleanTags(listing.tags, { trimLong: !!st.trimTags });
+      var price = listing.price;
+      var priceNote = "";
+      var parity = null;
+      if (st.priceMode && st.priceMode !== "keep") {
+        if (listing.price == null || listing.price <= 0) {
+          priceNote = "No valid Etsy price to reprice from.";
+        } else {
+          var etsyNet = feeLines("etsy", listing.price, { offsitePct: st.offsitePct }).net;
+          parity = parityPrice(etsyNet, st.priceMode, st);
+          if (parity.feasible) { price = parity.price; }
+          else { priceNote = parity.reason; }
+        }
+      }
+      if (price == null || !isFinite(price)) { price = 0; }
+
+      var variantMode = !!(st.expandVariants && listing.variations && listing.variations.length > 0);
+      var combos = [];
+      if (variantMode) {
+        var comboTotal = 1;
+        for (var ci = 0; ci < listing.variations.length; ci++) {
+          comboTotal *= Math.max(1, listing.variations[ci].values.length);
+        }
+        combos = optionCombos(listing.variations, st.maxVariants);
+        if (comboTotal > st.maxVariants) {
+          warnings.push({
+            code: "variant_cap", listing: listing.rowNumber,
+            message: "Listing " + listing.rowNumber + ": " + comboTotal + " combinations, capped at " + st.maxVariants +
+              " rows. Split this listing in Etsy or convert it on its own."
+          });
+        }
+      }
+      if (!combos.length) { variantMode = false; combos = [[null, null, null]]; }
+      if (listing.variations && listing.variations.length && !st.expandVariants) {
+        warnings.push({
+          code: "variants_dropped", listing: listing.rowNumber,
+          message: "Listing " + listing.rowNumber + ": variations were not expanded; the product imports as a single variant. Turn on \"Expand variations\" to keep them."
+        });
+      }
+
+      var images = [], ii;
+      if (st.includeImages) {
+        for (ii = 0; ii < listing.images.length; ii++) {
+          if (looksLikeUrl(listing.images[ii])) { images.push(listing.images[ii]); }
+        }
+      }
+
+      var altText = charSlice(collapseSpaces(listing.title), LIMITS.altText);
+      var productValues = {
+        handle: handle,
+        title: listing.title,
+        body: descriptionToHtml(listing.description),
+        vendor: st.vendor || "",
+        type: st.type || "",
+        tags: cleaned.tags.join(", "),
+        published: st.published ? "true" : "false",
+        status: st.status || "draft"
+      };
+
+      var firstRow = true;
+      if (!variantMode) {
+        /* Single-variant product: Shopify stores Option1 Name = Title. */
+        var row = baseRow(head.keys);
+        assign(row, productValues);
+        row.opt1n = "Title";
+        row.opt1v = "Default Title";
+        row.sku = listing.sku || (listing.skus.length ? listing.skus[0] : "");
+        row.price = plainNumber(price);
+        row.invTracker = digital ? "" : "shopify";
+        row.invQty = digital ? "" : (listing.quantity != null ? String(listing.quantity) : "");
+        row.invPolicy = "deny";
+        row.fulfillment = "manual";
+        row.requiresShipping = digital ? "false" : "true";
+        row.grams = digital ? "" : "";
+        if (images.length) {
+          row.imageSrc = images[0];
+          row.imagePos = "1";
+          row.imageAlt = altText;
+        }
+        rows.push(toArray(head.keys, row));
+        stats.products++;
+        stats.variants += 1;
+        firstRow = false;
+        for (ii = 1; ii < images.length; ii++) {
+          var imgRow = baseRow(head.keys);
+          imgRow.handle = handle;
+          imgRow.imageSrc = images[ii];
+          imgRow.imagePos = String(ii + 1);
+          imgRow.imageAlt = altText;
+          rows.push(toArray(head.keys, imgRow));
+          stats.images++;
+        }
+        if (images.length) { stats.images++; }
+      } else {
+        /* Variants: one row per combination, images on their own rows. */
+        var names = [];
+        for (j = 0; j < listing.variations.length; j++) { names.push(listing.variations[j].name); }
+        for (j = 0; j < combos.length; j++) {
+          var vRow = baseRow(head.keys);
+          if (j === 0) { assign(vRow, productValues); }
+          else { vRow.handle = handle; }
+          for (n = 0; n < 3; n++) {
+            vRow["opt" + (n + 1) + "n"] = names[n] || "";
+            vRow["opt" + (n + 1) + "v"] = combos[j][n] == null ? "" : String(combos[j][n]);
+          }
+          var sku = "";
+          if (listing.skus.length > 1 && combos[j][0] != null) {
+            var firstIdx = listing.variations[0].values.indexOf(combos[j][0]);
+            if (firstIdx >= 0 && listing.skus[firstIdx]) { sku = listing.skus[firstIdx]; }
+          }
+          if (!sku && listing.sku) {
+            sku = combos.length > 1 ? listing.sku + "-" + (j + 1) : listing.sku;
+          }
+          vRow.sku = sku;
+          vRow.price = plainNumber(price);
+          vRow.invTracker = digital ? "" : "shopify";
+          vRow.invQty = digital ? "" : "";
+          vRow.invPolicy = "deny";
+          vRow.fulfillment = "manual";
+          vRow.requiresShipping = digital ? "false" : "true";
+          rows.push(toArray(head.keys, vRow));
+          stats.variants++;
+        }
+        stats.products++;
+        if (!digital) {
+          warnings.push({
+            code: "variant_inventory",
+            listing: listing.rowNumber,
+            message: "Listing " + listing.rowNumber + ": variant stock is left empty (0) because an Etsy export only gives combined quantity. Set stock after import."
+          });
+        }
+        for (ii = 0; ii < images.length; ii++) {
+          var iRow = baseRow(head.keys);
+          iRow.handle = handle;
+          iRow.imageSrc = images[ii];
+          iRow.imagePos = String(ii + 1);
+          iRow.imageAlt = altText;
+          rows.push(toArray(head.keys, iRow));
+          stats.images++;
+        }
+      }
+
+      if (priceNote) {
+        warnings.push({ code: "price_note", listing: listing.rowNumber, message: "Listing " + listing.rowNumber + ": " + priceNote });
+      }
+      if (cleaned.removed.length) {
+        warnings.push({
+          code: "tags_cleaned", listing: listing.rowNumber,
+          message: "Listing " + listing.rowNumber + ": " + cleaned.removed.length + " tag change(s) — " +
+            cleaned.removed.slice(0, 3).map(function (x) { return x.reason; }).join(", ") + "."
+        });
+      }
+    }
+
+    var totalRows = rows.length;
+    if (st.limitRows && st.limitRows > 0 && rows.length > st.limitRows) {
+      rows = rows.slice(0, st.limitRows);
+    }
+    stats.rows = rows.length;
+    return {
+      header: head.names,
+      keys: head.keys,
+      rows: rows,
+      warnings: warnings,
+      stats: stats,
+      truncated: totalRows > rows.length,
+      totalRows: totalRows
+    };
+  }
+
+  function baseRow(keys) {
+    var row = {}, i;
+    for (i = 0; i < keys.length; i++) { row[keys[i]] = ""; }
+    return row;
+  }
+
+  function assign(target, values) {
+    for (var k in values) { if (values.hasOwnProperty(k)) { target[k] = values[k]; } }
+  }
+
+  function toArray(keys, row) {
+    var out = [], i;
+    for (i = 0; i < keys.length; i++) { out.push(row[keys[i]] == null ? "" : row[keys[i]]); }
+    return out;
+  }
+
+  function buildShopifyCSV(listings, settings) {
+    var built = buildShopifyRows(listings, settings);
+    var all = [built.header].concat(built.rows);
+    return {
+      csv: toCSV(all),
+      built: built
+    };
+  }
+
+  function buildAuditRows(listings, options) {
+    var opts = options || {};
+    var limit = opts.limitListings && opts.limitListings > 0 ? opts.limitListings : listings.length;
+    var header = [
+      "Listing #", "Title", "Currency", "Price", "Score", "Grade",
+      "Errors", "Warnings", "Tags used", "Tags over 20 chars", "Duplicate tags",
+      "Missing SKU", "Missing images", "Title characters", "Top issues", "Cleaned tags"
+    ];
+    var rows = [header], i, audit, issues, codes, j;
+    for (i = 0; i < listings.length && i < limit; i++) {
+      audit = auditListing(listings[i], opts);
+      issues = audit.issues.filter(function (x) { return x.level !== "info"; });
+      codes = [];
+      for (j = 0; j < issues.length && codes.length < 4; j++) { codes.push(issues[j].message); }
+      rows.push([
+        String(listings[i].rowNumber || (i + 1)),
+        listings[i].title,
+        listings[i].currency || opts.currency || "USD",
+        listings[i].price == null ? "" : plainNumber(listings[i].price),
+        String(audit.score),
+        audit.grade,
+        String(audit.counts.errors),
+        String(audit.counts.warnings),
+        String(audit.tags.count),
+        String(audit.tags.long.length),
+        String(audit.tags.duplicates.length),
+        audit.issues.some(function (x) { return x.code === "sku_missing"; }) ? "yes" : "no",
+        listings[i].images.length === 0 ? "yes" : "no",
+        String(audit.title.length),
+        codes.join(" | "),
+        audit.tags.cleaned.tags.join(", ")
+      ]);
+    }
+    return { header: header, rows: rows.slice(1), csv: toCSV(rows) };
+  }
+
+  function buildRepriceRows(listings, settings) {
+    var st = settings || {};
+    var header = [
+      "Listing #", "Title", "Currency", "Etsy price", "Etsy net",
+      "Shopify price for the same net", "Gumroad Direct price for the same net",
+      "Gumroad Discover price for the same net", "Note"
+    ];
+    var rows = [header], i;
+    for (i = 0; i < listings.length; i++) {
+      var listing = listings[i];
+      var currency = listing.currency || st.currency || "USD";
+      if (listing.price == null || listing.price <= 0) {
+        rows.push([String(listing.rowNumber || i + 1), listing.title, currency, "", "", "", "", "", "No valid price"]);
+        continue;
+      }
+      var net = feeLines("etsy", listing.price, { offsitePct: st.offsitePct }).net;
+      var shop = parityPrice(net, "shopify", st);
+      var gd = parityPrice(net, "gumroad_direct", st);
+      var disc = parityPrice(net, "gumroad_discover", st);
+      var note = [];
+      if (net <= 0) { note.push("Etsy net is zero or negative at this price"); }
+      if (!shop.feasible) { note.push("Shopify: " + shop.reason); }
+      if (!gd.feasible) { note.push("Gumroad: " + gd.reason); }
+      rows.push([
+        String(listing.rowNumber || i + 1),
+        listing.title,
+        currency,
+        plainNumber(listing.price),
+        plainNumber(net),
+        shop.feasible ? plainNumber(shop.price) : "",
+        gd.feasible ? plainNumber(gd.price) : "",
+        disc.feasible ? plainNumber(disc.price) : "",
+        note.join(" ")
+      ]);
+    }
+    return { header: header, rows: rows.slice(1), csv: toCSV(rows) };
+  }
+
+  function summarize(listings, options) {
+    var opts = options || {};
+    var audited = auditAll(listings, opts);
+    var build = buildShopifyRows(listings, opts);
+    return { audits: audited, build: build };
+  }
+
+  return {
+    VERSION: VERSION,
+    RATES: RATES,
+    LIMITS: LIMITS,
+    RATES_ASOF: RATES_ASOF,
+    HEADERS: HEADERS,
+    defaultSettings: defaultSettings,
+    parseCSV: parseCSV,
+    toCSV: toCSV,
+    parseEtsyCSV: parseEtsyCSV,
+    etsyHeaderMap: etsyHeaderMap,
+    parsePrice: parsePrice,
+    splitList: splitList,
+    cleanTags: cleanTags,
+    trimTagTo20: trimTagTo20,
+    charLength: charLength,
+    charSlice: charSlice,
+    collapseSpaces: collapseSpaces,
+    slugify: slugify,
+    auditListing: auditListing,
+    auditAll: auditAll,
+    buildShopifyRows: buildShopifyRows,
+    buildShopifyCSV: buildShopifyCSV,
+    buildAuditRows: buildAuditRows,
+    buildRepriceRows: buildRepriceRows,
+    descriptionToHtml: descriptionToHtml,
+    escapeHtml: escapeHtml,
+    detectDigital: detectDigital,
+    feeLines: feeLines,
+    parityPrice: parityPrice,
+    platformRate: platformRate,
+    summarize: summarize,
+    money: money,
+    plainNumber: plainNumber,
+    r2: r2
+  };
+})();
+
+if (typeof module !== "undefined" && module.exports) { module.exports = SellerMigrator; }
+</script>
+<script>window.__SAMPLE_CSV__ = "﻿LISTING ID,STATE,TITLE,DESCRIPTION,PRICE,CURRENCY_CODE,QUANTITY,TAGS,MATERIALS,IMAGE1,IMAGE2,IMAGE3,IMAGE4,IMAGE5,IMAGE6,IMAGE7,IMAGE8,IMAGE9,IMAGE10,SKU,VARIATION 1 NAME,VARIATION 1 VALUES,VARIATION 2 NAME,VARIATION 2 VALUES\n3811220041,active,Printable Weekly Planner | Instant Download | A4 & Letter,\"A clean weekly planner you print at home, as many times as you like.\n\nIncludes A4 and US Letter PDFs, plus a Monday- and Sunday-start version. The \"\"Notes\"\" column is wide enough for a grocery list and a client call.\n\nThis is a digital download. No physical item is shipped.\",4.50,USD,999,\"weekly planner,printable planner,planner insert,a4 planner,letter planner,digital download,instant download,productivity,planner pages,weekly schedule,office organization,printable pdf,undated planner\",PDF,https://i.etsystatic.com/31415926/r/il/0001abcd/7000000001/il_794xN.7000000001_0001abcd.jpg,https://i.etsystatic.com/31415926/r/il/0002abcd/7000000002/il_794xN.7000000002_0002abcd.jpg,,,,,,,,,PLANNER-A4,,,,\n3811220042,active,\"Handmade Ceramic Mug, Speckled Stoneware, 12 oz\",\"Wheel-thrown in small batches, glazed in a warm oat speckle.\n\nEach mug holds 12 oz and is dishwasher and microwave safe. Slight differences in speckle and rim are part of the handmade finish.\",38.00,USD,4,\"ceramic mug,handmade mug,speckled mug,stoneware mug,coffee mug,12 oz mug,kitchen gift,ceramic mug,pottery,housewarming gift\",\"stoneware, glaze\",https://i.etsystatic.com/31415926/r/il/0003abcd/7000000003/il_794xN.7000000003_0003abcd.jpg,https://i.etsystatic.com/31415926/r/il/0004abcd/7000000004/il_794xN.7000000004_0004abcd.jpg,https://i.etsystatic.com/31415926/r/il/0005abcd/7000000005/il_794xN.7000000005_0005abcd.jpg,,,,,,,,,,,,\n3811220043,active,\"Custom Pet Portrait, Digital Watercolor from Photo\",\"Send one clear photo and I paint a watercolor portrait of your pet.\n\nYou get a high-resolution PNG with a transparent background and a JPG on a \"\"paper\"\" background, ready to print at 8x10 or 11x14.\n\nReply to the order with your photo; proofs arrive within 2 days.\",24.00,USD,999,\"custom pet portrait,pet portrait from photo,digital watercolor,dog portrait,cat portrait,pet memorial gift,custom pet art,watercolor portrait,personalized gift,digital download,pet lover gift,photo to painting,instant download\",digital file,https://i.etsystatic.com/31415926/r/il/0006abcd/7000000006/il_794xN.7000000006_0006abcd.jpg,,,,,,,,,,PET-PORTRAIT,,,,\n3811220044,active,Boho Macramé Wall Hanging | Large 36 Inch,\"Hand-knotted from natural cotton cord on a driftwood dowel.\nMeasures about 36 inches wide and 30 inches long.\",89.00,USD,1,\"macrame,wall hanging,boho decor,large macrame,living room decor\",\"cotton, driftwood\",https://i.etsystatic.com/31415926/r/il/0007abcd/7000000007/il_794xN.7000000007_0007abcd.jpg,https://i.etsystatic.com/31415926/r/il/0008abcd/7000000008/il_794xN.7000000008_0008abcd.jpg,,,,,,,,,MAC-36,,,,\n3811220045,active,SVG Bundle - 120 Floral Cut Files,\"120 floral cut files for Cricut, Silhouette and Glowforge.\n\nSVG, PNG, DXF and EPS included. Personal and small-business use.\",12.99,USD,999,\"svg bundle,floral svg,cut files,cricut files,svg for cricut,floral clipart,wedding svg,svg bundle,commercial use svg,digital download,instant download,floral cut files,spring svg,boho svg\",\"SVG, PNG\",,,,,,,,,,,SVG-FLORAL-120,,,,\n3811220046,active,\"Vintage Brass Candle Holder, Set of 2\",\"A pair of solid brass candle holders with a soft, even patina.\n\nThey sit steady with a 7/8\"\" taper candle and stand 6 and 8 inches tall. Sold as a set; candles are not included.\",54.00,USD,2,\"brass candle holder,vintage candle holder,candle holder set,brass decor,vintage home decor,table centerpiece,set of 2,mid century decor,holiday table,metal candle holder,patina,collectible,housewarming\",brass,https://i.etsystatic.com/31415926/r/il/0009abcd/7000000009/il_794xN.7000000009_0009abcd.jpg,https://i.etsystatic.com/31415926/r/il/0010abcd/7000000010/il_794xN.7000000010_0010abcd.jpg,,,,,,,,,,,,,\n3811220047,active,Linen Apron with Pockets | Kitchen Gift,\"Washed European linen apron with two deep front pockets and an adjustable neck strap.\n\nPre-shrunk and softened, so it only gets better with each wash.\",42.50,USD,12,\"linen apron,kitchen apron,apron with pockets,cooking gift,baker gift,natural linen,sage linen,womens apron,mothers day gift,kitchen decor,handmade apron,linen gift,chef apron\",linen,https://i.etsystatic.com/31415926/r/il/0011abcd/7000000011/il_794xN.7000000011_0011abcd.jpg,https://i.etsystatic.com/31415926/r/il/0012abcd/7000000012/il_794xN.7000000012_0012abcd.jpg,https://i.etsystatic.com/31415926/r/il/0013abcd/7000000013/il_794xN.7000000013_0013abcd.jpg,,,,,,,,APRON,Size,\"S, M, L\",Color,\"Natural, Sage\"\n3811220048,active,Budget Spreadsheet for Google Sheets & Excel,\"A one-page monthly budget that rolls up into a year view.\n\nWorks in Google Sheets and Excel; formulas are unlocked and editable.\",N/A,USD,999,\"budget spreadsheet,google sheets template\",spreadsheet,,,,,,,,,,,,,,,\n";
+/* UI layer for the Etsy → Shopify migrator. DOM only; all parsing and
+   calculation live in SellerMigrator (core.js), which has no DOM access. */
+(function () {
+  "use strict";
+
+  var S = window.SellerMigrator;
+  var MODE = (document.documentElement.getAttribute("data-mode") || "free").toLowerCase();
+  var IS_PRO = MODE === "pro";
+  var FREE_LISTINGS = S.LIMITS.freeListings;
+  var FREE_ROWS = S.LIMITS.freeRows;
+  var SAMPLE = window.__SAMPLE_CSV__ || "";
+  var LIST_RENDER_CAP = IS_PRO ? 60 : FREE_LISTINGS;
+
+  var state = {
+    listings: [],
+    meta: null,
+    sourceName: "",
+    error: null,
+    audits: null,
+    build: null,
+    rows: 0
+  };
+
+  function $(id) { return document.getElementById(id); }
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) { node.className = className; }
+    if (text != null) { node.textContent = String(text); }
+    return node;
+  }
+
+  function clear(node) {
+    while (node && node.firstChild) { node.removeChild(node.firstChild); }
+  }
+
+  function pad(n) { return n < 10 ? "0" + n : String(n); }
+
+  function todayStamp() {
+    var d = new Date();
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+
+  function money(value, currency) {
+    return S.money(value, currency || "USD");
+  }
+
+  function limitListings() { return IS_PRO ? 0 : FREE_LISTINGS; }
+  function limitRows() { return IS_PRO ? 0 : FREE_ROWS; }
+
+  function readSettings() {
+    var trim = $("setTrim") ? $("setTrim").checked : false;
+    var variants = $("setVariants") ? $("setVariants").checked : true;
+    var images = $("setImages") ? $("setImages").checked : true;
+    var monthly = parseInt($("setMonthly").value, 10);
+    var orders = parseInt($("setOrders").value, 10);
+    return {
+      headerStyle: $("setHeader").value,
+      vendor: ($("setVendor").value || "").replace(/^\s+|\s+$/g, ""),
+      type: ($("setType").value || "").replace(/^\s+|\s+$/g, ""),
+      status: $("setStatus").value,
+      published: $("setStatus").value === "active",
+      digital: $("setDigital").value,
+      priceMode: $("setPriceMode").value,
+      offsitePct: parseInt($("setOffsite").value, 10) || 0,
+      shopifyMonthly: isFinite(monthly) ? monthly : S.RATES.shopify.monthly,
+      monthlyOrders: isFinite(orders) && orders > 0 ? orders : 0,
+      trimTags: trim,
+      expandVariants: variants,
+      includeImages: images,
+      limitRows: limitRows()
+    };
+  }
+
+  function alertBox(kind, title, message) {
+    var box = el("div", "alert" + (kind ? " " + kind : ""));
+    if (title) { box.appendChild(el("h3", null, title)); }
+    var p = el("p", null, message || "");
+    box.appendChild(p);
+    return box;
+  }
+
+  function setTopAlert(node) {
+    var host = $("topAlert");
+    clear(host);
+    if (node) { host.appendChild(node); }
+  }
+
+  function analyze(text, name) {
+    state.sourceName = name || "";
+    var result;
+    try {
+      result = S.parseEtsyCSV(text);
+    } catch (e) {
+      state.error = { message: "This file could not be read: " + (e && e.message ? e.message : e) };
+      render();
+      return;
+    }
+    if (result.error) {
+      state.listings = [];
+      state.meta = null;
+      state.error = result.error;
+      render();
+      return;
+    }
+    state.error = null;
+    state.listings = result.listings;
+    state.meta = result.meta;
+    state.parseWarnings = result.warnings || [];
+    render();
+    if (state.listings.length) {
+      $("results").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  function render() {
+    var hasListings = state.listings.length > 0;
+    $("results").hidden = !hasListings;
+    $("emptyState").hidden = hasListings || !!state.error;
+    $("fileName").textContent = state.sourceName ? state.sourceName + (hasListings ? " · " + state.listings.length + " listings" : "") : "";
+
+    if (state.error) {
+      var box = alertBox("bad", "That file was not read", state.error.message || String(state.error));
+      if (state.error.code === "unterminated_quote" || state.error.code === "no_title_column") {
+        var ul = el("ul");
+        ul.appendChild(el("li", null, "Download the file again from Shop Manager → Settings → Options → Download Data → Download CSV."));
+        ul.appendChild(el("li", null, "Open it in a plain text editor once to confirm the first line contains TITLE and DESCRIPTION."));
+        ul.appendChild(el("li", null, "If you edited it in Excel, save as \"CSV UTF-8\" — a broken quote is the usual cause."));
+        box.appendChild(ul);
+      }
+      setTopAlert(box);
+      return;
+    }
+    if (!hasListings) {
+      setTopAlert(null);
+      return;
+    }
+
+    var settings = readSettings();
+    state.settings = settings;
+    state.audits = S.auditAll(state.listings, {
+      limitListings: limitListings(),
+      trimTags: settings.trimTags
+    });
+    state.build = S.buildShopifyRows(state.listings, settings);
+    state.rows = state.audits.totals.analyzed;
+
+    setTopAlert(parseNotice(settings));
+    renderSummary();
+    renderListings();
+    renderFeeTable(settings);
+    renderExports(settings);
+  }
+
+  function parseNotice(settings) {
+    var warnings = (state.parseWarnings || []).filter(function (w) { return w.code !== "short_row"; });
+    var parts = [];
+    if (state.meta && state.meta.unmapped.length) {
+      parts.push(state.meta.unmapped.length + " column(s) this tool does not use: " + state.meta.unmapped.slice(0, 6).join(", ") +
+        (state.meta.unmapped.length > 6 ? "…" : "") + ".");
+    }
+    if (warnings.length) { parts.push(warnings[0].message); }
+    if (!parts.length) { return null; }
+    return alertBox("", "Read " + state.listings.length + " listing(s)", parts.join(" "));
+  }
+
+  function renderSummary() {
+    var totals = state.audits.totals;
+    var analyzed = totals.analyzed;
+    var total = state.listings.length;
+    var box = $("statBox");
+    clear(box);
+
+    function stat(label, value, kind, note) {
+      var s = el("div", "stat");
+      s.appendChild(el("div", "k", label));
+      s.appendChild(el("div", "v" + (kind ? " " + kind : ""), value));
+      if (note) { s.appendChild(el("div", "n", note)); }
+      box.appendChild(s);
+    }
+
+    stat("Listings analysed", String(analyzed), "", IS_PRO ? total + " in the file" : "of " + total + " in the file");
+    stat("Errors", String(totals.errors), totals.errors ? "bad" : "ok", "fix before you import");
+    stat("Warnings", String(totals.warnings), totals.warnings ? "warn" : "ok", "worth a look, not fatal");
+    stat("Shopify CSV", String(state.build.stats.rows), "", state.build.truncated
+      ? "preview of " + state.build.totalRows + " rows" : "rows ready to import");
+
+    var cap = $("capNotice");
+    clear(cap);
+    if (!IS_PRO && total > analyzed) {
+      var notice = el("div", "alert warn");
+      notice.appendChild(el("h3", null, (total - analyzed) + " more listing(s) were not analysed"));
+      notice.appendChild(el("p", null, "The free tool audits " + FREE_LISTINGS + " listings and previews " + FREE_ROWS + " CSV rows. The Pro app (one HTML file, $19) audits and converts the whole file, however many rows it has."));
+      var link = el("p");
+      link.style.marginTop = "8px";
+      var a = el("a", "btn accent", "See the Pro app");
+      a.href = "#pro";
+      link.appendChild(a);
+      notice.appendChild(link);
+      cap.appendChild(notice);
+    }
+
+    var buildNotes = $("buildNotes");
+    clear(buildNotes);
+    var warnings = state.build.warnings || [];
+    if (warnings.length) {
+      var w = el("div", "alert warn");
+      w.appendChild(el("h3", null, warnings.length + " note(s) about the export"));
+      var ul = el("ul");
+      var shown = warnings.slice(0, 6);
+      for (var i = 0; i < shown.length; i++) { ul.appendChild(el("li", null, shown[i].message)); }
+      if (warnings.length > shown.length) { ul.appendChild(el("li", null, "and " + (warnings.length - shown.length) + " more in the same pattern.")); }
+      w.appendChild(ul);
+      buildNotes.appendChild(w);
+    }
+    var skipped = (state.build.stats && state.build.stats.skipped) || 0;
+    if (skipped) {
+      buildNotes.appendChild(alertBox("bad", skipped + " listing(s) skipped", "A listing with no title cannot become a Shopify product. Fix the title in Etsy and export again."));
+    }
+  }
+
+  function renderListings() {
+    var host = $("listingBox");
+    clear(host);
+    var items = state.audits.perListing;
+    var shown = items.slice(0, LIST_RENDER_CAP);
+
+    $("resultSub").textContent = "Grade A means nothing was flagged. Each listing opens to the tag-by-tag detail and the exact wording to fix.";
+
+    for (var i = 0; i < shown.length; i++) {
+      host.appendChild(listingCard(shown[i].listing, shown[i].audit, i));
+    }
+    if (items.length > shown.length) {
+      host.appendChild(el("p", "note", "Showing the first " + shown.length + " of " + items.length + " analysed listings. The CSV covers what the current plan allows."));
+    }
+  }
+
+  function listingCard(listing, audit, index) {
+    var d = el("details", "listing");
+    if (index === 0) { d.open = false; }
+    var summary = el("summary");
+    var title = el("span", "ltitle", listing.title || "(no title)");
+    summary.appendChild(title);
+
+    var meta = el("span", "lmeta");
+    var price = listing.price == null ? "—" : money(listing.price, listing.currency);
+    meta.appendChild(el("span", null, price));
+    meta.appendChild(el("span", "badge " + audit.grade, audit.grade + " · " + audit.score));
+    if (audit.counts.errors) { meta.appendChild(el("span", "badge err", audit.counts.errors + " error" + (audit.counts.errors === 1 ? "" : "s"))); }
+    if (audit.counts.warnings) { meta.appendChild(el("span", "badge wrn", audit.counts.warnings + " warning" + (audit.counts.warnings === 1 ? "" : "s"))); }
+    if (!audit.counts.errors && !audit.counts.warnings) { meta.appendChild(el("span", "badge pass", "clean")); }
+    summary.appendChild(meta);
+    d.appendChild(summary);
+
+    var body = el("div", "lbody");
+
+    /* title preview */
+    body.appendChild(el("h4", null, "Title as searchers see it"));
+    var preview = el("div", "preview");
+    preview.appendChild(document.createTextNode(audit.title.snippet));
+    if (audit.title.truncatedSnippet) { preview.appendChild(el("span", "cut", "…")); }
+    body.appendChild(preview);
+    var titleNote = el("p", "note");
+    titleNote.textContent = audit.title.length + " characters" +
+      (audit.title.remaining >= 0 ? " · " + audit.title.remaining + " left of Etsy's 140" : " · " + (-audit.title.remaining) + " over Etsy's 140") +
+      (audit.title.truncatedSnippet ? " · about 40 characters is what a search result shows" : "");
+    body.appendChild(titleNote);
+    var full = el("p", "note");
+    full.style.wordBreak = "break-word";
+    full.textContent = "Full title: " + (audit.title.text || "(empty)");
+    body.appendChild(full);
+
+    /* tags */
+    body.appendChild(el("h4", null, "Tags · " + audit.tags.count + " of 13"));
+    if (!audit.tags.details.length) {
+      body.appendChild(el("p", "note", "No tags on this listing."));
+    } else {
+      var tagWrap = el("div", "tags");
+      for (var t = 0; t < audit.tags.details.length; t++) {
+        var td = audit.tags.details[t];
+        var chip = el("span", "tag" + (td.status === "error" ? " err" : td.status === "warn" ? " warn" : ""));
+        chip.appendChild(document.createTextNode(td.tag));
+        chip.appendChild(el("span", "n", td.length));
+        if (td.notes.length) { chip.title = td.notes.join(", "); }
+        tagWrap.appendChild(chip);
+      }
+      body.appendChild(tagWrap);
+      if (audit.tags.cleaned.changed) {
+        body.appendChild(el("p", "note", "Clean version for Shopify (" + audit.tags.cleaned.tags.length + " tags): " + audit.tags.cleaned.tags.join(", ")));
+      }
+    }
+
+    /* issues */
+    body.appendChild(el("h4", null, "What to fix"));
+    if (!audit.issues.length) {
+      body.appendChild(el("p", "note", "Nothing flagged on this listing."));
+    } else {
+      var ul = el("ul", "issues");
+      var order = { error: 0, warn: 1, info: 2 };
+      var sorted = audit.issues.slice().sort(function (a, b) { return order[a.level] - order[b.level]; });
+      for (var q = 0; q < sorted.length; q++) {
+        var it = sorted[q];
+        var li = el("li", it.level);
+        li.appendChild(el("span", "dot"));
+        li.appendChild(el("span", "txt", it.message));
+        ul.appendChild(li);
+      }
+      body.appendChild(ul);
+    }
+
+    if (listing.variations && listing.variations.length) {
+      var v = el("p", "note");
+      var names = [];
+      for (var j = 0; j < listing.variations.length; j++) {
+        names.push(listing.variations[j].name + ": " + listing.variations[j].values.join(", "));
+      }
+      v.textContent = "Variations → " + names.join(" · ");
+      body.appendChild(v);
+    }
+
+    d.appendChild(body);
+    return d;
+  }
+
+  function renderFeeTable(settings) {
+    var table = $("feeTable");
+    var body = table.tBodies[0];
+    clear(body);
+    var items = state.audits.perListing;
+    var anyCurrency = {};
+
+    for (var i = 0; i < items.length; i++) {
+      var listing = items[i].listing;
+      var currency = listing.currency || "USD";
+      anyCurrency[currency] = true;
+      var tr = el("tr");
+      tr.appendChild(el("td", "title", listing.title || "(no title)"));
+
+      if (listing.price == null || listing.price <= 0) {
+        tr.appendChild(el("td", "num", "—"));
+        tr.appendChild(el("td", "num", "—"));
+        tr.appendChild(el("td", "num", "—"));
+        tr.appendChild(el("td", "num", "—"));
+        tr.appendChild(el("td", "num", "—"));
+        body.appendChild(tr);
+        continue;
+      }
+
+      var net = S.feeLines("etsy", listing.price, { offsitePct: settings.offsitePct }).net;
+      var shop = S.parityPrice(net, "shopify", settings);
+      var gd = S.parityPrice(net, "gumroad_direct", settings);
+      var disc = S.parityPrice(net, "gumroad_discover", settings);
+
+      tr.appendChild(el("td", "num", money(listing.price, currency)));
+      var netCell = el("td", "num" + (net > 0 ? " money-pos" : ""), money(net, currency));
+      tr.appendChild(netCell);
+      tr.appendChild(el("td", "num", shop.feasible ? money(shop.price, currency) : "—"));
+      tr.appendChild(el("td", "num", gd.feasible ? money(gd.price, currency) : "—"));
+      tr.appendChild(el("td", "num", disc.feasible ? money(disc.price, currency) : "—"));
+      body.appendChild(tr);
+    }
+
+    var note = $("feeNote");
+    var curse = Object.keys(anyCurrency);
+    var rate = S.platformRate("shopify", settings);
+    var parts = [];
+    parts.push("Shopify figure includes " + money(rate.fixed, curse[0] || "USD") + " per order for the plan at " +
+      settings.monthlyOrders + " orders/month; set it to 0 orders to compare card fees alone.");
+    if (settings.offsitePct) { parts.push("Etsy take-home here includes a " + settings.offsitePct + "% Offsite Ads fee."); }
+    if (curse.length > 1) { parts.push("Listings use " + curse.join(", ") + "; each row is in its own currency and no conversion is applied."); }
+    parts.push("Platform fees only — product cost, shipping and ad spend are not subtracted.");
+    note.textContent = parts.join(" ");
+  }
+
+  function renderExports(settings) {
+    var build = state.build;
+    var sub = $("exportSub");
+    var note = $("exportNote");
+    var btnShop = $("btnShopify");
+    var btnAudit = $("btnAudit");
+    var btnReprice = $("btnReprice");
+
+    sub.textContent = "Files are generated in this page. Shopify accepts up to 15 MB per import; a few thousand listings fit comfortably.";
+
+    if (IS_PRO) {
+      btnShop.textContent = "Download Shopify product CSV";
+      btnAudit.removeAttribute("aria-disabled");
+      btnReprice.removeAttribute("aria-disabled");
+      note.textContent = build.truncated ? "" : "The Shopify file has " + build.stats.rows + " rows for " + build.stats.products +
+        " product(s), including " + build.stats.images + " image link(s) and " + Math.max(0, build.stats.variants - build.stats.products) + " extra variant row(s).";
+    } else {
+      btnShop.textContent = "Download Shopify preview (3 rows)";
+      btnAudit.setAttribute("aria-disabled", "true");
+      btnReprice.setAttribute("aria-disabled", "true");
+      note.textContent = "The free preview writes the header plus " + FREE_ROWS + " rows. Audit and repricing CSVs, and the full Shopify file, are in the Pro app.";
+    }
+
+    if (!IS_PRO && state.listings.length > 0 && build.truncated) {
+      note.appendChild(document.createElement("br"));
+      note.appendChild(document.createTextNode("Your file has " + build.totalRows + " CSV rows; the preview keeps the first " + build.stats.rows + "."));
+    }
+  }
+
+  function download(filename, text) {
+    var blob = new Blob([text], { type: "text/csv;charset=utf-8" });
+    if (window.navigator && window.navigator.msSaveBlob) {
+      window.navigator.msSaveBlob(blob, filename);
+      return;
+    }
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  }
+
+  function ensureData() {
+    if (!state.listings.length) {
+      setTopAlert(alertBox("warn", "Load a file first", "Choose your Etsy CSV, or press \"Load the 8-listing sample\" to try the tool."));
+      $("tool").scrollIntoView({ behavior: "smooth", block: "start" });
+      return false;
+    }
+    return true;
+  }
+
+  function onShopify() {
+    if (!ensureData()) { return; }
+    var settings = readSettings();
+    var built = S.buildShopifyCSV(state.listings, settings);
+    var name = IS_PRO ? "shopify-products-" + todayStamp() + ".csv" : "shopify-products-preview-" + todayStamp() + ".csv";
+    download(name, built.csv);
+  }
+
+  function onAudit() {
+    if (!IS_PRO) { return locked(); }
+    if (!ensureData()) { return; }
+    var rows = S.buildAuditRows(state.listings, readSettings());
+    download("etsy-listing-audit-" + todayStamp() + ".csv", rows.csv);
+  }
+
+  function onReprice() {
+    if (!IS_PRO) { return locked(); }
+    if (!ensureData()) { return; }
+    var rows = S.buildRepriceRows(state.listings, readSettings());
+    download("etsy-price-repricing-" + todayStamp() + ".csv", rows.csv);
+  }
+
+  function locked() {
+    var target = document.getElementById("pro") || $("emptyState");
+    setTopAlert(alertBox("warn", "That export is part of the Pro app",
+      "The free tool downloads the 3-row Shopify preview. The Pro app adds the full file, the audit report CSV and the repricing CSV."));
+    if (target) { target.scrollIntoView({ behavior: "smooth", block: "center" }); }
+  }
+
+  function copyTags() {
+    if (!ensureData()) { return; }
+    var lines = [];
+    var items = state.audits.perListing;
+    for (var i = 0; i < items.length; i++) {
+      var listing = items[i].listing;
+      var cleaned = S.cleanTags(listing.tags, { trimLong: readSettings().trimTags }).tags;
+      lines.push((listing.title || "(no title)") + ": " + cleaned.join(", "));
+    }
+    var text = lines.join("\n");
+    var done = function () {
+      setTopAlert(alertBox("ok", "Copied " + items.length + " listing(s) of cleaned tags", "Paste them into Etsy's tag field or a spreadsheet."));
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { legacyCopy(text, done); });
+    } else {
+      legacyCopy(text, done);
+    }
+  }
+
+  function legacyCopy(text, done) {
+    var area = document.createElement("textarea");
+    area.value = text;
+    area.setAttribute("readonly", "readonly");
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.select();
+    try { document.execCommand("copy"); done(); }
+    catch (e) { setTopAlert(alertBox("bad", "Copy failed", "Select the cleaned tags in the listing detail and copy them by hand.")); }
+    document.body.removeChild(area);
+  }
+
+  function readFile(file) {
+    if (!file) { return; }
+    if (file.size > 25 * 1024 * 1024) {
+      setTopAlert(alertBox("bad", "That file is very large", "This tool reads CSVs up to about 25 MB in the page. Split the file or use the desktop Pro app."));
+      return;
+    }
+    var reader = new FileReader();
+    reader.onerror = function () {
+      setTopAlert(alertBox("bad", "The file could not be read", "Try choosing it again, or open it in a text editor and save it as UTF-8 CSV."));
+    };
+    reader.onload = function () { analyze(String(reader.result || ""), file.name); };
+    reader.readAsText(file, "UTF-8");
+  }
+
+  function switchTab(which) {
+    var upload = $("tabUpload"), paste = $("tabPaste");
+    var pUpload = $("panelUpload"), pPaste = $("panelPaste");
+    var isUpload = which === "upload";
+    upload.setAttribute("aria-selected", isUpload ? "true" : "false");
+    paste.setAttribute("aria-selected", isUpload ? "false" : "true");
+    pUpload.hidden = !isUpload;
+    pPaste.hidden = isUpload;
+  }
+
+  function pasteOne() {
+    var title = $("pTitle").value.replace(/^\s+|\s+$/g, "");
+    var price = $("pPrice").value.replace(/^\s+|\s+$/g, "") || "0";
+    var tags = $("pTags").value;
+    var desc = $("pDesc").value;
+    if (!title) {
+      setTopAlert(alertBox("warn", "A title is needed", "Paste the listing title first — Etsy cannot publish a listing without one either."));
+      return;
+    }
+    var rows = [
+      ["TITLE", "DESCRIPTION", "PRICE", "CURRENCY_CODE", "QUANTITY", "TAGS"],
+      [title, desc, price, "USD", "999", tags]
+    ];
+    analyze(S.toCSV(rows), "Pasted listing");
+  }
+
+  function init() {
+    /* sample buttons */
+    var sampleHandler = function () {
+      if (!SAMPLE) { return; }
+      analyze(SAMPLE, "sample_etsy_listings.csv");
+    };
+    $("sampleBtn").addEventListener("click", sampleHandler);
+    $("sampleBtn2").addEventListener("click", sampleHandler);
+
+    $("pickFile").addEventListener("click", function () { $("fileInput").click(); });
+    $("fileInput").addEventListener("change", function (e) {
+      var file = e.target.files && e.target.files[0];
+      readFile(file);
+    });
+
+    var drop = $("dropZone");
+    ["dragenter", "dragover"].forEach(function (evt) {
+      drop.addEventListener(evt, function (e) { e.preventDefault(); drop.classList.add("over"); });
+    });
+    ["dragleave", "drop"].forEach(function (evt) {
+      drop.addEventListener(evt, function (e) { e.preventDefault(); drop.classList.remove("over"); });
+    });
+    drop.addEventListener("drop", function (e) {
+      var file = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      readFile(file);
+    });
+    window.addEventListener("dragover", function (e) { e.preventDefault(); });
+    window.addEventListener("drop", function (e) { e.preventDefault(); });
+
+    $("tabUpload").addEventListener("click", function () { switchTab("upload"); });
+    $("tabPaste").addEventListener("click", function () { switchTab("paste"); });
+    $("pasteBtn").addEventListener("click", pasteOne);
+    $("pasteClear").addEventListener("click", function () {
+      $("pTitle").value = ""; $("pPrice").value = ""; $("pTags").value = ""; $("pDesc").value = "";
+    });
+
+    ["setHeader", "setStatus", "setDigital", "setPriceMode", "setOffsite", "setMonthly",
+     "setOrders", "setTrim", "setVariants", "setImages", "setVendor", "setType"].forEach(function (id) {
+      var node = $(id);
+      if (!node) { return; }
+      node.addEventListener("change", function () { if (state.listings.length) { render(); } });
+      node.addEventListener("input", function () { if (state.listings.length && node.type !== "checkbox") { render(); } });
+    });
+
+    $("btnShopify").addEventListener("click", onShopify);
+    $("btnAudit").addEventListener("click", onAudit);
+    $("btnReprice").addEventListener("click", onReprice);
+    $("btnTags").addEventListener("click", copyTags);
+
+    /* Cmd/Ctrl+S saves the Shopify file — a small convenience for repeat use. */
+    document.addEventListener("keydown", function (e) {
+      if ((e.metaKey || e.ctrlKey) && String(e.key).toLowerCase() === "s" && state.listings.length) {
+        e.preventDefault();
+        onShopify();
+      }
+    });
+
+    if (state.listings.length === 0) {
+      $("results").hidden = true;
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
