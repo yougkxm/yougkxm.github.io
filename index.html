@@ -251,6 +251,17 @@
   .tool.bundle{border:2px solid var(--accent)}
   .tool.bundle .p{color:#0b7a4b}
   .tool .t .tagb{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#0b7a4b;background:#e6f6ee;border:1px solid #bfe6d3;border-radius:999px;padding:2px 7px;margin-left:6px;vertical-align:1px;white-space:nowrap}
+  .upsell{margin-top:16px;border:1px solid #bfe6d3;background:#f2fbf7;border-radius:12px;padding:12px 14px}
+  .upsell .ut{font-size:13.5px;line-height:1.5;color:#33404f}
+  .upsell .ul{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}
+  .upsell .ul a{display:inline-block;font-size:12.5px;font-weight:700;text-decoration:none;padding:7px 12px;border-radius:8px;background:var(--accent);color:#fff}
+  .upsell .ul a.alt{background:#fff;color:var(--accent);border:1px solid #bfe6d3}
+  .silonav{margin:16px 0 4px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:13px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 4px}
+  .silonav b{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-right:6px}
+  .silonav a{text-decoration:none;font-weight:600;padding:2px 8px;border-radius:7px}
+  .silonav a:hover{background:var(--accent-soft)}
+  .silonav a[aria-current="page"]{background:var(--accent);color:#fff}
+  .silonav .sep{color:#c9d2de}
 
   details.faq{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:9px}
   details.faq summary{cursor:pointer;font-weight:650;font-size:15px}
@@ -295,6 +306,15 @@
       <span class="pill">Returns included</span>
       <span class="pill">Every fee editable</span>
     </div>
+  </div>
+
+  <div class="silonav" aria-label="Fee calculators by platform">
+    <b>One-platform calculators</b>
+    <a href="https://yougkxm.github.io/" aria-current="page">All platforms</a><span class="sep">&middot;</span>
+    <a href="https://yougkxm.github.io/etsy-fee-calculator/">Etsy fees</a><span class="sep">&middot;</span>
+    <a href="https://yougkxm.github.io/gumroad-fee-calculator/">Gumroad fees</a><span class="sep">&middot;</span>
+    <a href="https://yougkxm.github.io/shopify-fee-calculator/">Shopify fees</a><span class="sep">&middot;</span>
+    <a href="https://yougkxm.github.io/etsy-offsite-ads-calculator/">Etsy Offsite Ads</a>
   </div>
 
   <section class="calc" id="calculator" aria-labelledby="calc-title">
@@ -438,6 +458,14 @@
             </div>
           </div>
 
+          <div class="upsell">
+            <div class="ut">Selling more than one product, or settling up quarterly? <b>Seller Profit &amp; Tax Calculator 2026</b> carries several SKUs and the Schedule C quarterly set-aside in one workbook &mdash; <b>$14.99 with LAUNCH25</b> (list $19.99), or every tool on this page for <b>$49</b>.</div>
+            <div class="ul">
+              <a href="https://8299181964131.gumroad.com/l/seller-profit-tax-calculator/LAUNCH25?utm_source=webtool&amp;utm_medium=profit-calculator&amp;utm_campaign=result-upsell" target="_blank" rel="noopener">Get the calculator &mdash; $14.99</a>
+              <a class="alt" href="https://8299181964131.gumroad.com/l/seller-tools-bundle?utm_source=webtool&amp;utm_medium=profit-calculator&amp;utm_campaign=result-upsell" target="_blank" rel="noopener">All 6 tools &mdash; $49</a>
+            </div>
+          </div>
+
           <div class="bar" id="barWrap">
             <div class="track" role="img" aria-label="Where each order's money goes" id="barTrack">
               <div class="seg" id="segFees" style="background:#f59e0b;width:0"></div>
@@ -555,7 +583,7 @@
           <div class="t">Bank Statement PDF → CSV</div>
           <div class="d">Drop a PDF statement and get one clean row per transaction in your browser: date, description, signed amount and running balance. Handles <code>-64.28 DR</code>, <code>(123.45)</code> and <code>100.00 CR</code>. Nothing is uploaded.</div>
         </div>
-        <div class="p">$0 · free · full Excel $12</div>
+        <div class="p">$0 · free · full Excel $19</div>
       </a>
       <a class="tool free" href="https://yougkxm.github.io/listing-kit/" target="_blank" rel="noopener">
         <div>
