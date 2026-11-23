@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Etsy Offsite Ads Calculator — 15% or 12%, $100 Cap, Break-Even</title>
+<meta name="description" content="Free Etsy Offsite Ads calculator: the 15% or 12% fee, the $100 per-order cap, and what it does to profit. See break-even and margin-defense prices on an attributed order and across all your orders. No signup, runs in your browser.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://yougkxm.github.io/etsy-offsite-ads-calculator/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Seller Tools">
+<meta property="og:title" content="Etsy Offsite Ads Calculator (15% / 12%, $100 cap)">
+<meta property="og:description" content="The Offsite Ads fee takes a fifth of a thin order. See the fee, the cap, net profit and the price that keeps your margin. Free, no signup.">
+<meta property="og:url" content="https://yougkxm.github.io/etsy-offsite-ads-calculator/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Etsy Offsite Ads Calculator (15% / 12%, $100 cap)">
+<meta name="twitter:description" content="The Offsite Ads fee takes a fifth of a thin order. See the fee, the cap, net profit and the price that keeps your margin. Free, no signup.">
+<meta name="theme-color" content="#0f172a">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://yougkxm.github.io/etsy-offsite-ads-calculator/#app",
+      "name": "Etsy Offsite Ads Calculator",
+      "url": "https://yougkxm.github.io/etsy-offsite-ads-calculator/",
+      "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": "Calculator",
+      "operatingSystem": "Any (runs in the browser)",
+      "browserRequirements": "Requires JavaScript",
+      "description": "Free Etsy Offsite Ads calculator: the 15% or 12% fee, the $100 per-order cap, and what it does to profit. See break-even and margin-defense prices on an attributed order and across all your orders. No signup, runs in your browser.",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "featureList": [
+        "15% and 12% Offsite Ads rates",
+        "The $100 per-order fee cap, applied in the calculation",
+        "Profit on an attributed order versus the same order without the fee",
+        "Break-even price and margin-defense price, per attributed order and blended over all orders",
+        "A cap simulator across order totals"
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "Seller Tools",
+        "url": "https://yougkxm.github.io/"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://yougkxm.github.io/etsy-offsite-ads-calculator/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is the Offsite Ads fee 15% or 12%?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It depends on your shop's revenue in any consecutive 365-day period. A shop that has always stayed under $10,000 is charged 15% and may opt out of the programme. Once a shop has made $10,000 or more in any such period, the fee drops to 12%, and participation becomes required for the lifetime of the shop. The calculator lets you switch between both rates."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there a budget or a monthly cap?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Offsite Ads has no budget setting: you are charged only when a click turns into an order, and the fee for any single order never exceeds $100, however large the order. At 15% the cap starts to matter at an order total of $666.67; at 12% it starts at $833.33. For ordinary orders the cap never applies."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which orders count as attributed?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "An order where the buyer clicked one of Etsy's offsite ads and bought within 30 days. If the buyer's last click before ordering was an Etsy ad on the site instead, only the Etsy Ads fee applies. One click can lead to several attributed orders inside that 30-day window, and each can carry the fee. There is no fee when a click does not end in a purchase."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the fee charged on?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The order total before the advertising fee — item price, shipping the buyer pays and gift wrap. For US sellers it is not charged on sales tax. That is why the calculator has a separate field for shipping the buyer pays, and why the fee looks larger than 15% of your item price when you charge shipping."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need an account or an email address to use this?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. The page runs entirely in your browser: nothing you type is sent anywhere, there is no signup, and it works offline once loaded."
+          }
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Seller Tools",
+          "item": "https://yougkxm.github.io/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Etsy Offsite Ads Calculator",
+          "item": "https://yougkxm.github.io/etsy-offsite-ads-calculator/"
+        }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+  :root{
+    --bg:#f6f7f9;
+    --card:#ffffff;
+    --ink:#0f172a;
+    --muted:#5b6577;
+    --line:#e3e7ee;
+    --accent:#0f766e;
+    --accent-soft:#e6f4f1;
+    --warn:#b42318;
+    --warn-soft:#fdecea;
+    --ok:#0f766e;
+    --gold:#b45309;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(15,23,42,.05), 0 8px 24px rgba(15,23,42,.06);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    font-size:16px;line-height:1.6;
+  }
+  a{color:var(--accent)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  header.site{border-bottom:1px solid var(--line);background:var(--card)}
+  header.site .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:14px;padding-bottom:14px}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+  .brand span.sub{font-weight:500;color:var(--muted);font-size:13px}
+  header.site nav a{font-size:13px;color:var(--muted);text-decoration:none;margin-left:16px}
+  header.site nav a:hover{color:var(--accent)}
+
+  .hero{padding:34px 0 6px}
+  h1{font-size:clamp(25px,4.2vw,38px);line-height:1.15;letter-spacing:-.025em;margin:0 0 12px}
+  .hero p.lead{font-size:clamp(15px,1.9vw,17.5px);color:var(--muted);margin:0 0 14px;max-width:780px}
+  .pills{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+  .pill{font-size:12.5px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:4px 11px;font-weight:600}
+
+  .silonav{margin:16px 0 4px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 14px;font-size:13px;display:flex;flex-wrap:wrap;align-items:center;gap:6px 4px}
+  .silonav b{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-right:6px}
+  .silonav a{text-decoration:none;font-weight:600;padding:2px 8px;border-radius:7px}
+  .silonav a:hover{background:var(--accent-soft)}
+  .silonav a[aria-current="page"]{background:var(--accent);color:#fff}
+  .silonav .sep{color:#c9d2de}
+
+  section.calc{margin:18px 0 8px}
+  .app{display:grid;grid-template-columns:minmax(290px,380px) 1fr;gap:16px;align-items:start}
+  @media (max-width:860px){ .app{grid-template-columns:1fr} }
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .card .inner{padding:18px}
+  .card h2{font-size:16px;margin:0 0 4px;letter-spacing:-.01em}
+  .card p.hint{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+
+  fieldset{border:0;margin:0 0 13px;padding:0;min-width:0}
+  legend{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px;padding:0}
+  .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .row.one{grid-template-columns:1fr}
+  .field{display:flex;flex-direction:column;gap:4px}
+  .field label{font-size:12.5px;color:var(--muted);font-weight:600}
+  .field .ib{position:relative;display:flex;align-items:center}
+  .field .ib .pre,.field .ib .suf{position:absolute;font-size:13px;color:#8b95a6;pointer-events:none}
+  .field .ib .pre{left:10px}
+  .field .ib .suf{right:10px}
+  input[type=number],select{
+    width:100%;font:inherit;font-size:15px;color:var(--ink);background:#fff;
+    border:1px solid #cfd6e0;border-radius:9px;padding:9px 10px;
+  }
+  input[type=number]{-moz-appearance:textfield}
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  input[type=number]:focus,select:focus{outline:2px solid var(--accent-soft);border-color:var(--accent)}
+  .field .ib.has-pre input{padding-left:24px}
+  .field .ib.has-suf input{padding-right:26px}
+  .field .ib select{padding-right:12px}
+  .inline{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--muted);margin-top:7px;line-height:1.45}
+  .inline input[type=checkbox]{width:16px;height:16px;margin:1px 0 0;accent-color:var(--accent);flex:0 0 auto}
+  .inline label{font-weight:500}
+  details.adv{border-top:1px solid var(--line);margin-top:4px;padding-top:12px}
+  details.adv summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--accent);list-style:none}
+  details.adv summary::-webkit-details-marker{display:none}
+  details.adv summary:before{content:"\2699 ";font-weight:400}
+  details.adv[open] summary{margin-bottom:10px}
+  .fee-note{font-size:12px;color:var(--muted);margin:7px 0 0}
+
+  .results .hero-num{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+  .big{font-size:clamp(32px,5.4vw,44px);font-weight:750;letter-spacing:-.03em;line-height:1.05}
+  .big.loss{color:var(--warn)}
+  .big-sub{font-size:13px;color:var(--muted);padding-bottom:7px}
+  .badge{display:inline-flex;align-items:center;font-size:12.5px;font-weight:700;border-radius:999px;padding:4px 10px;margin-top:10px}
+  .badge.bad{background:var(--warn-soft);color:var(--warn)}
+  .badge.good{background:var(--accent-soft);color:var(--accent)}
+  .badge.mid{background:#fff7ed;color:var(--gold)}
+
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(132px,1fr));gap:10px;margin-top:16px}
+  .kpi{border:1px solid var(--line);border-radius:11px;padding:11px 12px;background:#fbfcfd}
+  .kpi .k{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:700}
+  .kpi .v{font-size:19px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+  .kpi .n{font-size:11.5px;color:var(--muted);line-height:1.35}
+  .kpi.warn .v{color:var(--warn)}
+  .kpi.win{border-color:#bfe6d3;background:#f2fbf7}
+
+  table{border-collapse:collapse;width:100%;font-size:13.5px}
+  caption{text-align:left;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-bottom:8px}
+  th,td{padding:8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+  th:first-child,td:first-child{text-align:left;white-space:normal}
+  thead th{font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);border-bottom:1px solid #cfd6e0}
+  tbody tr.sum td{font-weight:700;border-bottom:none;border-top:2px solid #cfd6e0}
+  td.neg{color:var(--warn)}
+  td.pos{color:var(--ok)}
+  .tbl-wrap{overflow-x:auto;margin-top:16px}
+
+  .chan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-top:14px}
+  .chan{border:1px solid var(--line);border-radius:11px;padding:12px;background:#fbfcfd}
+  .chan.win{border-color:#bfe6d3;background:#f2fbf7}
+  .chan .ct{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  .chan .cv{font-size:24px;font-weight:750;letter-spacing:-.02em;margin-top:2px}
+  .chan .cn{font-size:12px;color:var(--muted);line-height:1.4}
+
+  .upsell{margin-top:16px;border:1px solid #bfe6d3;background:#f2fbf7;border-radius:12px;padding:12px 14px}
+  .upsell .ut{font-size:13.5px;line-height:1.5}
+  .upsell .ut b{font-weight:700}
+  .upsell .ul{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}
+  .upsell .ul a{display:inline-block;font-size:12.5px;font-weight:700;text-decoration:none;padding:7px 12px;border-radius:8px;background:var(--accent);color:#fff}
+  .upsell .ul a.alt{background:#fff;color:var(--accent);border:1px solid #bfe6d3}
+  .upsell .ul a:hover{filter:brightness(1.06)}
+
+  .content{margin:38px 0}
+  .content h2{font-size:clamp(19px,2.8vw,25px);letter-spacing:-.02em;margin:0 0 10px}
+  .content h3{font-size:16.5px;margin:22px 0 6px}
+  .content p,.content li{color:#33404f}
+  .content p{max-width:820px}
+  .cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+  .panel h3{margin-top:0;font-size:16px}
+  .panel ul{margin:6px 0 0;padding-left:18px}
+  .panel li{margin:4px 0;font-size:14px}
+
+  .tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px;margin-top:16px}
+  .tool{display:flex;flex-direction:column;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px;text-decoration:none;color:inherit}
+  .tool:hover{border-color:var(--accent)}
+  .tool .t{font-weight:700;font-size:15px}
+  .tool .d{font-size:13px;color:var(--muted);margin:4px 0 10px}
+  .tool .p{font-size:13px;font-weight:700;color:var(--accent)}
+  .tool .p s{color:#93a0b1;font-weight:500;margin-right:6px}
+  .tool.bundle{border:2px solid var(--accent)}
+
+  details.faq{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:9px}
+  details.faq summary{cursor:pointer;font-weight:650;font-size:15px}
+  details.faq p{margin:8px 0 0;font-size:14px;color:#33404f}
+
+  footer.site{border-top:1px solid var(--line);background:var(--card);margin-top:34px;padding:22px 0 34px;font-size:12.5px;color:var(--muted)}
+  footer.site .wrap{display:flex;flex-direction:column;gap:6px}
+  footer.site .nologin{margin-top:12px;display:flex;align-items:center;gap:8px}
+  footer.site .nologin a{display:inline-flex;text-decoration:none;line-height:0}
+  footer.site .nologin img{display:block;height:20px;width:auto;border:0}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  @media (max-width:480px){
+    .brand span.sub{display:none}
+    header.site nav a{margin-left:11px;font-size:12.5px}
+    .card .inner{padding:15px}
+    th,td{padding:7px 6px;font-size:13px}
+  }
+
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="https://yougkxm.github.io/"><span class="dot"></span> Seller Tools <span class="sub">free calculators for online sellers</span></a>
+    <nav aria-label="Sections">
+      <a href="#calculator">Calculator</a>
+      <a href="#how">How it works</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero">
+    <h1>Etsy Offsite Ads Calculator: the 15% fee and the $100 cap</h1>
+    <p class="lead">An Offsite Ads order pays 15% or 12% of its total to Etsy, capped at $100 — on top of the listing, transaction and processing fees. See profit on an attributed order, what the fee costs across the whole shop, and the price that keeps your margin.</p>
+    <div class="pills"><span class="pill">Free &middot; no signup</span><span class="pill">Nothing leaves your browser</span><span class="pill">15% / 12% + $100 cap</span><span class="pill">Blended cost included</span></div>
+  </div>
+
+  <div class="silonav" aria-label="Fee calculators"><b>Fee calculators</b>
+  <a href="https://yougkxm.github.io/">All platforms</a>
+  <span class="sep">&middot;</span>
+  <a href="https://yougkxm.github.io/etsy-fee-calculator/">Etsy</a>
+  <span class="sep">&middot;</span>
+  <a href="https://yougkxm.github.io/gumroad-fee-calculator/">Gumroad</a>
+  <span class="sep">&middot;</span>
+  <a href="https://yougkxm.github.io/shopify-fee-calculator/">Shopify</a>
+  <span class="sep">&middot;</span>
+  <a href="https://yougkxm.github.io/etsy-offsite-ads-calculator/">Etsy Offsite Ads</a>
+  </div>
+
+  <section class="calc" id="calculator" aria-labelledby="calc-title">
+    <h2 id="calc-title" class="sr-only">Etsy Offsite Ads calculator</h2>
+    <div class="app">
+      <div class="card">
+        <div class="inner">
+          <h2>Your numbers</h2>
+          <p class="hint">Results update as you type. Nothing leaves your browser (100% client-side, no signup).</p>
+
+          <fieldset>
+            <legend>The order</legend>
+            <div class="row">
+              <div class="field">
+                <label for="price">Item price</label>
+                <div class="ib has-pre"><span class="pre">$</span><input type="number" id="price" value="60" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="buyerShip">Shipping you charge</label>
+                <div class="ib has-pre"><span class="pre">$</span><input type="number" id="buyerShip" value="0" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Your costs</legend>
+            <div class="row">
+              <div class="field">
+                <label for="cogs">Product cost</label>
+                <div class="ib has-pre"><span class="pre">$</span><input type="number" id="cogs" value="20" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="shipCost">Postage you pay</label>
+                <div class="ib has-pre"><span class="pre">$</span><input type="number" id="shipCost" value="6" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="returnRate">Return / refund rate</label>
+                <div class="ib has-suf"><input type="number" id="returnRate" value="0" min="0" max="95" step="0.5" inputmode="decimal"><span class="suf">%</span></div>
+              </div>
+              <div class="field">
+                <label for="returnCost">Cost per return</label>
+                <div class="ib has-pre"><span class="pre">$</span><input type="number" id="returnCost" value="0" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Offsite Ads</legend>
+            <div class="row">
+              <div class="field">
+                <label for="rate">Your fee rate</label>
+                <div class="ib"><select id="rate" aria-label="Offsite Ads rate">
+                  <option value="15" selected>15% &mdash; shop under $10,000</option>
+                  <option value="12">12% &mdash; shop over $10,000</option>
+                </select></div>
+              </div>
+              <div class="field">
+                <label for="share">Attributed share of orders</label>
+                <div class="ib has-suf"><input type="number" id="share" value="20" min="0" max="100" step="1" inputmode="decimal"><span class="suf">%</span></div>
+              </div>
+              <div class="field">
+                <label for="targetMargin">Target net margin</label>
+                <div class="ib has-suf"><input type="number" id="targetMargin" value="20" min="0" max="90" step="1" inputmode="decimal"><span class="suf">%</span></div>
+              </div>
+            </div>
+            <p class="fee-note">Attributed share = orders carrying the fee ÷ all orders. This is what spreads the fee over the shop instead of only over the orders that paid it.</p>
+          </fieldset>
+
+          <details class="adv">
+            <summary>Etsy fees (prefilled, editable)</summary>
+            <div class="row">
+              <div class="field">
+                <label for="listingFee">Listing fee</label>
+                <div class="ib has-pre"><span class="pre">$</span><input type="number" id="listingFee" value="0.20" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+              <div class="field">
+                <label for="platformPct">Transaction fee</label>
+                <div class="ib has-suf"><input type="number" id="platformPct" value="6.5" min="0" max="99" step="0.01" inputmode="decimal"><span class="suf">%</span></div>
+              </div>
+              <div class="field">
+                <label for="processingPct">Payment processing</label>
+                <div class="ib has-suf"><input type="number" id="processingPct" value="3" min="0" max="99" step="0.01" inputmode="decimal"><span class="suf">%</span></div>
+              </div>
+              <div class="field">
+                <label for="processingFixed">Processing fixed</label>
+                <div class="ib has-pre"><span class="pre">$</span><input type="number" id="processingFixed" value="0.25" min="0" step="0.01" inputmode="decimal"></div>
+              </div>
+            </div>
+            <p class="fee-note">US defaults, November 2026: $0.20 listing, 6.5% transaction, 3% + $0.25 processing. The Offsite Ads fee is charged on top of these.</p>
+          </details>
+        </div>
+      </div>
+
+      <div class="card results">
+        <div class="inner">
+          <h2>What the ad fee costs you</h2>
+          <p class="hint" id="resultHint">On an attributed order, and spread across every order in the shop.</p>
+          <div aria-live="polite">
+            <div class="hero-num">
+              <div class="big" id="netAtt">$0.00</div>
+              <div class="big-sub" id="netSub">&nbsp;</div>
+            </div>
+            <div class="badge good" id="badge">&mdash;</div>
+
+            <div class="kpis">
+              <div class="kpi">
+                <div class="k">Offsite Ads fee</div>
+                <div class="v" id="kFee">$0.00</div>
+                <div class="n" id="kFeeN">on this order</div>
+              </div>
+              <div class="kpi">
+                <div class="k">Same order, no ad</div>
+                <div class="v" id="kNoAd">$0.00</div>
+                <div class="n">profit without the fee</div>
+              </div>
+              <div class="kpi">
+                <div class="k">Blended per order</div>
+                <div class="v" id="kBlend">$0.00</div>
+                <div class="n" id="kBlendN">fee spread over all orders</div>
+              </div>
+              <div class="kpi">
+                <div class="k">Break-even price</div>
+                <div class="v" id="kBE">$0.00</div>
+                <div class="n" id="kBEN">blended</div>
+              </div>
+              <div class="kpi">
+                <div class="k">Margin-defense price</div>
+                <div class="v" id="kTP">$0.00</div>
+                <div class="n" id="kTPN">keeps your target margin</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tbl-wrap">
+            <table>
+              <caption>The $100 cap at different order totals</caption>
+              <thead><tr><th scope="col">Order total</th><th scope="col">15% fee</th><th scope="col">12% fee</th><th scope="col">Effective at 15%</th></tr></thead>
+              <tbody id="tbody"></tbody>
+            </table>
+          </div>
+
+          <p class="fee-note" id="capNote"></p>
+
+          <div class="upsell">
+  <div class="ut">Pricing a whole shop around the fee? <b>Seller Profit &amp; Tax Calculator 2026</b> keeps per-product margins and the quarterly tax set-aside in one workbook — <b>$14.99 with LAUNCH25</b> (list $19.99).</div>
+  <div class="ul">
+    <a href="https://8299181964131.gumroad.com/l/seller-profit-tax-calculator/LAUNCH25?utm_source=webtool&utm_medium=etsy-offsite-ads-calculator&utm_campaign=result-upsell">Get the calculator &mdash; $14.99</a>
+    <a class="alt" href="https://8299181964131.gumroad.com/l/etsy-shopify-migrator-pro/MIGRATE25?utm_source=webtool&utm_medium=etsy-offsite-ads-calculator&utm_campaign=result-upsell">Migrator Pro &mdash; $14.25</a>
+    <a class="alt" href="https://8299181964131.gumroad.com/l/seller-tools-bundle?utm_source=webtool&utm_medium=etsy-offsite-ads-calculator&utm_campaign=result-upsell">All 6 tools &mdash; $49</a>
+  </div>
+</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content" id="how">
+    <h2>How the Offsite Ads fee works</h2>
+    <p>Offsite Ads is the one Etsy cost that can be larger than the transaction and processing fees together, and it arrives only on some orders — which makes it easy to both over-count and under-count.</p>
+    <div class="cols">
+      <div class="panel">
+        <h3>The rate</h3>
+        <ul>
+          <li><b>15%</b> of the order total for a shop that has always made under $10,000 in any consecutive 365 days — and that shop may opt out.</li>
+          <li><b>12%</b> once the shop has made $10,000 or more in such a period — participation is then required for the life of the shop.</li>
+          <li>Charged on item price + shipping the buyer pays + gift wrap, not on US sales tax.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>The cap</h3>
+        <ul>
+          <li>The fee for any one order <b>never exceeds $100</b>, whatever the order total.</li>
+          <li>At 15% the cap only starts at an order total of <b>$666.67</b>; at 12%, at <b>$833.33</b>.</li>
+          <li>So for normal order sizes the cap changes nothing — it protects large orders, not small margins.</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Attribution</h3>
+        <ul>
+          <li>A buyer clicks an offsite ad and orders within <b>30 days</b>: the order can carry the fee.</li>
+          <li>If the buyer's last click before ordering was an Etsy ad on the site, only the Etsy Ads fee applies.</li>
+          <li>One click can lead to several attributed orders in that window, and no purchase means no fee.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Why the fee is not 15% of your profit — it is worse</h3>
+    <p>Take a $60 item with no shipping charged, $20 of product cost and $6 of postage. Etsy's listing, transaction and processing fees come to about $6.15, which leaves $27.85 before any advertising. A 15% Offsite Ads fee is $9.00, so the attributed order actually pays $18.85 — the "15% fee" has taken roughly a third of the profit. On a thinner product the same fee can turn a good order into a loss, which is why the calculator shows net profit on the attributed order and not only the fee.</p>
+
+    <h3>Price for the blended cost, not the worst order</h3>
+    <p>The fee is charged only on attributed orders, so raising every price to cover it punishes the buyers who arrived for free. Set the attributed share (the percentage of your orders that carry the fee) and the calculator spreads the fee across the whole shop: that blended number is the true cost of being in the programme, and it is what your price has to cover. If 20% of orders are attributed at 15%, the blended cost is 3% of an order total — about the same as Etsy's transaction and processing fees combined.</p>
+
+    <h3>After a refund</h3>
+    <p>Refunding through Shop Manager recalculates the transaction and processing fees on the reduced amount. Etsy's help pages do not spell out what happens to the Offsite Ads fee on a seller refund, and one case is documented the other way: when Etsy itself covers a full refund, the transaction and Offsite Ads fees are not credited back. Check the order's fee lines in your Payment account after a refund rather than assuming the fee came back.</p>
+  </section>
+
+<section class="content" id="faq">
+  <h2>Questions</h2>
+  <details class="faq" open>
+    <summary>Is the Offsite Ads fee 15% or 12%?</summary>
+    <p>It depends on your shop's revenue in any consecutive 365-day period. A shop that has always stayed under $10,000 is charged 15% and may opt out of the programme. Once a shop has made $10,000 or more in any such period, the fee drops to 12%, and participation becomes required for the lifetime of the shop. The calculator lets you switch between both rates.</p>
+  </details>
+  <details class="faq">
+    <summary>Is there a budget or a monthly cap?</summary>
+    <p>No. Offsite Ads has no budget setting: you are charged only when a click turns into an order, and the fee for any single order never exceeds $100, however large the order. At 15% the cap starts to matter at an order total of $666.67; at 12% it starts at $833.33. For ordinary orders the cap never applies.</p>
+  </details>
+  <details class="faq">
+    <summary>Which orders count as attributed?</summary>
+    <p>An order where the buyer clicked one of Etsy's offsite ads and bought within 30 days. If the buyer's last click before ordering was an Etsy ad on the site instead, only the Etsy Ads fee applies. One click can lead to several attributed orders inside that 30-day window, and each can carry the fee. There is no fee when a click does not end in a purchase.</p>
+  </details>
+  <details class="faq">
+    <summary>What is the fee charged on?</summary>
+    <p>The order total before the advertising fee — item price, shipping the buyer pays and gift wrap. For US sellers it is not charged on sales tax. That is why the calculator has a separate field for shipping the buyer pays, and why the fee looks larger than 15% of your item price when you charge shipping.</p>
+  </details>
+  <details class="faq">
+    <summary>Do I need an account or an email address to use this?</summary>
+    <p>No. The page runs entirely in your browser: nothing you type is sent anywhere, there is no signup, and it works offline once loaded.</p>
+  </details>
+</section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div><b>Seller Tools</b> &middot; free calculators for online sellers.</div>
+    <div>Etsy is not affiliated with this page; Fee presets are the standard published rates as of November 2026 and are editable on purpose. This page is an estimate, not tax, legal or accounting advice. Your platform's fee page and your own payout reports are the authority.</div>
+    <div class="nologin">
+      <a href="https://nologin.tools/badge/yougkxm-github-io" target="_blank" rel="noopener"><img src="https://nologin.tools/badges/flat.svg" alt="NoLogin Verified" title="Verified by NoLoginTools.org" height="20"></a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var STATE = { cur: "$" };
+  function $(id) { return document.getElementById(id); }
+  function num(id) {
+    var el = $(id);
+    if (!el) return 0;
+    var v = parseFloat(el.value);
+    return isFinite(v) ? v : 0;
+  }
+  function raw(id, dflt) {
+    var el = $(id);
+    if (!el) return dflt;
+    var v = parseFloat(el.value);
+    return isFinite(v) ? v : dflt;
+  }
+  function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+  function rnd(v) { var r = Math.round(v * 100) / 100; return r === 0 ? 0 : r; }
+  function money(v) {
+    var r = rnd(v);
+    var s = Math.abs(r).toFixed(2).split(".");
+    var whole = s[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return (r < 0 ? "-" : "") + STATE.cur + whole + "." + s[1];
+  }
+  function pct(v) {
+    var r = Math.round(v * 10) / 10;
+    return (r === 0 ? "0.0" : r.toFixed(1)) + "%";
+  }
+  function setText(id, v) {
+    var el = $(id);
+    if (el) el.textContent = v;
+  }
+  function setClass(id, v) {
+    var el = $(id);
+    if (el) el.className = v;
+  }
+  function bind(id, ev, fn) {
+    var el = $(id);
+    if (el && el.addEventListener) el.addEventListener(ev, fn);
+  }
+
+  var CAP = 100;
+
+  function readInputs() {
+    var rt = $("rate");
+    return {
+      price: Math.max(0, num("price")),
+      buyerShip: Math.max(0, num("buyerShip")),
+      cogs: Math.max(0, num("cogs")),
+      shipCost: Math.max(0, num("shipCost")),
+      returnRate: clamp(raw("returnRate", 0), 0, 95),
+      returnCost: Math.max(0, num("returnCost")),
+      rate: clamp(parseFloat(rt ? rt.value : "15") || 15, 0, 99),
+      share: clamp(raw("share", 0), 0, 100),
+      target: clamp(raw("targetMargin", 20), 0, 90),
+      listing: Math.max(0, raw("listingFee", 0.20)),
+      transPct: clamp(raw("platformPct", 6.5), 0, 99),
+      procPct: clamp(raw("processingPct", 3), 0, 99),
+      procFixed: Math.max(0, raw("processingFixed", 0.25))
+    };
+  }
+
+  function compute(i) {
+    var N = 100;
+    var d = 1 - i.returnRate / 100;
+    var T = i.price + i.buyerShip;
+    var kept = N * d, back = N - kept;
+    var rev = kept * T;
+    var listing = N * i.listing;
+    var trans = kept * (i.transPct / 100) * T;
+    var procPct = kept * (i.procPct / 100) * T;
+    var procFixed = kept * i.procFixed;
+    var cogs = kept * i.cogs;
+    var ship = N * i.shipCost;
+    var backCost = back * i.returnCost;
+    var baseFees = listing + trans + procPct + procFixed;
+    var netNo = (rev - baseFees - cogs - ship - backCost) / N;
+
+    var f = i.rate / 100;
+    var fee = Math.min(f * T, CAP);
+    var netAtt = netNo - fee;
+    var s = i.share / 100;
+    var blendedFee = fee * s;
+    var netBlend = netNo - blendedFee;
+
+    var pctSum = (i.transPct + i.procPct) / 100;
+    var K = i.listing + d * i.procFixed + d * i.cogs + i.shipCost + (1 - d) * i.returnCost;
+    var base = d * (1 - pctSum);
+
+    function solveBlended(goal) {
+      var d1 = base - d * f * s - goal;
+      var d2 = base - goal;
+      var t1 = d1 > 0.0000001 ? K / d1 : null;
+      var t2 = d2 > 0.0000001 ? (K + d * CAP * s) / d2 : null;
+      if (f <= 0 || s <= 0) return base - goal > 0.0000001 ? K / (base - goal) : null;
+      if (t2 !== null && t2 * f >= CAP) return t2;
+      if (t1 !== null && t1 * f <= CAP) return t1;
+      return t1 !== null ? t1 : t2;
+    }
+
+    return {
+      T: T, d: d, fee: fee, capApplied: f * T > CAP, effRate: T > 0 ? (fee / T) * 100 : 0,
+      netNo: netNo, netAtt: netAtt, blendedFee: blendedFee, netBlend: netBlend,
+      marginNo: T > 0 ? (netNo / T) * 100 : 0,
+      marginAtt: T > 0 ? (netAtt / T) * 100 : 0,
+      marginBlend: T > 0 ? (netBlend / T) * 100 : 0,
+      baseFees: baseFees / 100,
+      beT: solveBlended(0), tpT: solveBlended(i.target / 100),
+      maxMargin: (base - d * f * s) * 100,
+      capT: f > 0 ? CAP / f : null
+    };
+  }
+
+  function render() {
+    var i = readInputs();
+    var c = compute(i);
+
+    var el = $("netAtt");
+    el.textContent = money(c.netAtt);
+    el.className = "big" + (c.netAtt < 0 ? " loss" : "");
+    setText("netSub", "on an attributed order \u00b7 " + pct(c.marginAtt) + " net margin \u00b7 the fee took " + money(c.fee));
+
+    var badge;
+    if (c.netAtt < -0.005) badge = { cls: "badge bad", text: "LOSS on an attributed order \u00b7 the ad fee is bigger than the margin" };
+    else if (c.netAtt < 0.005) badge = { cls: "badge mid", text: "Break-even on an attributed order" };
+    else if (c.tpT !== null && c.T + 0.000001 < c.tpT) badge = { cls: "badge mid", text: "Blended margin is below your " + i.target + "% target \u00b7 " + money(c.tpT - c.T) + " more per order needed" };
+    else if (c.tpT === null) badge = { cls: "badge good", text: "Profitable \u00b7 the blended ad cost caps net margin at " + pct(c.maxMargin) };
+    else badge = { cls: "badge good", text: "On target \u00b7 " + pct(c.marginBlend) + " blended net margin at this price" };
+    setClass("badge", badge.cls);
+    setText("badge", badge.text);
+
+    setText("kFee", money(c.fee));
+    setText("kFeeN", (c.capApplied ? "cap applied \u00b7 " : "") + pct(c.effRate) + " of the order total");
+    setText("kNoAd", money(c.netNo));
+    setText("kBlend", money(c.netBlend));
+    setText("kBlendN", money(c.blendedFee) + " per order at " + i.share + "% attributed");
+    setText("kBE", c.beT === null ? "Not reachable" : money(c.beT - i.buyerShip));
+    if (c.tpT === null) {
+      setText("kTP", "Not reachable");
+      setText("kTPN", "the fee caps margin at " + pct(c.maxMargin));
+    } else {
+      setText("kTP", money(c.tpT - i.buyerShip));
+      setText("kTPN", "keeps " + i.target + "% blended margin");
+    }
+
+    var totals = [25, 50, 100, 200, 500, 700, 1000];
+    var html = "";
+    for (var k = 0; k < totals.length; k++) {
+      var T = totals[k];
+      var f15 = Math.min(0.15 * T, CAP);
+      var f12 = Math.min(0.12 * T, CAP);
+      html += "<tr><td>" + money(T) + "</td><td>" + money(f15) + "</td><td>" + money(f12) + '</td><td class="' + (f15 >= CAP ? "neg" : "") + '">' + pct(f15 / T * 100) + "</td></tr>";
+    }
+    $("tbody").innerHTML = html;
+
+    setText("capNote", i.rate + "% fee on this order is " + money(c.fee) + (c.capApplied ? " (the $100 cap applies)" : "") +
+      ". The cap only starts at an order total of " + money(c.capT) + " at " + i.rate + "%.");
+  }
+
+  var inputs = document.querySelectorAll("input, select");
+  for (var k = 0; k < inputs.length; k++) {
+    inputs[k].addEventListener("input", render);
+    inputs[k].addEventListener("change", render);
+  }
+  render();
+
+  window.__TEST__ = { readInputs: readInputs, compute: compute, render: render };
+
+})();
+
+</script>
+</body>
+</html>
