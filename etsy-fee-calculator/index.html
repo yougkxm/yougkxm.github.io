@@ -682,7 +682,7 @@
     }
 
     var html = "";
-    html += row("Order total (item + shipping)", c.rev / 100, "pos");
+    html += row("Revenue kept (" + Math.round(c.kept) + " of 100 orders)", c.rev / 100, "pos");
     html += row("Listing fee", -c.listing / 100, "neg");
     html += row("Transaction fee " + i.transPct + "%", -c.trans / 100, "neg");
     html += row("Payment processing", -c.procPct / 100, "neg");
