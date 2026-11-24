@@ -4,7 +4,7 @@
 
 Free, offline web tools for Etsy, Gumroad and Shopify sellers. Every tool below is a single HTML page that runs in your browser: no signup, no install, and nothing you type is uploaded.
 
-**Free Firefox add-on:** [Seller Margin & Break-Even Quick Calc](https://addons.mozilla.org/addon/margin-break-even-quick-calc/) — the same break-even calculator as a toolbar popup, published on Mozilla Add-ons. No account, zero permissions requested, no network requests.
+**Free Firefox add-on:** [Margin & Break-Even Quick Calc](https://addons.mozilla.org/addon/margin-break-even-quick-calc/) — the same break-even calculator as a toolbar popup, published on Mozilla Add-ons. No account, zero permissions requested, no network requests.
 
 ## Free tools
 
@@ -19,7 +19,7 @@ Free, offline web tools for Etsy, Gumroad and Shopify sellers. Every tool below 
 | **Bank Statement PDF → CSV** | Drop a PDF statement and get one clean row per transaction — date, description, signed amount, running balance. Free tier exports 20 rows. | https://yougkxm.github.io/bank-to-csv/ |
 | **ArtStation → Gumroad Migration Checklist** | 22-step interactive checklist for the ArtStation Marketplace shutdown (orders stop Dec 18, 2026): queue, payout method, Store tab category, cover export. Ticks are saved in your browser. | https://yougkxm.github.io/artstation-to-gumroad/ |
 | **Etsy Listing Audit → Shopify CSV** | Drop an Etsy Shop Manager export and get an audit against Etsy's own limits (13 tags, 20 characters per tag, duplicate tags, repeated tag words, 140-character title, missing SKUs and photos) plus a Shopify product import CSV. Free tier audits 3 listings. | https://yougkxm.github.io/etsy-migrator/ |
-| **Seller Margin & Break-Even — Firefox add-on** | The main calculator as a toolbar popup: Etsy, Gumroad Direct, Gumroad Discover and Shopify presets, break-even price and target-margin price. No account, zero permissions, no network calls. | https://addons.mozilla.org/addon/margin-break-even-quick-calc/ |
+| **Margin & Break-Even Quick Calc — Firefox add-on** | The main calculator as a toolbar popup: Etsy, Gumroad Direct, Gumroad Discover and Shopify presets, break-even price and target-margin price. No account, zero permissions, no network calls. | https://addons.mozilla.org/addon/margin-break-even-quick-calc/ |
 
 ## Paid apps
 
