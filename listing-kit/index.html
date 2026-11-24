@@ -113,6 +113,12 @@
   #canvas{max-width:100%;max-height:min(72vh,760px);height:auto;width:auto;display:block;
     box-shadow:0 10px 30px -12px rgba(15,23,42,.35);border-radius:4px;background:#fff}
   .stage-foot{padding:10px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+  .upsellbar{margin-top:12px;border:1px solid #a7f3d0;background:#f0fdf7;border-radius:12px;padding:13px 15px}
+  .upsellbar .ut{margin:0;font-size:13px;line-height:1.55;color:#334155}
+  .upsellbar .ul{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .upsellbar .ul a{display:inline-block;font-size:12.5px;font-weight:700;text-decoration:none;padding:7px 12px;border-radius:8px;background:#fff;color:#0f172a;border:1px solid #cbd5e1}
+  .upsellbar .ul a.primary{background:#111827;color:#fff;border-color:#111827}
+  .upsellbar .ul a:hover{text-decoration:none;border-color:#111827}
   .status{font-size:12.5px;margin-top:9px;color:var(--muted);min-height:18px}
   .status.ok{color:var(--ok)}
   .status.warn{color:var(--warn)}
@@ -259,6 +265,13 @@
         <div class="stage-foot">
           <span id="tierFoot">Free tier · 3 of 15 presets</span>
           <span>Nothing leaves your browser. The only network call is a license check when you press Verify.</span>
+        </div>
+      </div>
+      <div class="upsellbar" id="resultUpsell">
+        <p class="ut"><b>Free tier exports 3 of 15 sizes.</b> Listing Kit Pro is <b>$12</b> — or <b>$9 with code LAUNCHKIT</b> — and opens the other 12 presets (Pinterest, Shopify, Instagram post and story, Amazon, eBay, Etsy shop icon and banners, KDP, print), the all-15 size sheet and the brand strip. Or take it with five more seller tools in the <b>$49</b> All-in-One Bundle ($131.98 bought separately).</p>
+        <div class="ul">
+          <a class="primary" href="https://8299181964131.gumroad.com/l/listing-kit-pro/LAUNCHKIT?utm_source=webtool&amp;utm_medium=listing-kit&amp;utm_campaign=result-upsell" target="_blank" rel="noopener">Get Pro — $12, or $9 with LAUNCHKIT</a>
+          <a href="https://8299181964131.gumroad.com/l/seller-tools-bundle?utm_source=webtool&amp;utm_medium=listing-kit&amp;utm_campaign=result-upsell" target="_blank" rel="noopener">All-in-One Bundle — $49</a>
         </div>
       </div>
     </section>
