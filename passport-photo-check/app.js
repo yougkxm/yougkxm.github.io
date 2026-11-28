@@ -805,6 +805,8 @@ function updateProUI(){
     el.lockedbox.style.display = 'none';
     if(state.img){ el.result.style.display = 'block'; el.empty.style.display = 'none'; }
     if(wasPro !== true) flash(el.licmsg, 'Pro is active on this browser.', 'ok');
+  } else if(wasPro === true){
+    hide(el.licmsg);
   }
   wasPro = pro;
 }
