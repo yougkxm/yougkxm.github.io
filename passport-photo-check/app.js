@@ -74,7 +74,7 @@ const PRESETS = [
 const FREE_IDS = new Set(['us','kr','schengen']);
 const DPI = 600;
 const MMPI = 25.4;
-const GUMROAD_PRODUCT_ID = 'GUMROAD_PRODUCT_ID_PLACEHOLDER';
+const GUMROAD_PRODUCT_ID = 'yd1RSbKIBjqXeNEwm6F2dg==';
 const BUY_URL = 'https://8299181964131.gumroad.com/l/passport-photo-check?utm_source=yougkxm.github.io&utm_medium=tool&utm_campaign=passport-photo-check';
 const LS_KEY = 'ppc_license_v1';
 
