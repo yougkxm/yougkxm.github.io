@@ -18,6 +18,7 @@ Free, offline web tools for Etsy, Gumroad and Shopify sellers. Every tool below 
 | **Listing & Mockup Frame Kit** | One product photo exported at the exact Etsy, Gumroad, Pinterest and Shopify sizes, with safe-zone guides, badges and price tags. | https://yougkxm.github.io/listing-kit/ |
 | **Bank Statement PDF → CSV** | Drop a PDF statement and get one clean row per transaction — date, description, signed amount, running balance. Free tier exports 20 rows. | https://yougkxm.github.io/bank-to-csv/ |
 | **ArtStation → Gumroad Migration Checklist** | 22-step interactive checklist for the ArtStation Marketplace shutdown (orders stop Dec 18, 2026): queue, payout method, Store tab category, cover export. Ticks are saved in your browser. | https://yougkxm.github.io/artstation-to-gumroad/ |
+| **Passport & Visa Photo Check** | Check a passport or visa photo against the published government specs for 20 countries — head height, eye line, centering, tilt, background, lighting and 600 DPI print resolution — with face landmarks running in the browser. Pro exports a 600 DPI JPEG and a 4×6 in sheet with 6 copies. | https://yougkxm.github.io/passport-photo-check/ |
 | **Etsy Listing Audit → Shopify CSV** | Drop an Etsy Shop Manager export and get an audit against Etsy's own limits (13 tags, 20 characters per tag, duplicate tags, repeated tag words, 140-character title, missing SKUs and photos) plus a Shopify product import CSV. Free tier audits 3 listings. | https://yougkxm.github.io/etsy-migrator/ |
 | **Margin & Break-Even Quick Calc — Firefox add-on** | The main calculator as a toolbar popup: Etsy, Gumroad Direct, Gumroad Discover and Shopify presets, break-even price and target-margin price. No account, zero permissions, no network calls. | https://addons.mozilla.org/addon/margin-break-even-quick-calc/ |
 
@@ -25,6 +26,7 @@ Free, offline web tools for Etsy, Gumroad and Shopify sellers. Every tool below 
 
 Single offline HTML files, delivered from Gumroad. No account or installation needed.
 
+- **Passport Photo Check Pro** — $12.99: 600 DPI JPEG at the exact print size (2×2 in / 35×45 mm), a 4×6 in print sheet with 6 copies, all 20 country presets, no watermark. https://8299181964131.gumroad.com/l/passport-photo-check
 - **Etsy Listing Audit & Shopify CSV Migrator Pro** — $19 (or $14.25 with code `MIGRATE25`): no listing cap, the full Shopify CSV in the classic or 2026 headers, an audit report CSV, repriced prices for Shopify and Gumroad, variation expansion. https://8299181964131.gumroad.com/l/etsy-shopify-migrator-pro
 - **Seller Profit & Tax Calculator 2026** — multi-SKU profit tracking with quarterly tax set-aside. https://8299181964131.gumroad.com/l/seller-profit-tax-calculator
 - **Bank Statement → Excel** · **Review Pain-Point Analyzer** · **Receipt & Tax Expense Aggregator** · **Skincare Mockup Pack**
