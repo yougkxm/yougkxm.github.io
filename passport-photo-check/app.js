@@ -641,14 +641,39 @@ function renderCropCanvas(wPx, hPx){
   return c;
 }
 function saveCanvas(canvas, filename, type, quality){
-  canvas.toBlob(blob=>{
+  const mime = type || 'image/jpeg';
+  canvas.toBlob(async blob=>{
     if(!blob){ flash(el.expmsg, 'Could not create the file. Try a smaller source photo.', 'err'); return; }
+    let out = blob;
+    if(mime === 'image/jpeg'){
+      try { out = await withJpegDpi(blob, DPI); } catch(e) { out = blob; }
+    }
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
+    a.href = URL.createObjectURL(out);
     a.download = filename;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(()=>URL.revokeObjectURL(a.href), 6000);
-  }, type || 'image/jpeg', quality || 0.95);
+  }, mime, quality || 0.95);
+}
+/* browsers write no DPI into a canvas JPEG; print shops read it, so stamp the JFIF density */
+async function withJpegDpi(blob, dpi){
+  const buf = new Uint8Array(await blob.arrayBuffer());
+  if(!(buf[0]===0xFF && buf[1]===0xD8)) return blob;
+  const isJfif = buf[2]===0xFF && buf[3]===0xE0 &&
+    buf[6]===0x4A && buf[7]===0x46 && buf[8]===0x49 && buf[9]===0x46 && buf[10]===0x00;
+  if(isJfif){
+    buf[13] = 1;                       // units: dots per inch
+    buf[14] = (dpi>>8)&0xFF; buf[15] = dpi&0xFF;
+    buf[16] = (dpi>>8)&0xFF; buf[17] = dpi&0xFF;
+    return new Blob([buf], {type:'image/jpeg'});
+  }
+  const app0 = new Uint8Array([0xFF,0xE0,0x00,0x10,0x4A,0x46,0x49,0x46,0x00,0x01,0x01,0x01,
+    (dpi>>8)&0xFF, dpi&0xFF, (dpi>>8)&0xFF, dpi&0xFF, 0x00,0x00]);
+  const out = new Uint8Array(buf.length + app0.length);
+  out.set(buf.subarray(0,2), 0);
+  out.set(app0, 2);
+  out.set(buf.subarray(2), 2 + app0.length);
+  return new Blob([out], {type:'image/jpeg'});
 }
 function exportSingle(){
   if(!state.img) return flash(el.expmsg, 'Add a photo first.', 'err');
@@ -815,6 +840,6 @@ else boot();
 window.__ppc = {
   PRESETS, state, selectPreset, runChecks, verifyKey,
   pxSize, sheetGrid, bandStatus, computeAutoCrop, applyCrop, draw,
-  exportSingle, exportSheet, sheetCanvas, isPro, doVerify,
+  exportSingle, exportSheet, sheetCanvas, isPro, doVerify, withJpegDpi,
   ready: () => !!(state.preset)
 };
