@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Passport &amp; Visa Photo Check — official specs, checked offline</title>
+<meta name="description" content="Free browser check of your passport or visa photo against published government specs: head height, eye line, centering, tilt, background and print resolution. Nothing is uploaded. 600 DPI export and a 4×6 in print sheet with Pro.">
+<link rel="canonical" href="https://yougkxm.github.io/passport-photo-check/">
+<meta property="og:title" content="Passport &amp; Visa Photo Check">
+<meta property="og:description" content="Check your passport photo against official specs in your browser — no upload. Pro unlocks 600 DPI export and a 4×6 in 6-up print sheet.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://yougkxm.github.io/passport-photo-check/">
+<style>
+:root{
+  --ink:#101828; --ink-2:#475467; --ink-3:#667085; --line:#e4e7ec; --bg:#ffffff;
+  --soft:#f8fafc; --brand:#1d4ed8; --brand-2:#1e40af; --ok:#067647; --ok-bg:#ecfdf3;
+  --warn:#b54708; --warn-bg:#fffaeb; --fail:#b42318; --fail-bg:#fef3f2; --lock:#6941c6;
+  --radius:14px; --shadow:0 1px 2px rgba(16,24,40,.06),0 8px 24px -12px rgba(16,24,40,.18);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,"Helvetica Neue",Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+header.site{border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:20}
+header.site .wrap{display:flex;align-items:center;gap:14px;height:62px}
+.logo{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:-.2px}
+.logo .mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#1d4ed8,#0ea5e9);display:grid;place-items:center;color:#fff;font-size:15px}
+nav.top{margin-left:auto;display:flex;gap:18px;font-size:14px;color:var(--ink-2)}
+nav.top a{color:var(--ink-2)}
+@media(max-width:640px){nav.top{display:none}}
+.hero{padding:38px 0 10px}
+.hero h1{font-size:34px;line-height:1.15;letter-spacing:-1px;margin:0 0 10px;max-width:760px}
+.hero h1 span{color:var(--brand)}
+.hero p.lead{font-size:16.5px;color:var(--ink-2);max-width:680px;margin:0 0 14px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.badge{font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--soft);border:1px solid var(--line);color:var(--ink-2)}
+.badge.ok{background:var(--ok-bg);border-color:#abefc6;color:var(--ok)}
+.app{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px;align-items:start;margin:8px 0 26px}
+@media(max-width:900px){.app{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.card .hd{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.card .hd h2{font-size:15px;margin:0;font-weight:700}
+.card .bd{padding:16px}
+label.field{display:block;font-size:12.5px;font-weight:600;color:var(--ink-2);margin:0 0 6px}
+select,input[type=text]{width:100%;padding:10px 12px;border:1px solid #d0d5dd;border-radius:10px;font-size:14px;background:#fff;color:var(--ink)}
+select:focus,input:focus{outline:2px solid #bfd3ff;border-color:var(--brand)}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+.drop{margin-top:12px;border:2px dashed #cfd6e4;border-radius:12px;padding:26px 16px;text-align:center;background:var(--soft);cursor:pointer;transition:.15s}
+.drop:hover,.drop.hover{border-color:var(--brand);background:#eff4ff}
+.drop strong{display:block;font-size:14.5px;margin-bottom:3px}
+.drop small{color:var(--ink-3);font-size:12.5px}
+.drop .ico{font-size:26px;margin-bottom:6px}
+.stage{margin-top:14px;display:none}
+.stage.on{display:block}
+.canvasbox{position:relative;background:#0f172a;border-radius:12px;overflow:hidden;display:grid;place-items:center;min-height:180px}
+#preview{display:block;max-width:100%;height:auto}
+.ctrls{margin-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+.ctrls .full{grid-column:1/-1}
+.ctrl{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink-3);white-space:nowrap}
+.ctrl input[type=range]{flex:1;accent-color:var(--brand)}
+button{font-family:inherit;cursor:pointer;border-radius:10px;border:1px solid transparent;font-weight:600;font-size:14px;padding:10px 14px}
+.btn{background:var(--brand);color:#fff;display:inline-block}
+.btn:hover{background:var(--brand-2);text-decoration:none}
+.btn.ghost{background:#fff;border-color:#d0d5dd;color:var(--ink)}
+.btn.ghost:hover{background:var(--soft)}
+.btn.lock{background:#f4f3ff;border-color:#d9d6fe;color:var(--lock)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.btn.sm{padding:7px 11px;font-size:12.5px}
+.verdict{border-radius:12px;padding:14px 16px;margin-bottom:12px;border:1px solid var(--line);background:var(--soft)}
+.verdict .big{font-size:16px;font-weight:700;margin:0 0 3px}
+.verdict .sub{font-size:13px;color:var(--ink-2);margin:0}
+.verdict.good{background:var(--ok-bg);border-color:#abefc6}
+.verdict.good .big{color:var(--ok)}
+.verdict.warn{background:var(--warn-bg);border-color:#fedf89}
+.verdict.warn .big{color:var(--warn)}
+.verdict.bad{background:var(--fail-bg);border-color:#fecdca}
+.verdict.bad .big{color:var(--fail)}
+.chk{list-style:none;margin:0;padding:0}
+.chk li{display:grid;grid-template-columns:22px 1fr auto;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);align-items:start}
+.chk li:last-child{border-bottom:0}
+.chk .st{width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;color:#fff;margin-top:2px}
+.st.pass{background:var(--ok)}
+.st.warn{background:#dc6803}
+.st.fail{background:var(--fail)}
+.st.na{background:#98a2b3}
+.chk .nm{font-size:13.5px;font-weight:600}
+.chk .dt{font-size:12.5px;color:var(--ink-3);margin-top:1px}
+.chk .val{font-variant-numeric:tabular-nums;font-size:12.5px;color:var(--ink-2);text-align:right;white-space:nowrap}
+.tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--ink-3);background:#fff}
+.tag.pass{color:var(--ok);border-color:#abefc6;background:var(--ok-bg)}
+.tag.warn{color:var(--warn);border-color:#fedf89;background:var(--warn-bg)}
+.tag.fail{color:var(--fail);border-color:#fecdca;background:var(--fail-bg)}
+.tag.pro{color:#fff;background:var(--lock);border-color:var(--lock)}
+.locked{padding:16px;border:1px solid #d9d6fe;background:#fcfcff;border-radius:12px;margin-top:6px}
+.locked h3{margin:0 0 6px;font-size:14.5px;color:var(--lock)}
+.locked ul{margin:0 0 12px;padding-left:18px;font-size:13px;color:var(--ink-2)}
+.locked li{margin:4px 0}
+.note{font-size:12px;color:var(--ink-3);margin-top:10px;line-height:1.55}
+.specs{margin-top:10px;font-size:12.5px;color:var(--ink-2);background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.specs b{color:var(--ink)}
+.export{display:grid;gap:8px}
+.export .btn{width:100%;text-align:center}
+.msg{font-size:12.5px;margin-top:10px;padding:9px 11px;border-radius:9px;display:none;line-height:1.45}
+.msg.on{display:block}
+.msg.ok{background:var(--ok-bg);color:var(--ok)}
+.msg.err{background:var(--fail-bg);color:var(--fail)}
+.msg.info{background:#eff4ff;color:var(--brand-2)}
+section.more{border-top:1px solid var(--line);padding:32px 0}
+section.more h2{font-size:22px;letter-spacing:-.4px;margin:0 0 12px}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:820px){.cols{grid-template-columns:1fr}}
+.cols h3{font-size:14.5px;margin:0 0 6px}
+.cols p{font-size:13.5px;color:var(--ink-2);margin:0}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px}
+table.spec{width:100%;border-collapse:collapse;font-size:13px}
+table.spec th,table.spec td{padding:9px 11px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+table.spec th{background:var(--soft);font-size:12px;color:var(--ink-2);font-weight:700;position:sticky;top:0}
+table.spec tr:last-child td{border-bottom:0}
+details{border:1px solid var(--line);border-radius:10px;padding:11px 14px;margin-bottom:8px;background:#fff}
+details summary{cursor:pointer;font-weight:600;font-size:13.5px}
+details p{font-size:13px;color:var(--ink-2);margin:8px 0 0}
+footer{border-top:1px solid var(--line);padding:22px 0 44px;font-size:12.5px;color:var(--ink-3)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
+.busy{display:inline-block;width:13px;height:13px;border:2px solid #fff;border-right-color:transparent;border-radius:50%;animation:sp .7s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.small{font-size:12px;color:var(--ink-3)}
+.k{font-variant-numeric:tabular-nums}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <div class="logo"><span class="mark">🛂</span> Passport Photo Check</div>
+  <nav class="top">
+    <a href="#how">How it works</a>
+    <a href="#countries">Specs</a>
+    <a href="#faq">FAQ</a>
+    <a href="#pro">Pro</a>
+  </nav>
+</div></header>
+
+<main>
+<div class="wrap">
+  <div class="hero">
+    <h1>Is your passport photo <span>actually</span> the right size?</h1>
+    <p class="lead">Add a photo and check it against the published government specs for your country: head height, eye line, centering, tilt, background and print resolution. Everything runs in your browser — the photo is never uploaded.</p>
+    <div class="badges">
+      <span class="badge ok">No upload · 100% local</span>
+      <span class="badge">20 country presets</span>
+      <span class="badge">600 DPI export · 4×6 in print sheet</span>
+      <span class="badge">Honest check, not a guarantee</span>
+    </div>
+  </div>
+
+  <div class="app">
+    <div class="card">
+      <div class="hd"><h2>1. Photo &amp; country</h2></div>
+      <div class="bd">
+        <label class="field" for="country">Country / document</label>
+        <select id="country"></select>
+        <div id="specs" class="specs"></div>
+
+        <div class="drop" id="drop">
+          <div class="ico">📷</div>
+          <strong>Drop a photo here, or click to choose</strong>
+          <small>JPG or PNG · a phone photo is fine · it stays on this device</small>
+        </div>
+        <input type="file" id="file" accept="image/*" hidden>
+
+        <div class="stage" id="stage">
+          <div class="canvasbox"><canvas id="preview" width="420" height="420"></canvas></div>
+          <div class="ctrls">
+            <div class="ctrl full"><span style="min-width:64px">Zoom</span><input type="range" id="zoom" min="70" max="160" value="100" step="1"><span id="zoomv" class="k">100%</span></div>
+            <div class="ctrl full"><span style="min-width:64px">Move ⇆</span><input type="range" id="panx" min="-100" max="100" value="0" step="1"><span id="panxv" class="k">0</span></div>
+            <div class="ctrl full"><span style="min-width:64px">Move ⇅</span><input type="range" id="pany" min="-100" max="100" value="0" step="1"><span id="panyv" class="k">0</span></div>
+            <div class="ctrl"><span style="min-width:64px">Head top</span><input type="range" id="adjtop" min="-14" max="14" value="0" step="1"><span id="adjtopv" class="k">0</span></div>
+            <div class="ctrl"><span style="min-width:64px">Chin</span><input type="range" id="adjchin" min="-14" max="14" value="0" step="1"><span id="adjchinv" class="k">0</span></div>
+            <div class="ctrl full"><button class="btn ghost sm" id="reset" type="button">↺ Auto-fit again</button></div>
+          </div>
+          <div id="facemsg" class="msg info"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd"><h2>2. Spec check</h2><span id="loadstate" class="small" style="margin-left:auto"></span></div>
+      <div class="bd">
+        <div id="empty" class="small">Add a photo to see the checklist.<br>Free checks: United States, South Korea and the Schengen area.</div>
+        <div id="result" style="display:none">
+          <div class="verdict" id="verdict"><p class="big" id="vbig"></p><p class="sub" id="vsub"></p></div>
+          <ul class="chk" id="chk"></ul>
+          <div class="note">Measured from face landmarks and the print area you see. Numbers are estimates within a few millimetres — the issuing authority makes the final decision.</div>
+        </div>
+        <div id="lockedbox" class="locked" style="display:none">
+          <h3>🔒 This country's check is part of Pro</h3>
+          <ul>
+            <li>Spec check for all <b>20 country presets</b> (UK, Canada, Australia, Japan, China, India…)</li>
+            <li><b>600 DPI</b> single JPEG at the exact print size</li>
+            <li><b>4×6 in (10×15 cm) print sheet</b> with 6 copies — CVS, Walgreens, Costco: 15–30¢</li>
+            <li>No watermark, lifetime key, unlimited photos</li>
+          </ul>
+          <a class="btn buy" href="#pro" target="_blank" rel="noopener">Unlock Pro — $12.99 once</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="app" id="pro">
+    <div class="card">
+      <div class="hd"><h2>3. Download</h2><span class="tag" id="protag" style="margin-left:auto">Free</span></div>
+      <div class="bd">
+        <div class="export">
+          <button class="btn lock" id="btn600" type="button" disabled>⬇ 600 DPI JPEG — exact <span id="dimm">2×2 in</span> size</button>
+          <button class="btn lock" id="btnsheet" type="button" disabled>⬇ 4×6 in print sheet — 6 copies</button>
+          <button class="btn ghost" id="btnfree" type="button">⬇ Free watermarked preview (400 px)</button>
+        </div>
+        <div id="expmsg" class="msg"></div>
+        <div class="locked" id="probenefits">
+          <h3>What Pro adds</h3>
+          <ul>
+            <li><b>600 DPI JPEG</b> at the exact millimetre size — accepted by print shops and online portals</li>
+            <li><b>4×6 in (10×15 cm) sheet, 6 identical copies</b> — print at any drugstore for 15–30¢ instead of $17.99 for two photos</li>
+            <li><b>All 20 country presets</b>, no watermark, unlimited photos</li>
+            <li>One-time $12.99 · lifetime license key · no subscription</li>
+          </ul>
+          <a class="btn buy" href="#pro" target="_blank" rel="noopener">Get the license key — $12.99</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="hd"><h2>License</h2></div>
+      <div class="bd">
+        <label class="field" for="license">Gumroad license key (in the email after purchase)</label>
+        <div class="row"><input type="text" id="license" placeholder="XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX" autocomplete="off" spellcheck="false"><button class="btn" id="verify" type="button" style="flex:0 0 auto">Unlock</button></div>
+        <div id="licmsg" class="msg"></div>
+        <div class="note">The key is checked once with Gumroad's license API and stored in this browser only. No account, no email, no tracking. The same key works on any device.</div>
+      </div>
+    </div>
+  </div>
+
+  <section class="more" id="how">
+    <h2>How the check works</h2>
+    <div class="cols">
+      <div><h3>1 · Face landmarks</h3><p>A face-landmark model runs on your device in WebAssembly. It finds the crown, chin, eyes and the centre of the face. If the model cannot load, the head-line sliders let you place the crown and chin yourself — every other check still runs.</p></div>
+      <div><h3>2 · Compared with the spec</h3><p>Each rule is taken from the country's published photo guidance: head height as a share of the photo, eye-line band, centering, tilt, background colour and uniformity, and the pixels needed for 600 DPI at the print size.</p></div>
+      <div><h3>3 · Print-ready file</h3><p>Pro renders the crop at exactly 600 DPI — 1200×1200 px for a 2×2 in photo, 827×1063 px for 35×45 mm — plus a 4×6 in sheet of six copies with white gutters to cut along.</p></div>
+    </div>
+  </section>
+
+  <section class="more" id="countries">
+    <h2>Country presets</h2>
+    <p class="small" style="max-width:760px;margin:0 0 12px">Sizes and head-height ranges transcribed from each authority's published photo guidance (checked November 2026). Specs do change — the linked page is the authority, and the issuing office decides.</p>
+    <div class="tablewrap"><table class="spec" id="spectable"></table></div>
+  </section>
+
+  <section class="more" id="faq">
+    <h2>Questions</h2>
+    <details><summary>Is my photo uploaded anywhere?</summary><p>No. The image is read by your browser and never leaves the device. The page sends no request with your photo; the only network call is the optional license check when you enter a key.</p></details>
+    <details><summary>Does a green check mean my photo will be accepted?</summary><p>No, and no tool can promise that. The check compares your photo with the published numeric rules — head size, eye line, centering, tilt, background and resolution. Expression, glasses, retouching, paper quality and the officer's judgement are outside it. Treat a pass as “the measurable rules are met”.</p></details>
+    <details><summary>Can I print the 4×6 in sheet at a drugstore?</summary><p>Yes. The sheet is 4×6 in at 600 DPI with six copies and white gutters; order it as “actual size / no crop” and cut along the gutters. CVS, Walgreens, Costco and most labs print 4×6 for 15–30¢.</p></details>
+    <details><summary>Do you edit my photo (background removal, retouching)?</summary><p>No. The tool only crops and resamples. Canada, Korea and others reject altered photos, so there is no retouching, background replacement or skin smoothing.</p></details>
+    <details><summary>What does Pro cost, and is it a subscription?</summary><p>$12.99 once. You get a license key by email, 600 DPI export, the print sheet, all 20 presets and no watermark. It does not renew.</p></details>
+  </section>
+</div>
+</main>
+
+<footer><div class="wrap">
+  <span>Passport Photo Check by Seller Tools — an offline tool. Not affiliated with any government.</span>
+  <span><a href="https://yougkxm.github.io/">More free tools</a></span>
+</div></footer>
+
+<script type="module" src="./app.js"></script>
+</body>
+</html>
