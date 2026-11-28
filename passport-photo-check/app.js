@@ -448,24 +448,25 @@ function analyzeBackground(){
   const a = state.analysis, S = state.S, c = state.crop, f = state.face;
   const x0 = Math.round(c.x*S), y0 = Math.round(c.y*S);
   const w = Math.round(c.w*S), h = Math.round(c.h*S);
-  const ex = { x0: 0, x1: 0, y0: 0, y1: 0 };
+  const strips = [];
   if(f){
-    const half = f.faceWidth*0.62*S;
-    ex.x0 = Math.round(f.centerX*S - half); ex.x1 = Math.round(f.centerX*S + half);
-    ex.y0 = Math.round(f.crownY*S - h*0.02); ex.y1 = Math.round(f.chinY*S + h*0.10);
+    const cx = f.centerX*S, crown = f.crownY*S, chin = f.chinY*S;
+    const half = f.faceWidth*0.80*S;
+    const topEnd = Math.round(crown - h*0.012);
+    if(topEnd > y0 + 3)
+      strips.push({x0:x0+Math.round(w*0.12), x1:x0+Math.round(w*0.88), y0:y0+1, y1:topEnd});
+    const leftX1 = Math.round(cx - half), rightX0 = Math.round(cx + half);
+    const midY0 = Math.round(crown), midY1 = Math.round(chin);
+    if(leftX1 - x0 > 6) strips.push({x0:x0+1, x1:leftX1-2, y0:midY0, y1:midY1});
+    if((x0+w) - rightX0 > 6) strips.push({x0:rightX0+2, x1:x0+w-1, y0:midY0, y1:midY1});
   }
-  const strips = [
-    {x0:x0+Math.round(w*0.10), x1:x0+Math.round(w*0.90), y0:y0+2, y1:y0+Math.round(h*0.10)},
-    {x0:x0+2, x1:x0+Math.round(w*0.10), y0:y0+Math.round(h*0.10), y1:y0+Math.round(h*0.85)},
-    {x0:x0+Math.round(w*0.90), x1:x0+w-2, y0:y0+Math.round(h*0.10), y1:y0+Math.round(h*0.85)},
-    {x0:x0+2, x1:x0+Math.round(w*0.20), y0:y0+Math.round(h*0.86), y1:y0+h-2},
-    {x0:x0+Math.round(w*0.80), x1:x0+w-2, y0:y0+Math.round(h*0.86), y1:y0+h-2}
-  ];
+  if(!strips.length){
+    strips.push({x0:x0+Math.round(w*0.12), x1:x0+Math.round(w*0.88), y0:y0+1, y1:y0+Math.round(h*0.08)});
+  }
   const lum = [], sat = [];
   for(const s of strips){
     for(let y=Math.max(0,s.y0); y<Math.min(a.height,s.y1); y+=2){
       for(let x=Math.max(0,s.x0); x<Math.min(a.width,s.x1); x+=2){
-        if(x>=ex.x0 && x<=ex.x1 && y>=ex.y0 && y<=ex.y1) continue;
         const i = (y*a.width + x)*4;
         const r=a.data[i], g=a.data[i+1], b=a.data[i+2];
         lum.push(0.299*r + 0.587*g + 0.114*b);
@@ -473,7 +474,7 @@ function analyzeBackground(){
       }
     }
   }
-  if(lum.length < 40) return null;
+  if(lum.length < 60) return null;
   const mean = lum.reduce((s,v)=>s+v,0)/lum.length;
   const sd = Math.sqrt(lum.reduce((s,v)=>s+(v-mean)**2,0)/lum.length);
   const sMean = sat.reduce((s,v)=>s+v,0)/sat.length;
@@ -596,6 +597,10 @@ function runChecks(){
 
   state.checks = checks;
   renderChecks(checks);
+  if(FREE_IDS.has(p.id) || isPro()){
+    el.result.style.display = 'block';
+    el.empty.style.display = 'none';
+  }
 }
 
 function renderChecks(checks){
